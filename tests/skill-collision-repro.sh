@@ -64,20 +64,21 @@ standalone_code_pins="$(
     2>/dev/null || true
 )"
 if [ -n "$legacy_model_pins" ] || [ -n "$standalone_code_pins" ]; then
-  note "FAIL: active Fable or Opus configuration still pins a model revision:"
+  note "FAIL: active Fable, Opus, or Sonnet configuration still pins a model revision:"
   [ -z "$legacy_model_pins" ] || note "$legacy_model_pins"
   [ -z "$standalone_code_pins" ] || note "$standalone_code_pins"
   fail=1
 else
-  note "ok: active Fable and Opus configuration uses rolling aliases"
+  note "ok: active Fable, Opus, and Sonnet configuration uses rolling aliases"
 fi
 
-# Static invariant (CHANGES maintenance note): provider-dispatch owns the default
-# provider/model quad and the three panel skills plus setup-pstack copy it verbatim.
+# Static invariant (CHANGES maintenance note): provider-dispatch owns the
+# first-run provider/model panel and the three panel skills plus setup-pstack
+# copy it verbatim.
 setup="$repo/plugins/pstack/skills/setup-pstack/SKILL.md"
 dispatch="$repo/plugins/pstack/skills/poteto-mode/references/provider-dispatch.md"
-quad_of() { { grep -oE '(claude|codex|grok):[a-z0-9.-]+@(low|medium|high|xhigh|max)' || true; } | tr '\n' ' ' | sed 's/ $//'; }
-canon_quad="$(awk '
+descriptor_list_of() { { grep -oE '(claude|codex|grok):[a-z0-9.-]+@(low|medium|high|xhigh|max)' || true; } | tr '\n' ' ' | sed 's/ $//'; }
+default_panel="$(awk '
   $0 == "## Model matrix" { in_matrix = 1; next }
   in_matrix && /^## / { exit }
   in_matrix && /^\|/ {
@@ -91,44 +92,38 @@ canon_quad="$(awk '
     }
     family = cells[1]
     if (family == "Family" || family ~ /^:?-+:?$/) next
-    provider = cells[3]
-    model = cells[4]
-    effort = cells[5]
+    if (cells[8] != "yes") next
     if (out != "") out = out " "
-    out = out provider ":" model "@" effort
+    out = out cells[3] ":" cells[4] "@" cells[5]
   }
   END { print out }
 ' "$dispatch")"
-quad_bad=""
-[ -n "$canon_quad" ] || quad_bad="could not read the canonical quad from $dispatch"$'\n'
-# Anchor on the quad's last slug rather than a hard-coded one, so a model swap in
-# setup-pstack cannot leave this check hunting for a slug nobody ships any more.
-anchor="${canon_quad##* }"
-# arena and architect each state the quad on one line; interrogate lists it
-# as one slug per row of its Reviewer A/B/C/D table (upstream #167).
+panel_mismatches=""
+[ -n "$default_panel" ] || panel_mismatches="could not read the default panel from $dispatch"$'\n'
+anchor="${default_panel##* }"
 for name in arena architect; do
   skill="$repo/plugins/pstack/skills/$name/SKILL.md"
   n="$(grep -Fc "$anchor" "$skill" || true)"
   if [ "$n" != "1" ]; then
-    quad_bad="$quad_bad$skill: expected exactly 1 default-quad line, found $n"$'\n'
+    panel_mismatches="$panel_mismatches$skill: expected exactly 1 default-panel line, found $n"$'\n'
     continue
   fi
-  got="$(grep -F "$anchor" "$skill" | quad_of)"
-  [ "$got" = "$canon_quad" ] || quad_bad="$quad_bad$skill: [$got] != [$canon_quad]"$'\n'
+  got="$(grep -F "$anchor" "$skill" | descriptor_list_of)"
+  [ "$got" = "$default_panel" ] || panel_mismatches="$panel_mismatches$skill: [$got] != [$default_panel]"$'\n'
 done
 interrogate="$repo/plugins/pstack/skills/interrogate/SKILL.md"
-got="$(grep -E '^\| Reviewer [A-Z] \|' "$interrogate" | quad_of)"
-[ "$got" = "$canon_quad" ] || quad_bad="$quad_bad$interrogate reviewer table: [$got] != [$canon_quad]"$'\n'
+got="$(grep -E '^\| Reviewer [A-Z] \|' "$interrogate" | descriptor_list_of)"
+[ "$got" = "$default_panel" ] || panel_mismatches="$panel_mismatches$interrogate reviewer table: [$got] != [$default_panel]"$'\n'
 while IFS= read -r line; do
-  got="$(printf '%s\n' "$line" | quad_of)"
-  [ "$got" = "$canon_quad" ] || quad_bad="$quad_bad$setup role row: [$got] != [$canon_quad]"$'\n'
+  got="$(printf '%s\n' "$line" | descriptor_list_of)"
+  [ "$got" = "$default_panel" ] || panel_mismatches="$panel_mismatches$setup role row: [$got] != [$default_panel]"$'\n'
 done < <(grep -E '^(arena runners|arena cross-judge pool|architect runners|interrogate reviewers):' "$setup")
-if [ -n "$quad_bad" ]; then
-  note "FAIL: the default model quad is not identical across provider dispatch, the panel skills, and setup-pstack:"
-  note "$quad_bad"
+if [ -n "$panel_mismatches" ]; then
+  note "FAIL: the default model panel is not identical across provider dispatch, the panel skills, and setup-pstack:"
+  note "$panel_mismatches"
   fail=1
 else
-  note "ok: default model quad identical across provider dispatch + 3 panel skills + setup-pstack ($canon_quad)"
+  note "ok: default model panel identical across provider dispatch + 3 panel skills + setup-pstack ($default_panel)"
 fi
 
 plugin="$repo/plugins/pstack"
