@@ -2,7 +2,7 @@
 
 This page contains the full skill, dependency, runtime, and porting reference. For the plain-English introduction and quick start, see the [main README](../README.md).
 
-[Poteto](https://x.com/poteto)'s [pstack](https://github.com/cursor/plugins/tree/main/pstack), adapted to run in Claude Code and Codex without Cursor. One shared skill tree serves both harnesses; Grok remains available as a model-provider lane. Version 1.4.1 is synced to Cursor pstack v0.15.1 at `f8abeddd1862dc73704e3d719dd73df0d51b8c71`. See [UPSTREAM.md](../UPSTREAM.md) for the exact sync contract.
+[Poteto](https://x.com/poteto)'s [pstack](https://github.com/cursor/plugins/tree/main/pstack), adapted to run in Claude Code and Codex without Cursor. One shared skill tree serves both harnesses; Grok remains available as a model-provider lane. Version 1.4.2-maana.1 is synced to Cursor pstack v0.15.1 at `f8abeddd1862dc73704e3d719dd73df0d51b8c71`. See [UPSTREAM.md](../UPSTREAM.md) for the exact sync contract.
 
 Original by Lauren Tan. This distribution builds on Michael Denyer's [pstack-claude](https://github.com/michael-denyer/pstack-claude) port and retains its history and MIT attribution. It imports seven MIT-licensed skills from [cursor-team-kit](https://github.com/cursor/plugins/tree/main/cursor-team-kit): `deslop`, `thermo-nuclear-code-quality-review`, `make-pr-easy-to-review`, `fix-ci`, `fix-merge-conflicts`, `get-pr-comments`, `what-did-i-get-done`.
 
@@ -17,7 +17,7 @@ This is not a verbatim copy. Skill bodies have been edited so every Cursor-speci
 This repo ships as a Claude Code marketplace containing one plugin (`pstack`).
 
 ```text
-/plugin marketplace add ericlitman/open-pstack
+/plugin marketplace add zenzen-sol/open-pstack
 /plugin install pstack@open-pstack
 /reload-plugins
 ```
@@ -29,7 +29,7 @@ The plugin auto-fires through a `SessionStart` hook on startup, `/clear`, and po
 The same plugin carries a `.codex-plugin/plugin.json` manifest and a root `.agents/plugins/marketplace.json`. Install it through the Codex marketplace:
 
 ```shell
-codex plugin marketplace add ericlitman/open-pstack --ref main
+codex plugin marketplace add zenzen-sol/open-pstack --ref main
 codex plugin add pstack@open-pstack
 ```
 
@@ -43,7 +43,7 @@ multi_agent = true
 For local plugin development, you can clone the repository and link its skills directly:
 
 ```shell
-git clone https://github.com/ericlitman/open-pstack
+git clone https://github.com/zenzen-sol/open-pstack
 cd open-pstack
 for s in plugins/pstack/skills/*/; do ln -s "$PWD/$s" ~/.agents/skills/"$(basename "$s")"; done
 ```

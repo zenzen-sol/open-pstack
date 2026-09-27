@@ -2,7 +2,7 @@
 
 This port applies the Cursor → Claude Code substitutions in skill bodies. Earlier drafts left them flagged; this revision resolves them. A later pass added a Codex build that shares the same skills; see [Codex port](#codex-port) below.
 
-## Unreleased adds opt-in Sonnet, Astra, Luna, and Terra families
+## 1.4.2-maana.1 adds opt-in Sonnet, Astra, Luna, and Terra families
 
 The provider matrix now supports Sonnet, GPT-6 Astra, GPT-5.6 Luna, and GPT-5.6 Terra alongside Fable, Sol, Grok, and Opus. A First-run active column keeps the existing four-family panel and generated first-run sheet unchanged. Setup derives active membership from the normalized final role map instead of persisting a second setting. Operators can add or remove supported families before probing. Setup collects efforts, probes, and runs its behavioral smoke only for the resulting active set, and it requires that set to equal the families in the final role map.
 

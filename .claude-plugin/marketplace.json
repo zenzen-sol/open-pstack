@@ -9,11 +9,11 @@
       "name": "pstack",
       "source": "./plugins/pstack",
       "description": "if you want to go fast, go deep first. pstack helps you write less, but higher quality code. rigorous agent workflows you can parallelize with confidence.",
-      "version": "1.4.1",
+      "version": "1.4.2-maana.1",
       "author": {
         "name": "Lauren Tan (original)"
       },
-      "homepage": "https://github.com/ericlitman/open-pstack",
+      "homepage": "https://github.com/zenzen-sol/open-pstack",
       "license": "MIT",
       "keywords": [
         "pstack",

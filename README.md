@@ -1,10 +1,12 @@
 # open-pstack
 
-[![CI](https://github.com/ericlitman/open-pstack/actions/workflows/ci.yml/badge.svg)](https://github.com/ericlitman/open-pstack/actions/workflows/ci.yml)
-[![Latest release](https://img.shields.io/github/v/release/ericlitman/open-pstack)](https://github.com/ericlitman/open-pstack/releases/latest)
-[![MIT license](https://img.shields.io/github/license/ericlitman/open-pstack)](LICENSE)
+[![CI](https://github.com/zenzen-sol/open-pstack/actions/workflows/ci.yml/badge.svg)](https://github.com/zenzen-sol/open-pstack/actions/workflows/ci.yml)
+[![Latest release](https://img.shields.io/github/v/release/zenzen-sol/open-pstack)](https://github.com/zenzen-sol/open-pstack/releases/latest)
+[![MIT license](https://img.shields.io/github/license/zenzen-sol/open-pstack)](LICENSE)
 
 **Open Pstack brings [Lauren Tan (@poteto)](https://x.com/poteto)'s [pstack](https://github.com/cursor/plugins/tree/main/pstack) to Claude Code and Codex.** Its job is to stay as close to her original work as possible while translating the parts that depend on Cursor.
+
+This is Maana Data's maintained downstream fork. See [DOWNSTREAM.md](DOWNSTREAM.md) for its purpose, downstream changes, and upstream sync policy.
 
 Lauren built pstack from the skills she uses to ship code at Cursor. In a [55-minute interview with Denis Labelle](https://x.com/DenisLabelle/status/2091337807939706928), she says that she shipped 1,000 pull requests in one month after steadily improving how her agents work and verify their results.
 
@@ -39,7 +41,7 @@ You need a current Claude Code or Codex installation. For the default four-model
 Run these commands inside Claude Code:
 
 ```text
-/plugin marketplace add ericlitman/open-pstack
+/plugin marketplace add zenzen-sol/open-pstack
 /plugin install pstack@open-pstack
 /reload-plugins
 ```
@@ -49,7 +51,7 @@ Run these commands inside Claude Code:
 Run these commands in your shell:
 
 ```shell
-codex plugin marketplace add ericlitman/open-pstack --ref main
+codex plugin marketplace add zenzen-sol/open-pstack --ref main
 codex plugin add pstack@open-pstack
 ```
 
@@ -153,7 +155,7 @@ This repository also keeps:
 
 ## Staying close to Lauren's pstack
 
-Open Pstack 1.4.1 tracks pstack 0.15.1 at Cursor commit [`f8abeddd1862dc73704e3d719dd73df0d51b8c71`](https://github.com/cursor/plugins/commit/f8abeddd1862dc73704e3d719dd73df0d51b8c71).
+Open Pstack 1.4.2-maana.1 tracks pstack 0.15.1 at Cursor commit [`f8abeddd1862dc73704e3d719dd73df0d51b8c71`](https://github.com/cursor/plugins/commit/f8abeddd1862dc73704e3d719dd73df0d51b8c71).
 
 The two projects have separate version numbers. The pstack version identifies Lauren's upstream content. The Open Pstack version identifies the Claude Code and Codex package built from it.
 
@@ -161,7 +163,7 @@ In this repository, “upstream” means Lauren's original pstack. Open Pstack d
 
 ## Contributing
 
-Fixes for Claude Code or Codex and help bringing over new pstack releases are welcome. Search [GitHub Issues](https://github.com/ericlitman/open-pstack/issues) before opening a new issue. For larger behavior changes, explain why the change belongs in Open Pstack instead of Lauren's original project.
+Fixes for Claude Code or Codex and help bringing over new pstack releases are welcome. Search [GitHub Issues](https://github.com/zenzen-sol/open-pstack/issues) before opening a new issue. For larger behavior changes, explain why the change belongs in this downstream fork instead of Lauren's original project or community Open Pstack.
 
 Read [UPSTREAM.md](UPSTREAM.md) before changing content brought over from Lauren's pstack. Pull requests must keep one shared skill tree for Claude Code and Codex and pass the repository's tests, type checks, plugin validation, and static checks.
 
