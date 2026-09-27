@@ -4,7 +4,7 @@ This fork lets Maana Data ship model-family and workflow changes without waiting
 
 ## Downstream changes
 
-Version `1.4.2-maana.1` adds the optional Sonnet, GPT-6 Astra, GPT-5.6 Luna, and GPT-5.6 Terra families from open-pstack PR #55. Setup derives the active family set from the final role map, so a Codex-only Astra, Sol, and Luna configuration does not probe or require Claude or Grok.
+Version `1.4.2-maana.1` incorporates the optional Sonnet, GPT-6 Astra, GPT-5.6 Luna, and GPT-5.6 Terra families from open-pstack PR #55. It also adds optional GPT-6 Sol and GPT-6 Luna families for the Maana Data GPT-only route. Setup derives the active family set from the final role map, so a Codex-only Astra, Sol 6, and Luna 6 configuration does not probe or require Claude or Grok.
 
 The implementation preserves the upstream first-run panel. Maana-specific role choices belong in each harness's pstack model sheet, not in plugin defaults.
 

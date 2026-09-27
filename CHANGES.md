@@ -2,13 +2,13 @@
 
 This port applies the Cursor → Claude Code substitutions in skill bodies. Earlier drafts left them flagged; this revision resolves them. A later pass added a Codex build that shares the same skills; see [Codex port](#codex-port) below.
 
-## 1.4.2-maana.1 adds opt-in Sonnet, Astra, Luna, and Terra families
+## 1.4.2-maana.1 adds opt-in Sonnet, Astra, Luna, Terra, Sol 6, and Luna 6 families
 
-The provider matrix now supports Sonnet, GPT-6 Astra, GPT-5.6 Luna, and GPT-5.6 Terra alongside Fable, Sol, Grok, and Opus. A First-run active column keeps the existing four-family panel and generated first-run sheet unchanged. Setup derives active membership from the normalized final role map instead of persisting a second setting. Operators can add or remove supported families before probing. Setup collects efforts, probes, and runs its behavioral smoke only for the resulting active set, and it requires that set to equal the families in the final role map.
+The provider matrix now supports Sonnet, GPT-6 Astra, GPT-5.6 Luna, GPT-5.6 Terra, GPT-6 Sol, and GPT-6 Luna alongside Fable, GPT-5.6 Sol, Grok, and Opus. A First-run active column keeps the existing four-family panel and generated first-run sheet unchanged. Setup derives active membership from the normalized final role map instead of persisting a second setting. Operators can add or remove supported families before probing. Setup collects efforts, probes, and runs its behavioral smoke only for the resulting active set, and it requires that set to equal the families in the final role map.
 
 Sonnet joins Fable and Opus as a rolling Claude alias. Runtime verification accepts only numeric concrete Sonnet revisions from Claude, stale versioned Sonnet descriptors normalize in memory or fail at the runner boundary, and Claude Code ships all five native Sonnet effort agents. Codex runner coverage now includes explicit Astra, Luna, and Terra argv and receipt cases. The generic runner, receipts, timeout policy, parent-owned routes, and no-fallback behavior are unchanged.
 
-The static default-panel check filters the matrix to First-run active rows. The four panel skills remain unchanged, and adding supported opt-in families does not expand their default fan-out. This change does not bump the plugin version.
+The static default-panel check filters the matrix to First-run active rows. The four panel skills remain unchanged, and adding supported opt-in families does not expand their default fan-out. The Maana downstream package records the combined model-matrix changes as version `1.4.2-maana.1`.
 
 ## 1.4.1 syncs to Cursor pstack 0.15.1
 

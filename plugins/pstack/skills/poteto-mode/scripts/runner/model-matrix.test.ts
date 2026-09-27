@@ -32,6 +32,8 @@ const FAMILY_ORDER = [
   "astra",
   "luna",
   "terra",
+  "sol6",
+  "luna6",
 ] as const;
 const PROVIDERS = ["claude", "codex", "grok"] as const;
 const DESCRIPTOR_RE =
@@ -119,9 +121,9 @@ function parseModelMatrix(markdown: string): MatrixRow[] {
     .slice(start + 1, end)
     .map((line) => line.trim())
     .filter((line) => line.startsWith("|"));
-  if (table.length !== 10) {
+  if (table.length < 3) {
     throw new Error(
-      `model matrix must be header, separator, and 8 data rows, got ${table.length}`
+      `model matrix must contain a header, separator, and data rows, got ${table.length}`
     );
   }
   const header = splitRow(table[0]);
@@ -247,6 +249,8 @@ describe("model matrix", () => {
       ["astra", "codex", "gpt-6-astra", "high", null, false],
       ["luna", "codex", "gpt-5.6-luna", "high", null, false],
       ["terra", "codex", "gpt-5.6-terra", "high", null, false],
+      ["sol6", "codex", "gpt-6-sol", "max", null, false],
+      ["luna6", "codex", "gpt-6-luna", "high", null, false],
     ]);
     expect(
       rows.filter((row) => row.firstRunActive).map((row) => row.family)

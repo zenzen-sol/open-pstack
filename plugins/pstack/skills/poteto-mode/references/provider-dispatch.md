@@ -18,6 +18,8 @@ pstack model choices are provider-qualified descriptors:
 | astra | - | codex | gpt-6-astra | high | low medium high xhigh max | - | no |
 | luna | - | codex | gpt-5.6-luna | high | low medium high xhigh max | - | no |
 | terra | - | codex | gpt-5.6-terra | high | low medium high xhigh max | - | no |
+| sol6 | - | codex | gpt-6-sol | max | low medium high xhigh max | - | no |
+| luna6 | - | codex | gpt-6-luna | high | low medium high xhigh max | - | no |
 
 The allowed effort universe is exactly `low`, `medium`, `high`, `xhigh`, `max`. A `-` in Upstream pstack choice means the portable build added that family. First run activates only rows whose First-run active cell is `yes`, in matrix order, and uses each active row's Default effort. Later runs derive the active family set from the non-alias descriptors in the normalized final role map. No separate active-family setting exists. A Claude-native agent stem of `-` means the family has no Claude-native agent. Otherwise the shipped agent name is `pstack-<stem>-<effort>`.
 
