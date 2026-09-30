@@ -12,12 +12,22 @@ This is not a verbatim copy. Skill bodies have been edited so every Cursor-speci
 
 ## Install
 
+The downstream version `1.4.2-maana.2` is available on [`codex/gpt-only-routing`](https://github.com/zenzen-sol/open-pstack/tree/codex/gpt-only-routing). `main` still contains community version `1.4.1`; installing from `main` omits the downstream changes. [PR #2](https://github.com/zenzen-sol/open-pstack/pull/2) remains a draft while parent-specific role-sheet confirmation and mixed-panel smoke checks are incomplete. This is a branch distribution, with no downstream release tag.
+
+Both distributions use marketplace name `open-pstack`. If that name is already registered from another source, remove that marketplace using your harness's marketplace remove command before adding this fork; otherwise it can keep resolving the old source.
+
 ### Claude Code
 
-This repo ships as a Claude Code marketplace containing one plugin (`pstack`).
+This repo ships as a Claude Code marketplace containing one plugin (`pstack`). Clone the downstream branch in your shell, then use the absolute path printed by `pwd` below:
+
+```shell
+git clone --branch codex/gpt-only-routing --single-branch https://github.com/zenzen-sol/open-pstack.git
+cd open-pstack
+pwd
+```
 
 ```text
-/plugin marketplace add zenzen-sol/open-pstack
+/plugin marketplace add /absolute/path/to/open-pstack
 /plugin install pstack@open-pstack
 /reload-plugins
 ```
@@ -29,7 +39,7 @@ The plugin auto-fires through a `SessionStart` hook on startup, `/clear`, and po
 The same plugin carries a `.codex-plugin/plugin.json` manifest and a root `.agents/plugins/marketplace.json`. Install it through the Codex marketplace:
 
 ```shell
-codex plugin marketplace add zenzen-sol/open-pstack --ref main
+codex plugin marketplace add zenzen-sol/open-pstack --ref codex/gpt-only-routing
 codex plugin add pstack@open-pstack
 ```
 
@@ -43,12 +53,12 @@ multi_agent = true
 For local plugin development, you can clone the repository and link its skills directly:
 
 ```shell
-git clone https://github.com/zenzen-sol/open-pstack
+git clone --branch codex/gpt-only-routing --single-branch https://github.com/zenzen-sol/open-pstack.git
 cd open-pstack
 for s in plugins/pstack/skills/*/; do ln -s "$PWD/$s" ~/.agents/skills/"$(basename "$s")"; done
 ```
 
-The marketplace install is the normal user path. Direct links are only for testing a checkout before publishing it. Remove the linked skill directories when the test is over.
+The marketplace install is the normal user path. Direct links are only for testing a checkout. Remove the linked skill directories when the test is over.
 
 ## Layout
 

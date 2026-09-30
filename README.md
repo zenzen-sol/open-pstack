@@ -1,7 +1,6 @@
 # open-pstack
 
-[![CI](https://github.com/zenzen-sol/open-pstack/actions/workflows/ci.yml/badge.svg)](https://github.com/zenzen-sol/open-pstack/actions/workflows/ci.yml)
-[![Latest release](https://img.shields.io/github/v/release/zenzen-sol/open-pstack)](https://github.com/zenzen-sol/open-pstack/releases/latest)
+[![CI](https://github.com/zenzen-sol/open-pstack/actions/workflows/ci.yml/badge.svg?branch=codex%2Fgpt-only-routing)](https://github.com/zenzen-sol/open-pstack/actions/workflows/ci.yml?query=branch%3Acodex%2Fgpt-only-routing)
 [![MIT license](https://img.shields.io/github/license/zenzen-sol/open-pstack)](LICENSE)
 
 **Open Pstack brings [Lauren Tan (@poteto)](https://x.com/poteto)'s [pstack](https://github.com/cursor/plugins/tree/main/pstack) to Claude Code and Codex.** Its job is to stay as close to her original work as possible while translating the parts that depend on Cursor.
@@ -34,14 +33,26 @@ pstack does not ask you to trust an agent on day one. It helps the agent leave e
 
 ## Install
 
+The downstream version `1.4.2-maana.2` is available on [`codex/gpt-only-routing`](https://github.com/zenzen-sol/open-pstack/tree/codex/gpt-only-routing). `main` still contains community version `1.4.1`; installing from `main` omits the downstream changes. [PR #2](https://github.com/zenzen-sol/open-pstack/pull/2) remains a draft while parent-specific role-sheet confirmation and mixed-panel smoke checks are incomplete. This is a branch distribution, with no downstream release tag.
+
+Both distributions use marketplace name `open-pstack`. If that name is already registered from another source, remove that marketplace using your harness's marketplace remove command before adding this fork; otherwise it can keep resolving the old source.
+
 You need a current Claude Code or Codex installation. For the default four-model review, install and sign in to the Claude Code, Codex, and Grok command-line tools. [Bun](https://bun.sh) runs the small local tool that starts models outside the app you are using. You can still use the core workflows with fewer models.
 
 ### Claude Code
 
-Run these commands inside Claude Code:
+First clone the downstream branch in your shell:
+
+```shell
+git clone --branch codex/gpt-only-routing --single-branch https://github.com/zenzen-sol/open-pstack.git
+cd open-pstack
+pwd
+```
+
+Use the absolute path printed by `pwd` in these commands inside Claude Code:
 
 ```text
-/plugin marketplace add zenzen-sol/open-pstack
+/plugin marketplace add /absolute/path/to/open-pstack
 /plugin install pstack@open-pstack
 /reload-plugins
 ```
@@ -51,7 +62,7 @@ Run these commands inside Claude Code:
 Run these commands in your shell:
 
 ```shell
-codex plugin marketplace add zenzen-sol/open-pstack --ref main
+codex plugin marketplace add zenzen-sol/open-pstack --ref codex/gpt-only-routing
 codex plugin add pstack@open-pstack
 ```
 
@@ -82,7 +93,7 @@ In Codex, ask:
 Use pstack:setup-pstack to configure pstack.
 ```
 
-Setup checks the models you can actually run, shows how each one will start, and asks before saving the choices. It supports Fable, GPT-5.6 Sol, Grok 4.6, Opus, Sonnet, GPT-6 Astra, GPT-5.6 Luna, and GPT-5.6 Terra. The first run still uses only Fable, Sol, Grok, and Opus. You can add or remove supported families before setup probes them.
+Setup checks the models you can actually run, shows how each one will start, and asks before saving the choices. It supports Fable, GPT-5.6 Sol, Grok 4.6, Opus, Sonnet, GPT-6 Astra, GPT-5.6 Luna, GPT-5.6 Terra, GPT-6 Sol, and GPT-6 Luna. The first run still uses only Fable, Sol, Grok, and Opus. You can add or remove supported families before setup probes them.
 
 A model sheet with versioned Claude-family entries starts using the rolling aliases in memory as soon as this release is installed. Run setup once after updating to persist that migration. It replaces versioned Fable, Opus, and Sonnet entries while preserving every role assignment and effort selection.
 

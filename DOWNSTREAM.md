@@ -8,6 +8,10 @@ Version `1.4.2-maana.2` incorporates the optional Sonnet, GPT-6 Astra, GPT-5.6 L
 
 The implementation preserves the upstream first-run panel. Maana-specific role choices belong in each harness's pstack model sheet, not in plugin defaults.
 
+## Installing the current branch
+
+Use the branch-specific [README installation instructions](README.md#install). The downstream changes live on `codex/gpt-only-routing`, while `main` remains at community version `1.4.1`. PR #2 remains a draft; sharing the branch does not mean the parent-specific role-sheet confirmation or mixed-panel smoke gates have passed. Each recipient must run setup in their own harness and confirm their own model choices.
+
 ## Updating
 
 1. Fetch `upstream/main` and inspect its release notes and `UPSTREAM.md`.

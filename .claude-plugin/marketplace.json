@@ -1,7 +1,7 @@
 {
   "name": "open-pstack",
   "owner": {
-    "name": "Eric Litman"
+    "name": "zenzen-sol"
   },
   "description": "Pstack for Claude Code and Codex, tracking Cursor's upstream pstack.",
   "plugins": [
