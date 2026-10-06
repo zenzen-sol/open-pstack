@@ -34,16 +34,16 @@ def port_path(path):
 
 ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument("--port", default="origin/main", help="Port commit to inspect")
+parser.add_argument("--port", default="HEAD", help="Port commit to inspect")
 parser.add_argument("--upstream", default="cursor/main", help="Upstream target commit")
 args = parser.parse_args()
 port = git("rev-parse", "--verify", args.port + "^{commit}").decode().strip()
 target = git("rev-parse", "--verify", args.upstream + "^{commit}").decode().strip()
 sync_doc = git("show", port + ":UPSTREAM.md").decode()
-match = re.search(r"^\| Commit \| `([0-9a-f]{40})` \|$", sync_doc, re.MULTILINE)
-if not match:
+matches = re.findall(r"^\| Commit \| `([0-9a-f]{40})` \|$", sync_doc, re.MULTILINE)
+if len(matches) != 1:
     parser.error("UPSTREAM.md must contain exactly the recorded full commit row")
-base = match.group(1)
+base = matches[0]
 subprocess.run(["git", "merge-base", "--is-ancestor", base, target], cwd=ROOT, check=True)
 before = tree(base, "pstack/")
 after = tree(target, "pstack/")

@@ -47,15 +47,38 @@ def check(name, condition, detail=""):
     return condition
 
 
+def verify_applied(audit, tree):
+    for row in audit["changes"]:
+        port = row["port_path"]
+        if port is None:
+            continue
+        path = os.path.join(tree, port)
+        if row["comparison"] in ("unchanged-since-base", "upstream-addition"):
+            if row["change"] == "delete":
+                if os.path.exists(path):
+                    return False
+            elif open(path, "rb").read() != subprocess.check_output(["git", "show", audit["upstream_target"] + ":" + row["upstream_path"]], cwd=tree):
+                return False
+    # Distribution metadata is never mechanically overwritten.
+    return sh("git", "diff", "--exit-code", "--", "UPSTREAM.md", "plugins/pstack/.claude-plugin/plugin.json", cwd=tree, check=False).returncode == 0
+
+
 def main(audit_path):
     audit = json.load(open(audit_path))
+    if not audit["changes"]:
+        print("Use an audit with an upstream delta for the merge probes.")
+        return 2
+    comparisons = {c["comparison"] for c in audit["changes"] if c["port_path"]}
+    if not {"unchanged-since-base", "port-diverged-review"}.issubset(comparisons):
+        print("This range does not exercise both verbatim and adapted merges. Run tests/test_cursor_updates.py for those fixture probes.")
+        return 2
     port = audit["port_commit"]
     results = []
     trees = []
     try:
         tree = worktree(port); trees.append(tree)
         code, out = run(audit, tree)
-        results.append(check("real range merges (exit 1 for hand review)", code == 1 and "verbatim 24, clean merge 32, needs review 32, removed 2" in out, out.splitlines()[0] if out else ""))
+        results.append(check("real range imports audited blobs and preserves unmapped files", code in (0, 1) and "verbatim " in out and verify_applied(audit, tree), out.splitlines()[0] if out else ""))
 
         tree = worktree(f"{port}~1"); trees.append(tree)
         code, out = run(audit, tree)
@@ -69,7 +92,11 @@ def main(audit_path):
 
         tree = worktree(port); trees.append(tree)
         variant = copy.deepcopy(audit)
-        variant["changes"] = [c for c in variant["changes"] if c["change"] != "modify"]
+        variant["changes"] = [c for c in variant["changes"] if c["change"] != "modify" and c["port_path"]]
+        if not variant["changes"]:
+            row = copy.deepcopy(next(c for c in audit["changes"] if c["port_path"]))
+            row["change"] = "delete"
+            variant["changes"] = [row]
         for c in variant["changes"]:
             c["comparison"] = "port-diverged-review"
         code, out = run(variant, tree)
@@ -103,7 +130,7 @@ def main(audit_path):
 
         tree = worktree(port); trees.append(tree)
         variant = copy.deepcopy(audit)
-        row = copy.deepcopy(next(c for c in variant["changes"] if c["change"] == "add"))
+        row = copy.deepcopy(next(c for c in variant["changes"] if c["port_path"]))
         row["comparison"] = "already-matches-target"
         variant["changes"] = [row]
         code, out = run(variant, tree)
