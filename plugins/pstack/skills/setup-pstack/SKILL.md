@@ -5,7 +5,7 @@ description: Configure pstack's provider-qualified models, per-family requested 
 
 # Setup pstack
 
-Configure one portable model sheet for the current parent harness. Read [`provider-dispatch.md`](../poteto-mode/references/provider-dispatch.md) before probing or writing anything. Its model matrix, descriptor grammar, and route table are the contract. Choose one requested effort per active matrix family. Do not add a second configuration file, a runtime resolver, or a weaker-model fallback.
+Configure one portable model sheet for the current parent harness. Every documented role remains present. Read [`provider-dispatch.md`](../poteto-mode/references/provider-dispatch.md) before probing or writing anything. Its model matrix, descriptor grammar, and route table are the contract. Choose one requested effort per active matrix family. Do not add a second configuration file, a runtime resolver, or a weaker-model fallback.
 
 Claude Code writes `~/.claude/pstack-models.md` and loads it from `~/.claude/CLAUDE.md` with:
 
@@ -31,7 +31,7 @@ Use the harness and tool surface running this skill: Claude Code or Codex. Envir
 
 Read the current parent-specific sheet when it exists. Before matrix validation, normalize only versioned predecessors of the supported rolling aliases. A provider-qualified Claude model is migratable when its model component starts with `claude-fable-`, `claude-opus-`, or `claude-sonnet-` and the remaining revision contains only digits and hyphens. Replace that component in memory with `fable`, `opus`, or `sonnet`, preserving the provider, effort, role, and lane order. Record each original and normalized descriptor for the confirmation in step 8. This migration is valid loaded state and does not require a separate operator choice.
 
-Treat the normalized loaded values as current role-to-family assignments. Keep any documented role missing from the sheet as a pending row seeded from the complete first-run role map. A pending row is not current state and does not activate its seeded families. Materialize it only in the next successful write after step 4 assigns every lane to a target family or alias. A duplicate or unknown role row is inconsistent state; report it and resolve it before probing. A bare host-native slug from an older sheet is also invalid because it does not say which provider owns it. A versioned Claude model outside the three migration families remains inconsistent state. If the sheet is missing, use the complete first-run role map. Its non-alias descriptors already equal the matrix rows marked First-run active `yes` at their Default effort.
+Treat the normalized loaded values as current role-to-family assignments. Keep any documented role missing from the sheet as a pending row seeded from the complete host-native first-run role map in provider-dispatch.md. A pending row is not current state and does not activate its seeded families. Materialize it only in the next successful write after step 4 assigns every lane to a target family or alias. A duplicate or unknown role row is inconsistent state; report it and resolve it before probing. A bare host-native slug from an older sheet is also invalid because it does not say which provider owns it. A versioned Claude model outside the three migration families remains inconsistent state. If the sheet is missing, use the complete host-native first-run role map in provider-dispatch.md. Its non-alias descriptors already equal the matrix rows whose First-run active cell names the current parent at their Default effort.
 
 ### 3. Parse the role map and active families
 
@@ -43,7 +43,7 @@ Derive the current active family set from the normalized loaded rows: it is exac
 
 ### 4. Choose the target active set and role assignments
 
-Show the supported matrix families and mark the current active set. On a first run, that set is Fable, Sol, Grok, and Opus because those rows have First-run active `yes`; keep it unchanged by default. On a rerun, keep the derived current set by default. Ask whether to add or remove named supported families. Require at least one target active family. Refuse an alias-only role map because setup could not probe a model family or choose a behavioral-smoke descriptor from it.
+Show the supported matrix families and mark the current active set. On a first run, use only the host-native set: Sol, Astra, and Luna 6 for Codex; Fable, Opus, and Sonnet for Claude Code. Keep it unchanged by default. Foreign providers require explicit opt-in. On a rerun, keep the derived current set by default. Ask whether to add or remove named supported families. Require at least one target active family. Refuse an alias-only role map because setup could not probe a model family or choose a behavioral-smoke descriptor from it.
 
 Build the final role map in memory before probing. Start from the normalized complete role map from step 2, preserving every loaded row's lane order and family or alias per lane. Present each pending row and its seeded assignments. If a seeded descriptor names a family outside the target set, require the operator to replace that lane with a target family, `inherit-parent`, or `auto`. Ask whether to keep the other assignments or change named roles. Keeping them is the default. Apply only role changes the operator names; never offer a reset of a customized sheet to the first-run assignments.
 
@@ -55,7 +55,7 @@ Offer a reasoning budget before the per-family choices: `unlimited` proposes `ma
 
 Visit the target active families in matrix order and collect one requested effort for each. For a family that currently uses one effort, show it as current. For a newly active family, show its Default effort as proposed. Empty input keeps the current value or accepts that proposal.
 
-If a target family has mixed current efforts, show every conflicting role row and ask for one normalized effort from its Selectable efforts cell. Do not ask for an effort from a removed or inactive family. On a first run with the unchanged target set, state the four matrix defaults before asking.
+If a target family has mixed current efforts, show every conflicting role row and ask for one normalized effort from its Selectable efforts cell. Do not ask for an effort from a removed or inactive family. On a first run with the unchanged target set, state the current parent's three matrix defaults before asking.
 
 ### 6. Probe the target active set
 
@@ -87,29 +87,9 @@ Why and Reflect require the parent's live MCP surface. Keep their investigator, 
 
 Every non-alias value must match `<provider>:<model>@<effort>` and its family must have passed step 6.
 
-After the operator confirms, write the in-memory render from step 7. Never paste the example below as the result. It is only the complete first-run role map used to seed step 2; selected efforts and explicit role changes always replace its example values before writing.
+After the operator confirms, write the in-memory render from step 7. The canonical host-native maps in provider-dispatch.md seed step 2; selected efforts and explicit role changes replace their seed values before writing.
 
-```markdown
-# pstack model configuration
-
-Provider-qualified per-role choices. Read the installed pstack provider-dispatch reference before dispatching a configured role. Every documented role remains present. `inherit-parent` and `auto` use the parent model natively and still count as one panel lane.
-
-feature, refactoring: grok:grok-4.6@xhigh
-bug-fix: codex:gpt-5.6-sol@max
-perf-issue: codex:gpt-5.6-sol@max
-hillclimb: codex:gpt-5.6-sol@max
-judgment and prose: claude:fable@max
-hardest tasks: claude:fable@max
-how explorer: grok:grok-4.6@xhigh
-how explainer: claude:fable@max
-why investigators, synthesizer: inherit-parent
-reflect tooling, judgment, divergent, synthesizer: inherit-parent
-arena runners: claude:fable@max, codex:gpt-5.6-sol@max, grok:grok-4.6@xhigh, claude:opus@xhigh
-arena cross-judge pool: claude:fable@max, codex:gpt-5.6-sol@max, grok:grok-4.6@xhigh, claude:opus@xhigh
-swarm workers: grok:grok-4.6@xhigh
-architect runners: claude:fable@max, codex:gpt-5.6-sol@max, grok:grok-4.6@xhigh, claude:opus@xhigh
-interrogate reviewers: claude:fable@max, codex:gpt-5.6-sol@max, grok:grok-4.6@xhigh, claude:opus@xhigh
-```
+Read the two canonical maps under **Host-native defaults** in provider-dispatch.md and select only the established parent's map. Do not maintain a second copy here.
 
 ### 9. Wire it in
 
@@ -121,6 +101,6 @@ Do not copy the model sheet between harnesses without rerunning the parent-speci
 
 ### 10. Behavioral smoke
 
-Before declaring setup complete, run one small read-only mixed panel from this parent: one chosen descriptor for every target active family, distinct output/receipt paths, and an independent cross-judge chosen from that same set. Do not smoke an inactive family. Launch native agents and every external process in the background with retained handles, then drain them. Verify the native transcript entries and every external receipt. A structural config check or unit test is not a substitute.
+Before declaring setup complete, run one small read-only configured panel from this parent: one chosen descriptor for every target active family, distinct output/receipt paths, and an independent cross-judge chosen from that same set. Do not smoke an inactive family. Launch native agents and every external process in the background with retained handles, then drain them. Verify the native transcript entries and every external receipt. A structural config check or unit test is not a substitute.
 
 Report the sheet path, parent route table, requested-effort probe results, smoke results, and external elapsed/token/cost receipts. Re-running this skill re-probes and updates the same sheet. Do not claim the provider exposed hidden applied-effort observability.

@@ -6,7 +6,7 @@ This fork lets Maana Data ship model-family and workflow changes without waiting
 
 Version `1.4.2-maana.2` incorporates the optional Sonnet, GPT-6 Astra, GPT-5.6 Luna, and GPT-5.6 Terra families from open-pstack PR #55. It also adds optional GPT-6 Sol and GPT-6 Luna families for the Maana Data GPT-only route. Setup derives the active family set from the final role map, so a Codex-only Astra, Sol 6, and Luna 6 configuration does not probe or require Claude or Grok.
 
-The implementation preserves the upstream first-run panel. Maana-specific role choices belong in each harness's pstack model sheet, not in plugin defaults.
+The native-default candidate uses a host-specific first-run map. Explicit role choices remain in each harness's pstack model sheet and project overrides.
 
 ## Installing the current branch
 
@@ -25,4 +25,4 @@ Cursor's `cursor/plugins/pstack` tree is the content source. Community Open Psta
 
 ## Current candidate
 
-`1.5.0-maana.1` imports Cursor pstack 0.15.15 at `df581122cde17e6e27686b5a448bde23e4ad4318`. It retains the existing optional model families and first-run portable panel. It is a review candidate, not an installed or published release. The prepared daily update-check schedule remains disabled; manual detection is read-only unless its caller explicitly enables the notice input.
+`1.5.0-maana.2` imports Cursor pstack 0.15.15 at `df581122cde17e6e27686b5a448bde23e4ad4318`. It retains optional model families and defaults unconfigured roles to the current host provider. Scheduled Autopilot wake-ups are disabled in this core candidate. It is a review candidate, not an installed or published release. The prepared daily update-check schedule remains disabled; manual detection is read-only unless its caller explicitly enables the notice input.

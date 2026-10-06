@@ -10,20 +10,74 @@ pstack model choices are provider-qualified descriptors:
 
 | Family | Upstream pstack choice | Provider | Model | Default effort | Selectable efforts | Claude-native agent stem | First-run active |
 |---|---|---|---|---|---|---|---|
-| fable | fable | claude | fable | max | low medium high xhigh max | fable | yes |
-| sol | gpt-5.6-sol-max | codex | gpt-5.6-sol | max | low medium high xhigh max | - | yes |
-| grok | grok-4.6-fast-xhigh | grok | grok-4.6 | xhigh | low medium high xhigh max | - | yes |
-| opus | opus | claude | opus | xhigh | low medium high xhigh max | opus | yes |
-| sonnet | - | claude | sonnet | high | low medium high xhigh max | sonnet | no |
-| astra | - | codex | gpt-6-astra | high | low medium high xhigh max | - | no |
+| fable | fable | claude | fable | max | low medium high xhigh max | fable | claude |
+| sol | gpt-5.6-sol-max | codex | gpt-5.6-sol | max | low medium high xhigh max | - | codex |
+| grok | grok-4.6-fast-xhigh | grok | grok-4.6 | xhigh | low medium high xhigh max | - | no |
+| opus | opus | claude | opus | xhigh | low medium high xhigh max | opus | claude |
+| sonnet | - | claude | sonnet | high | low medium high xhigh max | sonnet | claude |
+| astra | - | codex | gpt-6-astra | high | low medium high xhigh max | - | codex |
 | luna | - | codex | gpt-5.6-luna | high | low medium high xhigh max | - | no |
 | terra | - | codex | gpt-5.6-terra | high | low medium high xhigh max | - | no |
 | sol6 | - | codex | gpt-6-sol | max | low medium high xhigh max | - | no |
-| luna6 | - | codex | gpt-6-luna | high | low medium high xhigh max | - | no |
+| luna6 | - | codex | gpt-6-luna | high | low medium high xhigh max | - | codex |
 
-The allowed effort universe is exactly `low`, `medium`, `high`, `xhigh`, `max`. A `-` in Upstream pstack choice means the portable build added that family. First run activates only rows whose First-run active cell is `yes`, in matrix order, and uses each active row's Default effort. Later runs derive the active family set from the non-alias descriptors in the normalized final role map. No separate active-family setting exists. A Claude-native agent stem of `-` means the family has no Claude-native agent. Otherwise the shipped agent name is `pstack-<stem>-<effort>`.
+The allowed effort universe is exactly `low`, `medium`, `high`, `xhigh`, `max`. A `-` in Upstream pstack choice means the portable build added that family. First run activates only rows whose First-run active cell names the current parent (`codex` or `claude`), in matrix order, and uses each active row's Default effort. Grok and other foreign providers are explicit opt-in only. Later runs derive the active family set from the non-alias descriptors in the normalized final role map. No separate active-family setting exists. A Claude-native agent stem of `-` means the family has no Claude-native agent. Otherwise the shipped agent name is `pstack-<stem>-<effort>`.
 
 `fable`, `opus`, and `sonnet` are Claude Code's rolling aliases. Claude resolves each alias to the latest available family revision. A runner receipt keeps the requested alias in `model` and the concrete provider-reported revision in `reportedModel`; verification accepts only a numeric `claude-fable-*`, `claude-opus-*`, or `claude-sonnet-*` revision from the matching family.
+
+## Host-native defaults
+
+This is the canonical first-run and missing-role map. Establish the parent from its live tool surface. Codex defaults to OpenAI through native spawn_agent; Claude Code defaults to Anthropic through native Agent. Never launch a foreign CLI or authentication probe for an unconfigured role. Preserve every existing explicit descriptor, alias, effort, and lane order, including deliberate cross-provider choices. Project role overrides take precedence over the harness sheet. Resolve each missing role independently from the current parent map; never reset other rows. No silent fallback is allowed.
+
+### Codex defaults
+
+```markdown
+# pstack model configuration
+
+Provider-qualified per-role choices. Every documented role remains present.
+
+feature, refactoring: codex:gpt-5.6-sol@max
+bug-fix: codex:gpt-5.6-sol@max
+perf-issue: codex:gpt-5.6-sol@max
+hillclimb: codex:gpt-5.6-sol@max
+judgment and prose: codex:gpt-5.6-sol@max
+hardest tasks: codex:gpt-6-astra@high
+how explorer: codex:gpt-6-luna@high
+how explainer: codex:gpt-5.6-sol@max
+why investigators, synthesizer: inherit-parent
+reflect tooling, judgment, divergent, synthesizer: inherit-parent
+arena runners: codex:gpt-5.6-sol@max, codex:gpt-6-astra@high, codex:gpt-6-luna@high
+arena cross-judge pool: codex:gpt-5.6-sol@max, codex:gpt-6-astra@high, codex:gpt-6-luna@high
+swarm workers: codex:gpt-6-luna@high
+architect runners: codex:gpt-5.6-sol@max, codex:gpt-6-astra@high, codex:gpt-6-luna@high
+interrogate reviewers: codex:gpt-5.6-sol@max, codex:gpt-6-astra@high, codex:gpt-6-luna@high
+```
+
+### Claude Code defaults
+
+```markdown
+# pstack model configuration
+
+Provider-qualified per-role choices. Every documented role remains present.
+
+feature, refactoring: claude:fable@max
+bug-fix: claude:fable@max
+perf-issue: claude:fable@max
+hillclimb: claude:fable@max
+judgment and prose: claude:fable@max
+hardest tasks: claude:opus@xhigh
+how explorer: claude:sonnet@high
+how explainer: claude:fable@max
+why investigators, synthesizer: inherit-parent
+reflect tooling, judgment, divergent, synthesizer: inherit-parent
+arena runners: claude:fable@max, claude:opus@xhigh, claude:sonnet@high
+arena cross-judge pool: claude:fable@max, claude:opus@xhigh, claude:sonnet@high
+swarm workers: claude:sonnet@high
+architect runners: claude:fable@max, claude:opus@xhigh, claude:sonnet@high
+interrogate reviewers: claude:fable@max, claude:opus@xhigh, claude:sonnet@high
+```
+
+Single-provider panels still use independent model lanes and an independent judge. Choose a different model from the configured pool when possible. Choose a different provider only when explicitly configured; never expand the active set to obtain provider diversity.
 
 ## Read-time normalization
 

@@ -42,7 +42,7 @@ poteto-mode's Subagents section sets Claude-specific defaults (`subagent_type: "
 
 ## Models and providers
 
-Do not replace every configured entry with a Codex model. `/setup-pstack` writes portable descriptors such as `claude:fable@max`, `codex:gpt-5.6-sol@max`, and `grok:grok-4.6@xhigh`. In a Codex parent, only `codex:*` is native. Route Claude and Grok descriptors through the external launcher exactly as `provider-dispatch.md` specifies. The current default panel intentionally keeps four-provider frontier diversity and contains no older GPT or Claude substitute.
+Do not replace every configured entry with a Codex model. `/setup-pstack` writes portable descriptors such as `claude:fable@max`, `codex:gpt-5.6-sol@max`, and `grok:grok-4.6@xhigh`. In a Codex parent, only `codex:*` is native. Route Claude and Grok descriptors through the external launcher exactly as `provider-dispatch.md` specifies. Unconfigured roles use the Codex canonical map in provider-dispatch.md. Claude and Grok lanes run only when explicitly configured.
 
 ## Claude built-in skills pstack references
 
@@ -53,7 +53,7 @@ Some triggers name skills that ship with Claude Code, not pstack. They do not ex
 | `run` (drive a CLI/TUI to see a change work) | Run the app yourself via `shell` and observe the real output. |
 | `verify` (drive a UI to confirm a fix) | Drive the UI with whatever automation you have, or hand the user a concrete manual check. Do not claim done without observing the artifact. |
 | `plugin-dev:skill-development` (Claude's SKILL.md authoring guidance) | Follow your platform's skill-authoring guidance; the `writing-skills` skill if present. Keep `name` + `description` frontmatter and progressive disclosure. |
-| `loop` (recurring/self-paced re-invocation, used by `babysit`) | Codex has no `loop` skill. For an authorized recurring run, use the available Codex scheduled-task surface with the playbook's hourly cadence. Do not claim a durable wake-up from an in-turn polling loop. Preserve change-only status messages and stop/hold orders. |
+| `loop` (recurring/self-paced re-invocation, used by `babysit`) | Codex has no `loop` skill. Scheduled Autopilot wake-ups are disabled in this core candidate. Never register them through this mapping. For other explicitly authorized recurring workflows, use the available Codex scheduled-task surface with the workflow's cadence. Do not claim a durable wake-up from an in-turn polling loop. Preserve change-only status messages and stop/hold orders. |
 
 ## Vendored scripts
 
