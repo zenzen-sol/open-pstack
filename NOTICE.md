@@ -21,6 +21,8 @@ This plugin is a port of upstream MIT-licensed work. All upstream copyright noti
 | `plugins/pstack/skills/` (0.15.0 prose changes and the new `principle-attack-the-premise` and `principle-test-behavior-not-implementation` leaves), `plugins/pstack/assets/logo.png`, `README-UPSTREAM.md` | [cursor/plugins/pstack @ 71ed0d1](https://github.com/cursor/plugins/tree/71ed0d1076fec562c1b74ee353121a8d00f75382/pstack) | (c) 2026 Lauren Tan | MIT | [LICENSE](LICENSE) |
 | `plugins/pstack/skills/poteto-mode/SKILL.md` (0.15.1 reply-writing evidence rule) | [cursor/plugins/pstack @ f8abedd](https://github.com/cursor/plugins/tree/f8abeddd1862dc73704e3d719dd73df0d51b8c71/pstack) | (c) 2026 Lauren Tan | MIT | [LICENSE](LICENSE) |
 
+| `plugins/pstack/skills/` and `agents/poteto-agent.md` (0.15.15 workflow changes, four new skills and two help references), `README-UPSTREAM.md` | [cursor/plugins/pstack @ df58112](https://github.com/cursor/plugins/tree/df581122cde17e6e27686b5a448bde23e4ad4318/pstack) | (c) 2026 Lauren Tan | MIT | [LICENSE](LICENSE) |
+
 ## What changed in the port
 
 The port is editorial, not mechanical. See [CHANGES.md](CHANGES.md) for the full per-skill audit of substitutions applied.

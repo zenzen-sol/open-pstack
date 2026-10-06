@@ -31,6 +31,10 @@ The normal entry point is `poteto-mode`. You give it a task in plain language. I
 
 pstack does not ask you to trust an agent on day one. It helps the agent leave evidence you can inspect. Start with supervised work. Let it run more work in parallel only after its checks have earned that trust in your own repositories.
 
+## Cursor 0.15.15 candidate
+
+The `codex/cursor-0.15.15-port` branch prepares version `1.5.0-maana.1` from the pinned direct Cursor source. It has not replaced the shared machine installation. Release and rollout require the live gates in `AGENTS.md`. See [the candidate verification record](docs/plans/cursor-0.15.15-verification.md).
+
 ## Install
 
 The downstream version `1.4.2-maana.2` is available on [`codex/gpt-only-routing`](https://github.com/zenzen-sol/open-pstack/tree/codex/gpt-only-routing). `main` still contains community version `1.4.1`; installing from `main` omits the downstream changes. [PR #2](https://github.com/zenzen-sol/open-pstack/pull/2) remains a draft while parent-specific role-sheet confirmation and mixed-panel smoke checks are incomplete. This is a branch distribution, with no downstream release tag.
@@ -166,11 +170,11 @@ This repository also keeps:
 
 ## Staying close to Lauren's pstack
 
-Open Pstack 1.4.2-maana.2 tracks pstack 0.15.1 at Cursor commit [`f8abeddd1862dc73704e3d719dd73df0d51b8c71`](https://github.com/cursor/plugins/commit/f8abeddd1862dc73704e3d719dd73df0d51b8c71).
+Candidate Open Pstack 1.5.0-maana.1 tracks pstack 0.15.15 at Cursor commit [`df581122cde17e6e27686b5a448bde23e4ad4318`](https://github.com/cursor/plugins/commit/df581122cde17e6e27686b5a448bde23e4ad4318).
 
 The two projects have separate version numbers. The pstack version identifies Lauren's upstream content. The Open Pstack version identifies the Claude Code and Codex package built from it.
 
-In this repository, “upstream” means Lauren's original pstack. Open Pstack does not promise instant updates. It records the exact version it follows, reviews new changes in order, and changes only what Claude Code and Codex require. New pstack behavior belongs in Lauren's project first whenever possible.
+In this repository, “upstream” means Lauren's original pstack. This fork checks Cursor directly rather than waiting for community Open Pstack releases. It records the exact version it follows, reviews new changes in order, and changes only what Claude Code and Codex require. New pstack behavior belongs in Lauren's project first whenever possible.
 
 ## Contributing
 

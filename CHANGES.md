@@ -2,6 +2,21 @@
 
 This port applies the Cursor → Claude Code substitutions in skill bodies. Earlier drafts left them flagged; this revision resolves them. A later pass added a Codex build that shares the same skills; see [Codex port](#codex-port) below.
 
+## 1.5.0-maana.1 directly ports Cursor pstack 0.15.15
+
+This candidate imports the 17 pstack commits after `f8abeddd1862dc73704e3d719dd73df0d51b8c71` through `df581122cde17e6e27686b5a448bde23e4ad4318`. The source delta has 65 paths, six additions and 59 modifications. Four new shared skills add performance-number validation, architectural enforcement of repeated corrections, and typed help. The shared catalog now has 58 skills and 24 principle leaves.
+
+Fresh subagents take fix rounds and new tasks unless they need expensive agent-local state. Autopilot review starts at code-ready, keeps stable bases during fix rounds, records child handles and pushed progress, and reports only new changes on hourly audits. Existing cancellation rules still require affirmative failure evidence; expected runtime never becomes a deadline. PR descriptions adopt the upstream headings while retaining repository-specific live evidence, drafts, expected-head merges, disarmed queues, captured-SHA leases, fork-safe bases, and patch-ID verdicts.
+
+Setup adds an optional reasoning-budget shortcut translated to supported per-family requested efforts. Reruns default to keeping current efforts. Budgets never change providers, model families, aliases, panel order, active membership, or role assignments, and failed probes still write nothing. Cursor's removal of Sol and its model-fallback instructions are deliberately excluded. GPT-6 Astra, GPT-6 Sol, GPT-6 Luna, GPT-5.6 Luna and Terra support remains. MCP-dependent Why and Reflect roles remain native to the parent. Existing user sheets and global instructions are not migrated by this release.
+
+`poteto-help` remains typed-only and routes to the installed adapted skills. Cursor Custom Modes, cloud VMs, routines, and Cursor-specific installation instructions are not ported. Its pinned public guide links are conceptual background. `benchmark-checklist` and `correct` remain model-invocable; the new principle follows this port's user-hidden/model-readable convention. Benchmark host checks support Linux and macOS.
+
+The adapted plan checker retains the fork's complete skeleton and configured-worker contract, with hourly/change-only audit text. The log helper appends its header rather than risking truncation on a failed network-mount existence check. No provider runner, runtime dependencies, or lockfile changed. Source paths and retained adaptations are recorded in `docs/plans/cursor-0.15.15-paths.tsv`.
+
+The direct-Cursor checker, merge probes, and notice planner have dependency-free Python tests. Detection does not write the checkout. A manual workflow uploads the audit; an explicit optional notice step reuses one bot-authored pending issue and never repeats an already reported target. The daily schedule is present only as a commented proposal. It has not been enabled.
+
+
 ## 1.4.2-maana.2 adds opt-in Sonnet, Astra, Luna, Terra, Sol 6, and Luna 6 families
 
 The provider matrix now supports Sonnet, GPT-6 Astra, GPT-5.6 Luna, GPT-5.6 Terra, GPT-6 Sol, and GPT-6 Luna alongside Fable, GPT-5.6 Sol, Grok, and Opus. A First-run active column keeps the existing four-family panel and generated first-run sheet unchanged. Setup derives active membership from the normalized final role map instead of persisting a second setting. Operators can add or remove supported families before probing. Setup collects efforts, probes, and runs its behavioral smoke only for the resulting active set, and it requires that set to equal the families in the final role map.

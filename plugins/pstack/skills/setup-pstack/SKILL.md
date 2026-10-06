@@ -1,6 +1,6 @@
 ---
 name: setup-pstack
-description: Configure pstack's provider-qualified models, per-family requested effort, and parent-owned routes per role. Verifies native and external Claude, Codex, and Grok lanes before writing the override sheet. Use for /setup-pstack, "configure pstack models", or changing pstack's model choices.
+description: Configure pstack's provider-qualified models, per-family requested effort and reasoning budget, and parent-owned routes per role. Verifies native and external Claude, Codex, and Grok lanes before writing the override sheet. Use for /setup-pstack, "configure pstack models", "pstack budget", or changing pstack's model choices.
 ---
 
 # Setup pstack
@@ -50,6 +50,8 @@ Build the final role map in memory before probing. Start from the normalized com
 A removed family must have every occurrence replaced with another target family, `inherit-parent`, or `auto`. An added family must appear in at least one role. Other named role changes may use a target family, `inherit-parent`, or `auto`. Refuse an unqualified slug, a model outside the matrix, a provider/model mismatch, or any role map whose derived family set differs from the chosen target set.
 
 ### 5. Collect one requested effort per active family
+
+Offer a reasoning budget before the per-family choices: `unlimited` proposes `max`, `large` proposes `xhigh`, `medium` proposes `high`, and `small` proposes `medium`. Include `keep current efforts`, which is the default on a rerun. A budget changes only requested effort, never providers, models, role assignments, aliases, lane order, or active membership. Propose the chosen effort only when it appears in each family's Selectable efforts cell. Otherwise report the unsupported pair and require an explicit supported effort before probing. Never infer a weaker-model substitute or silently cap the effort. The subsequent per-family choices can override the proposal. Budget labels are input shortcuts, not a second persisted setting.
 
 Visit the target active families in matrix order and collect one requested effort for each. For a family that currently uses one effort, show it as current. For a newly active family, show its Default effort as proposed. Empty input keeps the current value or accepts that proposal.
 

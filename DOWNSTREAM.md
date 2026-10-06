@@ -12,15 +12,17 @@ The implementation preserves the upstream first-run panel. Maana-specific role c
 
 Use the branch-specific [README installation instructions](README.md#install). The downstream changes live on `codex/gpt-only-routing`, while `main` remains at community version `1.4.1`. PR #2 remains a draft; sharing the branch does not mean the parent-specific role-sheet confirmation or mixed-panel smoke gates have passed. Each recipient must run setup in their own harness and confirm their own model choices.
 
-## Updating
+## Updating directly from Cursor
 
-1. Fetch `upstream/main` and inspect its release notes and `UPSTREAM.md`.
-2. Rebase downstream commits onto the selected upstream tag.
-3. Drop any downstream change already absorbed upstream.
-4. Keep remaining model-matrix changes in standalone commits.
-5. Run the static, test, typecheck, manifest, plugin-validation, and installed-harness gates from `AGENTS.md`.
-6. Tag the exact installed and live-verified commit before updating either harness.
+Cursor's `cursor/plugins/pstack` tree is the content source. Community Open Pstack releases do not gate this fork's updates. Keep that remote available only for optional cross-harness fixes.
 
-## Returning to upstream
+1. Run the direct-Cursor checker and pin the selected full source SHA. See `UPSTREAM.md`.
+2. Branch from the current fork tip and keep source imports, harness changes, GPT routing, and release metadata separable.
+3. Apply the audit in an isolated checkout, review every adapted hunk, and record each source path as imported, adapted, or intentionally retained/excluded.
+4. Preserve provider-qualified GPT support, configured roles and panel order, native MCP roles, no fallback, and no implicit timeout. Do not copy Cursor's Opus/Grok defaults over the user's configuration.
+5. Run the static, test, typecheck, manifest, plugin-validation, and installed-harness gates from `AGENTS.md`. Keep the PR draft until live evidence exists.
+6. After review and exact-candidate live proof, tag the merged commit and refresh the shared machine installation. Open fresh Maana and DealTeam tasks and verify the installed candidate. Leave global instructions, model sheets, and project verification skills unchanged.
 
-When upstream supports the model families and selected-provider setup we use, repoint the Codex and Claude marketplaces to `ericlitman/open-pstack`, verify the installed release in both harnesses, and archive this fork only after its downstream diff is empty.
+## Current candidate
+
+`1.5.0-maana.1` imports Cursor pstack 0.15.15 at `df581122cde17e6e27686b5a448bde23e4ad4318`. It retains the existing optional model families and first-run portable panel. It is a review candidate, not an installed or published release. The prepared daily update-check schedule remains disabled; manual detection is read-only unless its caller explicitly enables the notice input.
