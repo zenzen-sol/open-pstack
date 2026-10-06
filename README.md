@@ -33,7 +33,7 @@ pstack does not ask you to trust an agent on day one. It helps the agent leave e
 
 ## Cursor 0.15.15 candidate
 
-The `codex/cursor-0.15.15-port` branch prepares version `1.5.0-maana.1` from the pinned direct Cursor source. It has not replaced the shared machine installation. Release and rollout require the live gates in `AGENTS.md`. See [the candidate verification record](docs/plans/cursor-0.15.15-verification.md).
+The native-default candidate is `1.5.0-maana.3`, based on the pinned direct Cursor 0.15.15 import. Its core workflows default to the host provider and preserve explicit role choices. Independent scheduled Autopilot wake-ups are disabled. See [the native-default adoption record](docs/plans/native-default-adoption.md) for installation and verification evidence. It is a candidate installation, not a published release.
 
 ## Install
 
@@ -41,7 +41,7 @@ The downstream version `1.4.2-maana.2` is available on [`codex/gpt-only-routing`
 
 Both distributions use marketplace name `open-pstack`. If that name is already registered from another source, remove that marketplace using your harness's marketplace remove command before adding this fork; otherwise it can keep resolving the old source.
 
-You need a current Claude Code or Codex installation. For the default four-model review, install and sign in to the Claude Code, Codex, and Grok command-line tools. [Bun](https://bun.sh) runs the small local tool that starts models outside the app you are using. You can still use the core workflows with fewer models.
+You need a current Claude Code or Codex installation. Default review panels use native OpenAI models in Codex and native Anthropic models in Claude Code. Install and sign in to foreign command-line tools only for explicitly configured cross-provider lanes. [Bun](https://bun.sh) runs the small local tool that starts models outside the app you are using. You can still use the core workflows with fewer models.
 
 ### Claude Code
 
@@ -97,7 +97,7 @@ In Codex, ask:
 Use pstack:setup-pstack to configure pstack.
 ```
 
-Setup checks the models you can actually run, shows how each one will start, and asks before saving the choices. It supports Fable, GPT-5.6 Sol, Grok 4.6, Opus, Sonnet, GPT-6 Astra, GPT-5.6 Luna, GPT-5.6 Terra, GPT-6 Sol, and GPT-6 Luna. The first run still uses only Fable, Sol, Grok, and Opus. You can add or remove supported families before setup probes them.
+Setup checks the models you can actually run, shows how each one will start, and asks before saving the choices. It supports Fable, GPT-5.6 Sol, Grok 4.6, Opus, Sonnet, GPT-6 Astra, GPT-5.6 Luna, GPT-5.6 Terra, GPT-6 Sol, and GPT-6 Luna. The first run uses Sol, Astra, and Luna 6 in Codex, or Opus and Sonnet in Claude Code. You can add or remove supported families before setup probes them.
 
 A model sheet with versioned Claude-family entries starts using the rolling aliases in memory as soon as this release is installed. Run setup once after updating to persist that migration. It replaces versioned Fable, Opus, and Sonnet entries while preserving every role assignment and effort selection.
 
@@ -170,7 +170,7 @@ This repository also keeps:
 
 ## Staying close to Lauren's pstack
 
-Candidate Open Pstack 1.5.0-maana.1 tracks pstack 0.15.15 at Cursor commit [`df581122cde17e6e27686b5a448bde23e4ad4318`](https://github.com/cursor/plugins/commit/df581122cde17e6e27686b5a448bde23e4ad4318).
+Candidate Open Pstack 1.5.0-maana.3 tracks pstack 0.15.15 at Cursor commit [`df581122cde17e6e27686b5a448bde23e4ad4318`](https://github.com/cursor/plugins/commit/df581122cde17e6e27686b5a448bde23e4ad4318).
 
 The two projects have separate version numbers. The pstack version identifies Lauren's upstream content. The Open Pstack version identifies the Claude Code and Codex package built from it.
 

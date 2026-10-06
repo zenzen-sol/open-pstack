@@ -1,5 +1,12 @@
 # CHANGES — applied substitutions
 
+## 1.5.0-maana.3 defaults to the native host provider
+
+Unconfigured and missing roles use one canonical map per parent: OpenAI Sol/Astra/Luna 6 in Codex, Anthropic Opus/Sonnet in Claude Code. Setup and workflow fallbacks share these maps. Explicit models, efforts, aliases and lane order remain unchanged, including cross-provider choices. Fable remains available as explicit opt-in after its live probe required usage credits. Foreign CLIs and authentication probes are never default requirements. There is no execution fallback.
+
+Independent scheduled Autopilot wake-ups are disabled in this core candidate. Manual audit ticks remain available. Shared candidate adoption for DealTeam and Codeslaw, exact installed native probes and panels, preservation checks, and release limitations are recorded in [the adoption record](docs/plans/native-default-adoption.md).
+
+
 This port applies the Cursor → Claude Code substitutions in skill bodies. Earlier drafts left them flagged; this revision resolves them. A later pass added a Codex build that shares the same skills; see [Codex port](#codex-port) below.
 
 ## 1.5.0-maana.1 directly ports Cursor pstack 0.15.15
