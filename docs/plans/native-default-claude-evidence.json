@@ -1,0 +1,174 @@
+{
+  "behavioralEvidence": {
+    "parent": {
+      "harness": "claude",
+      "evidence": "running inside Claude Code; dispatched native lanes via the Agent tool with subagent_type pstack:pstack-opus-xhigh / pstack:pstack-sonnet-high, matching provider-dispatch.md's Claude-native agent stem pstack-<stem>-<effort>",
+      "route": "native Agent (per provider-dispatch.md 'The parent owns the route' table: Claude Code -> claude:* uses native Agent)"
+    },
+    "installedVersion": "1.5.0-maana.3",
+    "installedPath": "/Users/zenzen-sol/.claude/plugins/cache/open-pstack/pstack/1.5.0-maana.3",
+    "firstRunActiveFamilies": [
+      "opus",
+      "sonnet"
+    ],
+    "fable": {
+      "probed": false,
+      "reason": "matrix row First-run active = no for Claude parent; task explicitly excludes it from probing"
+    },
+    "probes": [
+      {
+        "family": "opus",
+        "descriptor": "claude:opus@xhigh",
+        "subagentType": "pstack:pstack-opus-xhigh",
+        "marker": "NATIVE_PROBE_opus",
+        "status": "completed",
+        "toolUses": 0,
+        "durationMs": 2200,
+        "resultVerbatim": "NATIVE_PROBE_opus"
+      },
+      {
+        "family": "sonnet",
+        "descriptor": "claude:sonnet@high",
+        "subagentType": "pstack:pstack-sonnet-high",
+        "marker": "NATIVE_PROBE_sonnet",
+        "status": "completed",
+        "toolUses": 0,
+        "durationMs": 2260,
+        "resultVerbatim": "NATIVE_PROBE_sonnet"
+      }
+    ],
+    "panel": [
+      {
+        "family": "opus",
+        "subagentType": "pstack:pstack-opus-xhigh",
+        "marker": "PANEL_opus",
+        "status": "completed",
+        "durationMs": 2008,
+        "task": "17+25",
+        "resultVerbatim": "PANEL_opus\n42"
+      },
+      {
+        "family": "sonnet",
+        "subagentType": "pstack:pstack-sonnet-high",
+        "marker": "PANEL_sonnet",
+        "status": "completed",
+        "durationMs": 2205,
+        "task": "17+25",
+        "resultVerbatim": "PANEL_sonnet\n42"
+      }
+    ],
+    "judge": {
+      "family": "sonnet",
+      "subagentType": "pstack:pstack-sonnet-high",
+      "marker": "JUDGE_sonnet",
+      "status": "completed",
+      "durationMs": 2355,
+      "task": "17+25",
+      "resultVerbatim": "JUDGE_sonnet\n42",
+      "note": "active set for this Claude first-run map has only two families (opus, sonnet); judge necessarily reuses sonnet as a separate, independent invocation with its own handle and output, not a read of the panel lane's output"
+    },
+    "missingRoleResolution": {
+      "missingRole": "swarm workers",
+      "resolvedFrom": "parent canonical map only (provider-dispatch.md Host-native defaults -> Claude Code defaults block)",
+      "resolvedDescriptor": "claude:sonnet@high",
+      "otherRowsReset": false
+    },
+    "explicitRolePreservation": {
+      "role": "feature",
+      "descriptor": "grok:grok-4.6@xhigh",
+      "changed": false,
+      "probed": false,
+      "reason": "deliberate cross-provider choice preserved unchanged per instruction; grok explicitly excluded from probing, no foreign CLI or external runner invoked"
+    },
+    "scheduledWakeDisabled": {
+      "disabled": true,
+      "source": [
+        "skills/poteto-mode/playbooks/autopilot-full.md: \"Independent scheduled Autopilot wake-ups are disabled in this candidate because hourly wake proof is incomplete. Do not register /loop, CronCreate, heartbeat, or another recurring automation from this playbook.\"",
+        "skills/poteto-mode/playbooks/autopilot-stack.md: identical core distribution gate language"
+      ],
+      "schedulingToolInvoked": false
+    },
+    "constraintsHonored": {
+      "nestedAgentsSpawned": false,
+      "nestedAgentsStructurallyBlocked": "pstack-opus-xhigh and pstack-sonnet-high agent definitions omit Agent/Task from their tool surface",
+      "foreignCliInvoked": false,
+      "externalRunnerInvoked": false,
+      "generalPurposeOrDiscoveryAgentUsed": false,
+      "realHomeFilesModified": false,
+      "schedulingRegistered": false,
+      "gitCommitsOrPushes": false
+    },
+    "failures": []
+  },
+  "observedNativeArguments": [
+    {
+      "tool": "Agent",
+      "description": "Native probe opus family",
+      "subagent_type": "pstack:pstack-opus-xhigh",
+      "run_in_background": true
+    },
+    {
+      "tool": "Agent",
+      "description": "Native probe sonnet family",
+      "subagent_type": "pstack:pstack-sonnet-high",
+      "run_in_background": true
+    },
+    {
+      "tool": "Agent",
+      "description": "Panel lane opus 17+25",
+      "subagent_type": "pstack:pstack-opus-xhigh",
+      "run_in_background": true
+    },
+    {
+      "tool": "Agent",
+      "description": "Panel lane sonnet 17+25",
+      "subagent_type": "pstack:pstack-sonnet-high",
+      "run_in_background": true
+    },
+    {
+      "tool": "Agent",
+      "description": "Independent judge 17+25",
+      "subagent_type": "pstack:pstack-sonnet-high",
+      "run_in_background": true
+    }
+  ],
+  "observedInitialization": {
+    "parentModel": "claude-sonnet-5",
+    "plugin": {
+      "name": "pstack",
+      "path": "/Users/zenzen-sol/Documents/Codex/2026-10-06/task-2/open-pstack-native/plugins/pstack",
+      "source": "pstack@open-pstack",
+      "version": "1.5.0-maana.3"
+    }
+  },
+  "rawTranscriptPublished": false,
+  "observedNativeCompletionResults": [
+    {
+      "retrievalSucceeded": true,
+      "taskCompleted": true,
+      "observedOutput": "NATIVE_PROBE_opus"
+    },
+    {
+      "retrievalSucceeded": true,
+      "taskCompleted": true,
+      "observedOutput": "NATIVE_PROBE_sonnet"
+    },
+    {
+      "retrievalSucceeded": true,
+      "taskCompleted": true,
+      "observedOutput": "PANEL_sonnet\n42"
+    },
+    {
+      "retrievalSucceeded": true,
+      "taskCompleted": true,
+      "observedOutput": "JUDGE_sonnet\n42"
+    }
+  ],
+  "observedNativeReplyMarkers": [
+    "JUDGE_sonnet\n42",
+    "NATIVE_PROBE_opus",
+    "NATIVE_PROBE_sonnet",
+    "PANEL_opus\n42",
+    "PANEL_sonnet\n42"
+  ]
+}

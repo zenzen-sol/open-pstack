@@ -1,0 +1,256 @@
+{
+  "behavioralEvidence": {
+    "parent": {
+      "harness": "codex",
+      "establishedFrom": "live Codex tool surface, native collaboration.spawn_agent with model and reasoning_effort arguments",
+      "nativeToolId": "collaboration.spawn_agent",
+      "drainToolId": "collaboration.list_agents",
+      "completionEvidence": "FINAL_ANSWER notifications and completed handle statuses",
+      "opaqueToolCallIds": "not exposed by this tool surface; canonical task handles are recorded"
+    },
+    "installedVersion": "1.5.0-maana.3",
+    "installedPath": "/Users/zenzen-sol/.codex/plugins/cache/open-pstack/pstack/1.5.0-maana.3",
+    "fixture": "first run with no sheet; real home choices ignored; no real home sheets or instructions read or modified",
+    "sources": [
+      "skills/setup-pstack/SKILL.md",
+      "skills/poteto-mode/references/provider-dispatch.md",
+      "skills/poteto-mode/playbooks/autopilot-stack.md",
+      "skills/poteto-mode/playbooks/autopilot-full.md"
+    ],
+    "defaultMap": {
+      "feature, refactoring": [
+        "codex:gpt-5.6-sol@max"
+      ],
+      "bug-fix": [
+        "codex:gpt-5.6-sol@max"
+      ],
+      "perf-issue": [
+        "codex:gpt-5.6-sol@max"
+      ],
+      "hillclimb": [
+        "codex:gpt-5.6-sol@max"
+      ],
+      "judgment and prose": [
+        "codex:gpt-5.6-sol@max"
+      ],
+      "hardest tasks": [
+        "codex:gpt-6-astra@high"
+      ],
+      "how explorer": [
+        "codex:gpt-6-luna@high"
+      ],
+      "how explainer": [
+        "codex:gpt-5.6-sol@max"
+      ],
+      "why investigators, synthesizer": [
+        "inherit-parent"
+      ],
+      "reflect tooling, judgment, divergent, synthesizer": [
+        "inherit-parent"
+      ],
+      "arena runners": [
+        "codex:gpt-5.6-sol@max",
+        "codex:gpt-6-astra@high",
+        "codex:gpt-6-luna@high"
+      ],
+      "arena cross-judge pool": [
+        "codex:gpt-5.6-sol@max",
+        "codex:gpt-6-astra@high",
+        "codex:gpt-6-luna@high"
+      ],
+      "swarm workers": [
+        "codex:gpt-6-luna@high"
+      ],
+      "architect runners": [
+        "codex:gpt-5.6-sol@max",
+        "codex:gpt-6-astra@high",
+        "codex:gpt-6-luna@high"
+      ],
+      "interrogate reviewers": [
+        "codex:gpt-5.6-sol@max",
+        "codex:gpt-6-astra@high",
+        "codex:gpt-6-luna@high"
+      ]
+    },
+    "defaultMapMarkdown": "# pstack model configuration\n\nProvider-qualified per-role choices. Every documented role remains present.\n\nfeature, refactoring: codex:gpt-5.6-sol@max\nbug-fix: codex:gpt-5.6-sol@max\nperf-issue: codex:gpt-5.6-sol@max\nhillclimb: codex:gpt-5.6-sol@max\njudgment and prose: codex:gpt-5.6-sol@max\nhardest tasks: codex:gpt-6-astra@high\nhow explorer: codex:gpt-6-luna@high\nhow explainer: codex:gpt-5.6-sol@max\nwhy investigators, synthesizer: inherit-parent\nreflect tooling, judgment, divergent, synthesizer: inherit-parent\narena runners: codex:gpt-5.6-sol@max, codex:gpt-6-astra@high, codex:gpt-6-luna@high\narena cross-judge pool: codex:gpt-5.6-sol@max, codex:gpt-6-astra@high, codex:gpt-6-luna@high\nswarm workers: codex:gpt-6-luna@high\narchitect runners: codex:gpt-5.6-sol@max, codex:gpt-6-astra@high, codex:gpt-6-luna@high\ninterrogate reviewers: codex:gpt-5.6-sol@max, codex:gpt-6-astra@high, codex:gpt-6-luna@high\n",
+    "defaultMapPreserved": true,
+    "activeFamilies": [
+      "sol",
+      "astra",
+      "luna6"
+    ],
+    "probes": [
+      {
+        "family": "sol",
+        "requestedDescriptor": "codex:gpt-5.6-sol@max",
+        "requestedModel": "gpt-5.6-sol",
+        "requestedEffort": "max",
+        "marker": "NATIVE_PROBE_sol",
+        "output": "NATIVE_PROBE_sol",
+        "status": "completed",
+        "drained": true,
+        "outputLocation": "retained native final transcript"
+      },
+      {
+        "family": "astra",
+        "requestedDescriptor": "codex:gpt-6-astra@high",
+        "requestedModel": "gpt-6-astra",
+        "requestedEffort": "high",
+        "marker": "NATIVE_PROBE_astra",
+        "output": "NATIVE_PROBE_astra",
+        "status": "completed",
+        "drained": true,
+        "outputLocation": "retained native final transcript"
+      },
+      {
+        "family": "luna6",
+        "requestedDescriptor": "codex:gpt-6-luna@high",
+        "requestedModel": "gpt-6-luna",
+        "requestedEffort": "high",
+        "marker": "NATIVE_PROBE_luna6",
+        "output": "NATIVE_PROBE_luna6",
+        "status": "completed",
+        "drained": true,
+        "outputLocation": "retained native final transcript"
+      }
+    ],
+    "panel": [
+      {
+        "family": "sol",
+        "requestedDescriptor": "codex:gpt-5.6-sol@max",
+        "requestedModel": "gpt-5.6-sol",
+        "requestedEffort": "max",
+        "marker": "NATIVE_PANEL_sol",
+        "output": "NATIVE_PANEL_sol: 42",
+        "status": "completed",
+        "drained": true,
+        "outputLocation": "retained native final transcript",
+        "answer": 42
+      },
+      {
+        "family": "astra",
+        "requestedDescriptor": "codex:gpt-6-astra@high",
+        "requestedModel": "gpt-6-astra",
+        "requestedEffort": "high",
+        "marker": "NATIVE_PANEL_astra",
+        "output": "NATIVE_PANEL_astra: 17 + 25 = 42.",
+        "status": "completed",
+        "drained": true,
+        "outputLocation": "retained native final transcript",
+        "answer": 42
+      },
+      {
+        "family": "luna6",
+        "requestedDescriptor": "codex:gpt-6-luna@high",
+        "requestedModel": "gpt-6-luna",
+        "requestedEffort": "high",
+        "marker": "NATIVE_PANEL_luna6",
+        "output": "17 + 25 = 42\n\nNATIVE_PANEL_luna6",
+        "status": "completed",
+        "drained": true,
+        "outputLocation": "retained native final transcript",
+        "answer": 42
+      }
+    ],
+    "judge": {
+      "family": "astra",
+      "requestedDescriptor": "codex:gpt-6-astra@high",
+      "requestedModel": "gpt-6-astra",
+      "requestedEffort": "high",
+      "marker": "NATIVE_JUDGE_astra",
+      "independent": true,
+      "forkTurns": "none",
+      "startedAfterPanelDrained": true,
+      "output": "17 + 25 = 42.\n\nAll three lanes pass: sol, astra, and luna6 report 42 and include their respective unique markers.\n\nNATIVE_JUDGE_astra",
+      "answer": 42,
+      "verdict": "all three lanes pass",
+      "status": "completed",
+      "drained": true,
+      "outputLocation": "retained native final transcript"
+    },
+    "missing-role resolution": {
+      "role": "swarm workers",
+      "resolvedDescriptors": [
+        "codex:gpt-6-luna@high"
+      ],
+      "source": "parent canonical Codex defaults",
+      "otherRowsReset": false
+    },
+    "explicit-role preservation": {
+      "role": "feature",
+      "before": "grok:grok-4.6@xhigh",
+      "after": "grok:grok-4.6@xhigh",
+      "unchanged": true,
+      "probed": false
+    },
+    "scheduledWakeDisabled": true,
+    "scheduledWakeEvidence": {
+      "playbooks": [
+        "skills/poteto-mode/playbooks/autopilot-stack.md",
+        "skills/poteto-mode/playbooks/autopilot-full.md"
+      ],
+      "reason": "hourly wake proof is incomplete",
+      "recurringRegistrationPermitted": false,
+      "schedulingToolsCalled": false
+    },
+    "toolIdsUsed": [
+      "functions.exec",
+      "exec_command",
+      "collaboration.spawn_agent",
+      "collaboration.list_agents"
+    ],
+    "requestedEffortEvidence": "Exact requested model and reasoning_effort are recorded in native spawn arguments; hidden applied reasoning depth is not observable.",
+    "foreignClisInvoked": false,
+    "externalRunnerInvoked": false,
+    "persistentWrites": [
+      "/tmp/pstack-native-live/codex/evidence.json"
+    ],
+    "failures": []
+  },
+  "observedNativeArguments": [
+    {
+      "task_name": "probe_sol",
+      "model": "gpt-5.6-sol",
+      "reasoning_effort": "max",
+      "fork_turns": "none"
+    },
+    {
+      "task_name": "probe_astra",
+      "model": "gpt-6-astra",
+      "reasoning_effort": "high",
+      "fork_turns": "none"
+    },
+    {
+      "task_name": "probe_luna6",
+      "model": "gpt-6-luna",
+      "reasoning_effort": "high",
+      "fork_turns": "none"
+    },
+    {
+      "task_name": "panel_sol",
+      "model": "gpt-5.6-sol",
+      "reasoning_effort": "max",
+      "fork_turns": "none"
+    },
+    {
+      "task_name": "panel_astra",
+      "model": "gpt-6-astra",
+      "reasoning_effort": "high",
+      "fork_turns": "none"
+    },
+    {
+      "task_name": "panel_luna6",
+      "model": "gpt-6-luna",
+      "reasoning_effort": "high",
+      "fork_turns": "none"
+    },
+    {
+      "task_name": "judge_astra",
+      "model": "gpt-6-astra",
+      "reasoning_effort": "high",
+      "fork_turns": "none"
+    }
+  ],
+  "observedInitialization": null,
+  "rawTranscriptPublished": false
+}

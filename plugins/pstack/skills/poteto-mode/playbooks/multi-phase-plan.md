@@ -14,7 +14,7 @@
 
 **Driver skill.** Pick it by surface. Browser, Electron, and web UIs use Claude Code's **verify** skill. CLIs and TUIs use Claude Code's **run** skill. Native mobile uses whatever simulator-driving skill the repo has. On Codex, substitute per [`../references/codex-tools.md`](../references/codex-tools.md). A PR that touches two surfaces gets lanes on both. A surface with no driver skill is a risk in Appendix C, and its live block still names how each lane drives it.
 
-On Claude Code, arm the 30-minute audit tick as a real `/loop` in dynamic mode. On Codex, arm the cadence per [`../references/codex-tools.md`](../references/codex-tools.md). Never leave the cadence to memory. Keep skill-relative links in this playbook body. Do not copy them into the plan file.
+On Claude Code, arm the hourly audit tick as a real `/loop` in dynamic mode. On Codex, arm the cadence per [`../references/codex-tools.md`](../references/codex-tools.md). Never leave the cadence to memory. Keep skill-relative links in this playbook body. Do not copy them into the plan file.
 
 ````markdown
 # <Program> plan
@@ -41,8 +41,8 @@ Tests alone are not sufficient verification. A PR is verified only when its unit
   - [ ] `<driver skill path>`
   - [ ] `skills/poteto-mode/playbooks/opening-a-pr.md`
   - [ ] `skills/<each other leaf skill the program uses>/SKILL.md`
-- [ ] Arm the 30-minute audit tick as a real cadence. Never leave the cadence to memory.
-- [ ] Use this tick prompt, verbatim. "Re-read the execution playbook from the installed plugin and the standing orders. Audit the operation against both and fix drift in this tick. Probe every active lane and judge progress by side effects only. Stand down a lane only on affirmative failure evidence, and dispatch its replacement in the same tick. Then send the operator a status message, whether or not anything changed, with the queue table of PR, owner, state, and head SHA, the verdicts since the last tick, what merged, open operator gates, and blockers."
+- [ ] Arm the hourly audit tick through the harness's authorized scheduling surface as a real cadence. Never leave the cadence to memory.
+- [ ] Use this tick prompt, verbatim. "Re-read the execution playbook from the installed plugin and the standing orders. Audit the operation against both and fix drift in this tick. Probe every active lane and judge progress by side effects only. Stand down a lane only on affirmative failure evidence, and dispatch its replacement in the same tick. Then post a short status message only for tracked changes no earlier message reported. Name each new PR, code-ready head, review round, verdict, merge, blocker change, failed lane and action, or operator decision. Do not repeat an unchanged table or blocker. If nothing changed, end with no reply text. Either way, log the tick and the items reported, or none, in the decision trail."
 - [ ] On the operator's hold or stand-down, send every owner a zero-writes order at once.
 
 ### Spawn owners
@@ -61,12 +61,12 @@ Tests alone are not sufficient verification. A PR is verified only when its unit
 - [ ] Run the repo's lint and typecheck once before the PR-facing push. Push with hooks on.
 - [ ] Run `/deslop` before each commit and `/no-comments` before review.
 - [ ] Triage every Bugbot and security-reviewer comment per `skills/poteto-mode/references/bugbot-triage.md` under the installed plugin.
-- [ ] Before babysit, rebase each independent PR and stack root onto current trunk. Rebase each unmerged stack child onto its parent's exact tip. After its parent merges, use Shipping's explicit old-base-to-trunk rebase before the child's merge-ready report.
+- [ ] Before the code-ready report and babysit, rebase each independent PR and stack root onto current trunk. Rebase each unmerged stack child onto its parent's exact tip. Keep the merge base in fix rounds. Rebase again only at merge prep, on a merge-tree conflict with trunk, or a trunk-caused CI failure. After its parent merges, use Shipping's explicit old-base-to-trunk rebase before the child's merge-ready report.
 
 ### Verdict and merge, for every PR
 
-- [ ] At the merge-ready head SHA, run the swarm per `skills/swarm/SKILL.md`. One gates lane. The ten live lanes from the PR's **Verify, live** block. The perf lane from its **Verify, perf** block. One audit lane that reads the diff and the receipts and distrusts the PR body.
-- [ ] Clean only when every lane is `PASS`. Findings go back to the owner. A new head gets a fresh swarm and a fresh verdict.
+- [ ] At the code-ready head SHA and each later push that changes the patch, run the swarm per `skills/swarm/SKILL.md`. One gates lane. The ten live lanes from the PR's **Verify, live** block. The perf lane from its **Verify, perf** block. Two or more audit lanes, each with its own focus, that read the diff and the receipts and distrust the PR body. Audit the merge-ready receipts before the verdict.
+- [ ] Clean only when every lane is `PASS`. Findings go back to the owner. A changed patch gets a fresh swarm and verdict. Patch-equivalent rewrites use Shipping's patch ID rule.
 - [ ] <The merge or append rule from the execution playbook, with the verdict SHA, current landing SHA, recorded patch base, and patch ID rule from `skills/poteto-mode/playbooks/shipping.md`.>
 
 ### Boot recipe, for every live lane

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "bun:test";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { ROLLING_CLAUDE_ALIASES } from "./model-aliases.ts";
 import { EFFORTS, type Effort } from "./types.ts";
 
 const PLUGIN_ROOT = join(import.meta.dir, "../../../..");
@@ -19,9 +20,21 @@ const MATRIX_HEADER = [
   "Default effort",
   "Selectable efforts",
   "Claude-native agent stem",
+  "First-run active",
 ] as const;
 
-const FAMILY_ORDER = ["fable", "sol", "grok", "opus"] as const;
+const FAMILY_ORDER = [
+  "fable",
+  "sol",
+  "grok",
+  "opus",
+  "sonnet",
+  "astra",
+  "luna",
+  "terra",
+  "sol6",
+  "luna6",
+] as const;
 const PROVIDERS = ["claude", "codex", "grok"] as const;
 const DESCRIPTOR_RE =
   /(claude|codex|grok):[a-z0-9.-]+@(low|medium|high|xhigh|max)/g;
@@ -50,11 +63,12 @@ const SHEET_ROLES = [
 ] as const;
 const SETUP_SECTION_ORDER = [
   "### 2. Load current state",
-  "### 3. Parse per-family efforts",
-  "### 4. Collect one requested effort per family",
-  "### 5. Probe the four requested pairs",
-  "### 6. Render, preserving role families",
-  "### 7. Confirm and commit",
+  "### 3. Parse the role map and active families",
+  "### 4. Choose the target active set and role assignments",
+  "### 5. Collect one requested effort per active family",
+  "### 6. Probe the target active set",
+  "### 7. Render the final role map",
+  "### 8. Confirm and commit",
 ] as const;
 
 interface MatrixRow {
@@ -65,6 +79,7 @@ interface MatrixRow {
   defaultEffort: Effort;
   selectableEfforts: Effort[];
   claudeNativeAgentStem: string | null;
+  firstRunActive: "codex" | "claude" | "no";
 }
 
 function splitRow(line: string): string[] {
@@ -106,9 +121,9 @@ function parseModelMatrix(markdown: string): MatrixRow[] {
     .slice(start + 1, end)
     .map((line) => line.trim())
     .filter((line) => line.startsWith("|"));
-  if (table.length !== 6) {
+  if (table.length < 3) {
     throw new Error(
-      `model matrix must be header, separator, and 4 data rows, got ${table.length}`
+      `model matrix must contain a header, separator, and data rows, got ${table.length}`
     );
   }
   const header = splitRow(table[0]);
@@ -131,6 +146,7 @@ function parseModelMatrix(markdown: string): MatrixRow[] {
       defaultEffortRaw,
       selectableRaw,
       stemRaw,
+      firstRunActiveRaw,
     ] = cells;
     if (!(PROVIDERS as readonly string[]).includes(provider)) {
       throw new Error(`invalid provider: ${provider}`);
@@ -147,6 +163,9 @@ function parseModelMatrix(markdown: string): MatrixRow[] {
     if (!selectableEfforts.includes(defaultEffort)) {
       throw new Error(`${family} default effort is not selectable`);
     }
+    if (firstRunActiveRaw !== "codex" && firstRunActiveRaw !== "claude" && firstRunActiveRaw !== "no") {
+      throw new Error(`${family} First-run active must name a parent or no`);
+    }
     return {
       family,
       upstreamChoice,
@@ -155,12 +174,13 @@ function parseModelMatrix(markdown: string): MatrixRow[] {
       defaultEffort,
       selectableEfforts,
       claudeNativeAgentStem,
+      firstRunActive: firstRunActiveRaw,
     };
   });
 }
 
-function defaultDescriptors(rows: MatrixRow[]): string[] {
-  return rows.map(
+function defaultDescriptors(rows: MatrixRow[], parent: "codex" | "claude"): string[] {
+  return rows.filter((row) => row.firstRunActive === parent).map(
     (row) => `${row.provider}:${row.model}@${row.defaultEffort}`
   );
 }
@@ -187,8 +207,9 @@ function parseFrontmatter(text: string): {
   return { fields, body: text.slice(end + 5) };
 }
 
-function firstRunSheet(setup: string): string {
-  const match = setup.match(
+function firstRunSheet(dispatch: string, parent: "codex" | "claude"): string {
+  const heading = parent === "codex" ? "### Codex defaults" : "### Claude Code defaults";
+  const match = dispatch.slice(dispatch.indexOf(heading)).match(
     /```markdown\n(# pstack model configuration\n[\s\S]*?)```/
   );
   if (!match) {
@@ -200,7 +221,7 @@ function firstRunSheet(setup: string): string {
 describe("model matrix", () => {
   const rows = parseModelMatrix(readFileSync(DISPATCH_PATH, "utf8"));
   const setup = readFileSync(SETUP_PATH, "utf8");
-  const quad = defaultDescriptors(rows);
+  const dispatch = readFileSync(DISPATCH_PATH, "utf8");
 
   it("owns the effort universe and first-run defaults", () => {
     expect([...EFFORTS]).toEqual(["low", "medium", "high", "xhigh", "max"]);
@@ -209,26 +230,34 @@ describe("model matrix", () => {
       expect(row.upstreamChoice.length).toBeGreaterThan(0);
       expect(row.model.length).toBeGreaterThan(0);
       expect(row.selectableEfforts.length).toBeGreaterThan(0);
-      expect(row.selectableEfforts).toEqual(
-        EFFORTS.filter((effort) => row.selectableEfforts.includes(effort))
-      );
+      expect(row.selectableEfforts).toEqual([...EFFORTS]);
     }
     expect(
-      rows.map((row) => [row.family, row.defaultEffort])
+      rows.map((row) => [
+        row.family,
+        row.provider,
+        row.model,
+        row.defaultEffort,
+        row.claudeNativeAgentStem,
+        row.firstRunActive,
+      ])
     ).toEqual([
-      ["fable", "max"],
-      ["sol", "max"],
-      ["grok", "xhigh"],
-      ["opus", "xhigh"],
+      ["fable", "claude", "fable", "max", "fable", "no"],
+      ["sol", "codex", "gpt-5.6-sol", "max", null, "codex"],
+      ["grok", "grok", "grok-4.6", "xhigh", null, "no"],
+      ["opus", "claude", "opus", "xhigh", "opus", "claude"],
+      ["sonnet", "claude", "sonnet", "high", "sonnet", "claude"],
+      ["astra", "codex", "gpt-6-astra", "high", null, "codex"],
+      ["luna", "codex", "gpt-5.6-luna", "high", null, "no"],
+      ["terra", "codex", "gpt-5.6-terra", "high", null, "no"],
+      ["sol6", "codex", "gpt-6-sol", "max", null, "no"],
+      ["luna6", "codex", "gpt-6-luna", "high", null, "codex"],
     ]);
+    expect(rows.filter((row) => row.firstRunActive === "codex").map((row) => row.family)).toEqual(["sol", "astra", "luna6"]);
+    expect(rows.filter((row) => row.firstRunActive === "claude").map((row) => row.family)).toEqual(["opus", "sonnet"]);
     expect(
-      rows
-        .filter((row) => row.family === "fable" || row.family === "opus")
-        .map((row) => [row.family, row.model])
-    ).toEqual([
-      ["fable", "fable"],
-      ["opus", "opus"],
-    ]);
+      rows.filter((row) => row.provider === "claude").map((row) => row.model)
+    ).toEqual([...ROLLING_CLAUDE_ALIASES]);
   });
 
   it("ships exactly the declared Claude-native frontier agents", () => {
@@ -275,8 +304,9 @@ describe("model matrix", () => {
     expect(shipped).toEqual([...expected].sort());
   });
 
-  it("keeps setup's first-run default panel copy aligned with the matrix", () => {
-    const sheet = firstRunSheet(setup);
+  for (const parent of ["codex", "claude"] as const) {
+  it(`keeps ${parent} first-run and missing-role defaults native and aligned with the matrix`, () => {
+    const sheet = firstRunSheet(dispatch, parent);
     const roles = sheet
       .split("\n")
       .filter((line) => line.includes(": "))
@@ -295,7 +325,8 @@ describe("model matrix", () => {
       }
       expect(effort).toBe(row.defaultEffort);
     }
-    const expectedPanel = quad.join(", ");
+    expect(new Set((sheet.match(DESCRIPTOR_RE) ?? []).map((descriptor) => descriptor.split(":")[0]))).toEqual(new Set([parent]));
+    const expectedPanel = defaultDescriptors(rows, parent).join(", ");
     for (const role of PANEL_ROLES) {
       const line = sheet
         .split("\n")
@@ -307,6 +338,8 @@ describe("model matrix", () => {
     }
   });
 
+  }
+
   it("keeps setup's fail-closed reconfiguration order", () => {
     let previous = -1;
     for (const heading of SETUP_SECTION_ORDER) {
@@ -317,15 +350,28 @@ describe("model matrix", () => {
     expect(setup).toContain("Do not invent a precedence rule.");
     expect(setup).toContain("Do not probe or write while any inconsistency is unresolved.");
     expect(setup).toContain("A failed probe writes nothing:");
-    expect(setup).toContain("Run one probe per family");
+    expect(setup).toContain("Run one probe per active family");
     expect(setup).toContain("normalized complete role map from step 2");
-    expect(setup).toContain("starts with `claude-fable-` or `claude-opus-`");
+    expect(setup).toContain(
+      "starts with `claude-fable-`, `claude-opus-`, or `claude-sonnet-`"
+    );
     expect(setup).toContain("preserving the provider, effort, role, and lane order");
     expect(setup).toContain("Show any rolling-alias migrations");
     expect(setup).toContain("Every documented role remains present.");
     expect(setup).toContain("An effort-only rerun cannot change a role's family.");
     expect(setup).toContain("<!-- pstack:models:begin -->");
     expect(setup).toContain("<!-- pstack:models:end -->");
+  });
+
+  it("preserves explicit provider choices and disables unverified scheduled Autopilot", () => {
+    expect(dispatch).toContain("Preserve every existing explicit descriptor, alias, effort, and lane order, including deliberate cross-provider choices.");
+    expect(dispatch).toContain("Resolve each missing role independently");
+    expect(dispatch).toContain("Never launch a foreign CLI or authentication probe for an unconfigured role.");
+    for (const mode of ["full", "stack"]) {
+      const playbook = readFileSync(join(PLUGIN_ROOT, `skills/poteto-mode/playbooks/autopilot-${mode}.md`), "utf8");
+      expect(playbook).toContain("Do not register `/loop`, CronCreate, heartbeat, or another recurring automation");
+      expect(playbook).not.toContain("arm `/loop 1h`");
+    }
   });
 
   it("binds Claude-native dispatch to the matrix mapping", () => {
@@ -352,6 +398,8 @@ describe("model matrix", () => {
     expect(normalization).toContain("Never pass the versioned predecessor to Claude.");
     expect(normalization).toContain("without writing user files");
     expect(normalization).toContain("`/setup-pstack` will rewrite it");
-    expect(normalization).toContain("runner rejects a missed Fable or Opus version pin");
+    expect(normalization).toContain(
+      "runner rejects a missed Fable, Opus, or Sonnet version pin"
+    );
   });
 });

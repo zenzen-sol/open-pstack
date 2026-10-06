@@ -32,3 +32,5 @@ jobs:
         run: |
           bun -e 'for (const path of [".claude-plugin/marketplace.json", ".agents/plugins/marketplace.json", "plugins/pstack/.claude-plugin/plugin.json", "plugins/pstack/.codex-plugin/plugin.json"]) JSON.parse(await Bun.file(path).text())'
           PSTACK_STATIC_ONLY=1 bash tests/skill-collision-repro.sh
+      - name: Direct Cursor audit and notice tests
+        run: python3 -m unittest discover -s tests -p 'test_cursor_updates.py' -v

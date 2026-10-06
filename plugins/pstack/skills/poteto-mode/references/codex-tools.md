@@ -17,9 +17,9 @@ pstack skills retain Claude Code tool language (`Skill`, `Agent`, `AskUserQuesti
 | Dispatch a subagent (the `Agent`/`Task` tool) | `spawn_agent` |
 | Dispatch N parallel subagents in one turn | N `spawn_agent` calls in one response |
 | Wait for a subagent result | `wait_agent` |
-| Free a finished subagent slot | `close_agent` |
+| Free a finished subagent slot | the available agent-slot management action |
 | Track tasks (the todolist / `TodoWrite`) | `update_plan` |
-| Ask the human a fixed-choice question (`AskUserQuestion`) | Ask in plain text and let the user answer. Codex has no structured-choice tool. |
+| Ask the human a fixed-choice question (`AskUserQuestion`) | Use the harness's available user-input tool when provided; otherwise ask in plain text. Follow the tool's availability and permission rules. |
 
 Subagent dispatch needs `multi_agent` enabled. Add to `~/.codex/config.toml`:
 
@@ -34,7 +34,7 @@ Without it, the native Codex lane is a named dropout. Independent external lanes
 
 poteto-mode's Subagents section sets Claude-specific defaults (`subagent_type: "poteto-agent"`, `run_in_background: true`). On Codex:
 
-- There is no `poteto-agent` subagent type. Route an ad-hoc subagent through poteto-mode's style by dispatching a `spawn_agent` whose instructions tell it to read the `poteto-mode` skill in full first.
+- There is no `poteto-agent` subagent type. Route an ad-hoc subagent through poteto-mode's style by dispatching a fresh `spawn_agent` whose instructions tell it to read the `poteto-mode` skill in full first. Reuse a returned agent only for the costly agent-local state cases in that skill's Subagents section.
 - `spawn_agent` calls already run concurrently with your turn, so `run_in_background: true` has no separate flag. Issue the dispatch and continue.
 - There is no `comment-sicko` subagent type either. The **no-comments** skill spawns it on Claude Code; on Codex dispatch a `spawn_agent` whose instructions tell it to read `agents/comment-sicko.md` in full first.
 - Claude Code runs every subagent on this machine, so the **swarm** skill's workers and the fan-out playbooks (`orchestrate`, `autopilot-full`, `autopilot-stack`) isolate writers with worktrees. The same holds on Codex.
@@ -42,7 +42,7 @@ poteto-mode's Subagents section sets Claude-specific defaults (`subagent_type: "
 
 ## Models and providers
 
-Do not replace every configured entry with a Codex model. `/setup-pstack` writes portable descriptors such as `claude:fable@max`, `codex:gpt-5.6-sol@max`, and `grok:grok-4.6@xhigh`. In a Codex parent, only `codex:*` is native. Route Claude and Grok descriptors through the external launcher exactly as `provider-dispatch.md` specifies. The current default panel intentionally keeps four-provider frontier diversity and contains no older GPT or Claude substitute.
+Do not replace every configured entry with a Codex model. `/setup-pstack` writes portable descriptors such as `claude:fable@max`, `codex:gpt-5.6-sol@max`, and `grok:grok-4.6@xhigh`. In a Codex parent, only `codex:*` is native. Route Claude and Grok descriptors through the external launcher exactly as `provider-dispatch.md` specifies. Unconfigured roles use the Codex canonical map in provider-dispatch.md. Claude and Grok lanes run only when explicitly configured.
 
 ## Claude built-in skills pstack references
 
@@ -53,7 +53,7 @@ Some triggers name skills that ship with Claude Code, not pstack. They do not ex
 | `run` (drive a CLI/TUI to see a change work) | Run the app yourself via `shell` and observe the real output. |
 | `verify` (drive a UI to confirm a fix) | Drive the UI with whatever automation you have, or hand the user a concrete manual check. Do not claim done without observing the artifact. |
 | `plugin-dev:skill-development` (Claude's SKILL.md authoring guidance) | Follow your platform's skill-authoring guidance; the `writing-skills` skill if present. Keep `name` + `description` frontmatter and progressive disclosure. |
-| `loop` (recurring/self-paced re-invocation, used by `babysit`) | Codex has no `loop` skill. Re-run the step yourself on a cadence, or use a Codex scheduled task if available. |
+| `loop` (recurring/self-paced re-invocation, used by `babysit`) | Codex has no `loop` skill. Scheduled Autopilot wake-ups are disabled in this core candidate. Never register them through this mapping. For other explicitly authorized recurring workflows, use the available Codex scheduled-task surface with the workflow's cadence. Do not claim a durable wake-up from an in-turn polling loop. Preserve change-only status messages and stop/hold orders. |
 
 ## Vendored scripts
 

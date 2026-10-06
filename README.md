@@ -1,10 +1,11 @@
 # open-pstack
 
-[![CI](https://github.com/ericlitman/open-pstack/actions/workflows/ci.yml/badge.svg)](https://github.com/ericlitman/open-pstack/actions/workflows/ci.yml)
-[![Latest release](https://img.shields.io/github/v/release/ericlitman/open-pstack)](https://github.com/ericlitman/open-pstack/releases/latest)
-[![MIT license](https://img.shields.io/github/license/ericlitman/open-pstack)](LICENSE)
+[![CI](https://github.com/zenzen-sol/open-pstack/actions/workflows/ci.yml/badge.svg?branch=codex%2Fgpt-only-routing)](https://github.com/zenzen-sol/open-pstack/actions/workflows/ci.yml?query=branch%3Acodex%2Fgpt-only-routing)
+[![MIT license](https://img.shields.io/github/license/zenzen-sol/open-pstack)](LICENSE)
 
 **Open Pstack brings [Lauren Tan (@poteto)](https://x.com/poteto)'s [pstack](https://github.com/cursor/plugins/tree/main/pstack) to Claude Code and Codex.** Its job is to stay as close to her original work as possible while translating the parts that depend on Cursor.
+
+This is Maana Data's maintained downstream fork. See [DOWNSTREAM.md](DOWNSTREAM.md) for its purpose, downstream changes, and upstream sync policy.
 
 Lauren built pstack from the skills she uses to ship code at Cursor. In a [55-minute interview with Denis Labelle](https://x.com/DenisLabelle/status/2091337807939706928), she says that she shipped 1,000 pull requests in one month after steadily improving how her agents work and verify their results.
 
@@ -30,16 +31,32 @@ The normal entry point is `poteto-mode`. You give it a task in plain language. I
 
 pstack does not ask you to trust an agent on day one. It helps the agent leave evidence you can inspect. Start with supervised work. Let it run more work in parallel only after its checks have earned that trust in your own repositories.
 
+## Cursor 0.15.15 candidate
+
+The native-default candidate is `1.5.0-maana.3`, based on the pinned direct Cursor 0.15.15 import. Its core workflows default to the host provider and preserve explicit role choices. Independent scheduled Autopilot wake-ups are disabled. See [the native-default adoption record](docs/plans/native-default-adoption.md) for installation and verification evidence. The scoped release disables scheduled Autopilot and supports explicit manual audit ticks. Fresh private-project AI sessions were not run; project adoption is verified through local plugin-manager and cache readback.
+
 ## Install
 
-You need a current Claude Code or Codex installation. For the full four-model review, install and sign in to the Claude Code, Codex, and Grok command-line tools. [Bun](https://bun.sh) runs the small local tool that starts models outside the app you are using. You can still use the core workflows with fewer models.
+Use the immutable fork release `v1.5.0-maana.3` for the native-default distribution. Cross-provider use is explicit opt-in. Scheduled Autopilot is disabled/manual-only. The separate daily Cursor detector reports source changes and never installs them.
+
+Both distributions use marketplace name `open-pstack`. If that name is already registered from another source, remove that marketplace using your harness's marketplace remove command before adding this fork; otherwise it can keep resolving the old source.
+
+You need a current Claude Code or Codex installation. Default review panels use native OpenAI models in Codex and native Anthropic models in Claude Code. Install and sign in to foreign command-line tools only for explicitly configured cross-provider lanes. [Bun](https://bun.sh) runs the small local tool that starts models outside the app you are using. You can still use the core workflows with fewer models.
 
 ### Claude Code
 
-Run these commands inside Claude Code:
+First clone the downstream branch in your shell:
+
+```shell
+git clone --branch v1.5.0-maana.3 --single-branch https://github.com/zenzen-sol/open-pstack.git
+cd open-pstack
+pwd
+```
+
+Use the absolute path printed by `pwd` in these commands inside Claude Code:
 
 ```text
-/plugin marketplace add ericlitman/open-pstack
+/plugin marketplace add /absolute/path/to/open-pstack
 /plugin install pstack@open-pstack
 /reload-plugins
 ```
@@ -49,7 +66,7 @@ Run these commands inside Claude Code:
 Run these commands in your shell:
 
 ```shell
-codex plugin marketplace add ericlitman/open-pstack --ref main
+codex plugin marketplace add zenzen-sol/open-pstack --ref v1.5.0-maana.3
 codex plugin add pstack@open-pstack
 ```
 
@@ -80,9 +97,9 @@ In Codex, ask:
 Use pstack:setup-pstack to configure pstack.
 ```
 
-Setup checks the models you can actually run, shows how each one will start, and asks before saving the choices. The current default group uses Fable, GPT-5.6 Sol, Grok 4.6, and Opus.
+Setup checks the models you can actually run, shows how each one will start, and asks before saving the choices. It supports Fable, GPT-5.6 Sol, Grok 4.6, Opus, Sonnet, GPT-6 Astra, GPT-5.6 Luna, GPT-5.6 Terra, GPT-6 Sol, and GPT-6 Luna. The first run uses Sol, Astra, and Luna 6 in Codex, or Opus and Sonnet in Claude Code. You can add or remove supported families before setup probes them.
 
-An older model sheet starts using the rolling aliases in memory as soon as this release is installed. Run setup once after updating to persist that migration. It replaces versioned Fable and Opus entries while preserving every role assignment and effort selection.
+A model sheet with versioned Claude-family entries starts using the rolling aliases in memory as soon as this release is installed. Run setup once after updating to persist that migration. It replaces versioned Fable, Opus, and Sonnet entries while preserving every role assignment and effort selection.
 
 ### 2. Use poteto-mode
 
@@ -124,7 +141,7 @@ Plugin skills include `pstack:` in their name. In Claude Code, invoke a native s
 
 Some pstack workflows use one model. Skills such as `architect`, `arena`, and `interrogate` can run several models in parallel. Each model run uses the subscription and token allowance of its own command-line tool.
 
-`setup-pstack` lets you choose the models, one requested effort per model family, and how many run in parallel. A model from the app you are using runs inside that app. Other models run through their own command-line tools. Open Pstack does not quietly replace a failed model with a weaker one.
+`setup-pstack` lets you choose the active model families, one requested effort per active family, and how many run in parallel. It probes and smokes only the families used by the final role map. A model from the app you are using runs inside that app. Other models run through their own command-line tools. Open Pstack does not quietly replace a failed model with a weaker one.
 
 ## Claude Code and Codex
 
@@ -133,7 +150,7 @@ Both apps read the same pstack skills. Only the way they start those skills and 
 | | Claude Code | Codex |
 | --- | --- | --- |
 | Start poteto-mode | Claude loads a small startup instruction that can route non-trivial work into it. You can also run `/pstack:poteto-mode` yourself. | Ask for `pstack:poteto-mode` by name. Codex does not load the Claude startup instruction. |
-| Runs inside the app | Claude models stay inside Claude Code. | The Sol model stays inside Codex. |
+| Runs inside the app | Claude models stay inside Claude Code. | Codex models stay inside Codex. |
 | Other models | Codex and Grok run through their signed-in command-line tools. | Claude and Grok run through their signed-in command-line tools. |
 | Skills and workflows | Shared with Codex. | Shared with Claude Code. |
 
@@ -153,15 +170,15 @@ This repository also keeps:
 
 ## Staying close to Lauren's pstack
 
-Open Pstack 1.4.1 tracks pstack 0.15.1 at Cursor commit [`f8abeddd1862dc73704e3d719dd73df0d51b8c71`](https://github.com/cursor/plugins/commit/f8abeddd1862dc73704e3d719dd73df0d51b8c71).
+Candidate Open Pstack 1.5.0-maana.3 tracks pstack 0.15.15 at Cursor commit [`df581122cde17e6e27686b5a448bde23e4ad4318`](https://github.com/cursor/plugins/commit/df581122cde17e6e27686b5a448bde23e4ad4318).
 
 The two projects have separate version numbers. The pstack version identifies Lauren's upstream content. The Open Pstack version identifies the Claude Code and Codex package built from it.
 
-In this repository, “upstream” means Lauren's original pstack. Open Pstack does not promise instant updates. It records the exact version it follows, reviews new changes in order, and changes only what Claude Code and Codex require. New pstack behavior belongs in Lauren's project first whenever possible.
+In this repository, “upstream” means Lauren's original pstack. This fork checks Cursor directly rather than waiting for community Open Pstack releases. It records the exact version it follows, reviews new changes in order, and changes only what Claude Code and Codex require. New pstack behavior belongs in Lauren's project first whenever possible.
 
 ## Contributing
 
-Fixes for Claude Code or Codex and help bringing over new pstack releases are welcome. Search [GitHub Issues](https://github.com/ericlitman/open-pstack/issues) before opening a new issue. For larger behavior changes, explain why the change belongs in Open Pstack instead of Lauren's original project.
+Fixes for Claude Code or Codex and help bringing over new pstack releases are welcome. Search [GitHub Issues](https://github.com/zenzen-sol/open-pstack/issues) before opening a new issue. For larger behavior changes, explain why the change belongs in this downstream fork instead of Lauren's original project or community Open Pstack.
 
 Read [UPSTREAM.md](UPSTREAM.md) before changing content brought over from Lauren's pstack. Pull requests must keep one shared skill tree for Claude Code and Codex and pass the repository's tests, type checks, plugin validation, and static checks.
 

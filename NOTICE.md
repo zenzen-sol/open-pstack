@@ -21,6 +21,8 @@ This plugin is a port of upstream MIT-licensed work. All upstream copyright noti
 | `plugins/pstack/skills/` (0.15.0 prose changes and the new `principle-attack-the-premise` and `principle-test-behavior-not-implementation` leaves), `plugins/pstack/assets/logo.png`, `README-UPSTREAM.md` | [cursor/plugins/pstack @ 71ed0d1](https://github.com/cursor/plugins/tree/71ed0d1076fec562c1b74ee353121a8d00f75382/pstack) | (c) 2026 Lauren Tan | MIT | [LICENSE](LICENSE) |
 | `plugins/pstack/skills/poteto-mode/SKILL.md` (0.15.1 reply-writing evidence rule) | [cursor/plugins/pstack @ f8abedd](https://github.com/cursor/plugins/tree/f8abeddd1862dc73704e3d719dd73df0d51b8c71/pstack) | (c) 2026 Lauren Tan | MIT | [LICENSE](LICENSE) |
 
+| `plugins/pstack/skills/` and `agents/poteto-agent.md` (0.15.15 workflow changes, four new skills and two help references), `README-UPSTREAM.md` | [cursor/plugins/pstack @ df58112](https://github.com/cursor/plugins/tree/df581122cde17e6e27686b5a448bde23e4ad4318/pstack) | (c) 2026 Lauren Tan | MIT | [LICENSE](LICENSE) |
+
 ## What changed in the port
 
 The port is editorial, not mechanical. See [CHANGES.md](CHANGES.md) for the full per-skill audit of substitutions applied.
@@ -34,7 +36,7 @@ Summary of structural changes:
 - `plugins/pstack/skills/babysit/` is independently authored as the Claude Code analog of Cursor's `/babysit` built-in. It has no upstream pstack equivalent; its workflow is informed by Cursor's public `/babysit` behavior. No code or prose was copied from any source.
 - `plugins/pstack/skills/poteto-mode/scripts/` is vendored from upstream (`watch-pr`, `orch`, `bootstrap.ts`, `worktree-audit.sh`, `package.json`, `bun.lock`) with these port edits: `worktree-audit.sh` reads `~/.claude/projects/` instead of Cursor's transcript directory and warns when `jq` or `rg` is missing (their absence silently blanks the columns the prune decision reads), the private workspace package is named `@open-pstack/poteto-mode-tools`, `bootstrap.ts` rejects Node before it reads Bun-only APIs, and `package.json` includes the port-authored tests in `bun run test`. `check-plan.mjs` is the Cursor 0.14.3 checker adapted for the shared Claude Code and Codex skeleton. `bootstrap.test.ts` and `check-plan.test.ts` are authored for this port.
 - `plugins/pstack/agents/comment-sicko.md` is upstream's `Comment Sicko` agent, renamed to `comment-sicko` so the name works as a Claude Code `subagent_type`. The body is verbatim.
-- Claude-native Fable and Opus lanes are port-authored agent definitions. They select the rolling family alias plus requested effort for every selectable Claude-native pair in the provider-dispatch model matrix.
+- Claude-native Fable, Opus, and Sonnet lanes are port-authored agent definitions. They select the rolling family alias plus requested effort for every selectable Claude-native pair in the provider-dispatch model matrix.
 - A Codex build shares the same `skills/` tree. It adds `plugins/pstack/.codex-plugin/plugin.json`, a root `.agents/plugins/marketplace.json`, and `plugins/pstack/skills/poteto-mode/references/codex-tools.md` (the Claude-to-Codex tool, model, and built-in map), plus a one-line Platform note in the skills that name a Claude primitive. The skill content itself is unchanged. See [CHANGES.md](CHANGES.md#codex-port).
 
 ## Modifications
@@ -51,7 +53,7 @@ Files authored for this port (not derived from upstream):
 - `plugins/pstack/skills/poteto-mode/scripts/bootstrap.test.ts`
 - `plugins/pstack/skills/poteto-mode/scripts/check-plan.test.ts`
 - `plugins/pstack/skills/babysit/SKILL.md` (independently authored; workflow informed by Cursor's public `/babysit` behavior)
-- `plugins/pstack/agents/pstack-fable-*.md` and `plugins/pstack/agents/pstack-opus-*.md` (Claude-native frontier lanes at each selectable effort)
+- `plugins/pstack/agents/pstack-fable-*.md`, `plugins/pstack/agents/pstack-opus-*.md`, and `plugins/pstack/agents/pstack-sonnet-*.md` (Claude-native frontier lanes at each selectable effort)
 - `plugins/pstack/hooks/hooks.json`, `plugins/pstack/hooks/session-start`, and `plugins/pstack/hooks/session-start-context.md` (the auto-fire hook and its mandate)
 - `NOTICE.md` (this file)
 - `README.md`

@@ -8,22 +8,82 @@ pstack model choices are provider-qualified descriptors:
 
 ## Model matrix
 
-| Family | Upstream pstack choice | Provider | Model | Default effort | Selectable efforts | Claude-native agent stem |
-|---|---|---|---|---|---|---|
-| fable | fable | claude | fable | max | low medium high xhigh max | fable |
-| sol | gpt-5.6-sol-max | codex | gpt-5.6-sol | max | low medium high xhigh max | - |
-| grok | grok-4.6-fast-xhigh | grok | grok-4.6 | xhigh | low medium high xhigh max | - |
-| opus | opus | claude | opus | xhigh | low medium high xhigh max | opus |
+| Family | Upstream pstack choice | Provider | Model | Default effort | Selectable efforts | Claude-native agent stem | First-run active |
+|---|---|---|---|---|---|---|---|
+| fable | fable | claude | fable | max | low medium high xhigh max | fable | no |
+| sol | gpt-5.6-sol-max | codex | gpt-5.6-sol | max | low medium high xhigh max | - | codex |
+| grok | grok-4.6-fast-xhigh | grok | grok-4.6 | xhigh | low medium high xhigh max | - | no |
+| opus | opus | claude | opus | xhigh | low medium high xhigh max | opus | claude |
+| sonnet | - | claude | sonnet | high | low medium high xhigh max | sonnet | claude |
+| astra | - | codex | gpt-6-astra | high | low medium high xhigh max | - | codex |
+| luna | - | codex | gpt-5.6-luna | high | low medium high xhigh max | - | no |
+| terra | - | codex | gpt-5.6-terra | high | low medium high xhigh max | - | no |
+| sol6 | - | codex | gpt-6-sol | max | low medium high xhigh max | - | no |
+| luna6 | - | codex | gpt-6-luna | high | low medium high xhigh max | - | codex |
 
-The allowed effort universe is exactly `low`, `medium`, `high`, `xhigh`, `max`. First-run requested efforts are the Default effort cell of each row. A Claude-native agent stem of `-` means the family has no Claude-native agent. Otherwise the shipped agent name is `pstack-<stem>-<effort>`.
+The allowed effort universe is exactly `low`, `medium`, `high`, `xhigh`, `max`. A `-` in Upstream pstack choice means the portable build added that family. First run activates only rows whose First-run active cell names the current parent (`codex` or `claude`), in matrix order, and uses each active row's Default effort. Grok and other foreign providers are explicit opt-in only. Later runs derive the active family set from the non-alias descriptors in the normalized final role map. No separate active-family setting exists. A Claude-native agent stem of `-` means the family has no Claude-native agent. Otherwise the shipped agent name is `pstack-<stem>-<effort>`.
 
-`fable` and `opus` are Claude Code's rolling aliases. Claude resolves each alias to the latest available family revision. A runner receipt keeps the requested alias in `model` and the concrete provider-reported revision in `reportedModel`; verification accepts only a numeric `claude-fable-*` or `claude-opus-*` revision from the matching family.
+`fable`, `opus`, and `sonnet` are Claude Code's rolling aliases. Claude resolves each alias to the latest available family revision. A runner receipt keeps the requested alias in `model` and the concrete provider-reported revision in `reportedModel`; verification accepts only a numeric `claude-fable-*`, `claude-opus-*`, or `claude-sonnet-*` revision from the matching family.
+
+## Host-native defaults
+
+This is the canonical first-run and missing-role map. Establish the parent from its live tool surface. Codex defaults to OpenAI through native spawn_agent; Claude Code defaults to Anthropic through native Agent. Never launch a foreign CLI or authentication probe for an unconfigured role. Preserve every existing explicit descriptor, alias, effort, and lane order, including deliberate cross-provider choices. Project role overrides take precedence over the harness sheet. Resolve each missing role independently from the current parent map; never reset other rows. No silent fallback is allowed.
+
+### Codex defaults
+
+```markdown
+# pstack model configuration
+
+Provider-qualified per-role choices. Every documented role remains present.
+
+feature, refactoring: codex:gpt-5.6-sol@max
+bug-fix: codex:gpt-5.6-sol@max
+perf-issue: codex:gpt-5.6-sol@max
+hillclimb: codex:gpt-5.6-sol@max
+judgment and prose: codex:gpt-5.6-sol@max
+hardest tasks: codex:gpt-6-astra@high
+how explorer: codex:gpt-6-luna@high
+how explainer: codex:gpt-5.6-sol@max
+why investigators, synthesizer: inherit-parent
+reflect tooling, judgment, divergent, synthesizer: inherit-parent
+arena runners: codex:gpt-5.6-sol@max, codex:gpt-6-astra@high, codex:gpt-6-luna@high
+arena cross-judge pool: codex:gpt-5.6-sol@max, codex:gpt-6-astra@high, codex:gpt-6-luna@high
+swarm workers: codex:gpt-6-luna@high
+architect runners: codex:gpt-5.6-sol@max, codex:gpt-6-astra@high, codex:gpt-6-luna@high
+interrogate reviewers: codex:gpt-5.6-sol@max, codex:gpt-6-astra@high, codex:gpt-6-luna@high
+```
+
+### Claude Code defaults
+
+```markdown
+# pstack model configuration
+
+Provider-qualified per-role choices. Every documented role remains present.
+
+feature, refactoring: claude:opus@xhigh
+bug-fix: claude:opus@xhigh
+perf-issue: claude:opus@xhigh
+hillclimb: claude:opus@xhigh
+judgment and prose: claude:opus@xhigh
+hardest tasks: claude:opus@xhigh
+how explorer: claude:sonnet@high
+how explainer: claude:opus@xhigh
+why investigators, synthesizer: inherit-parent
+reflect tooling, judgment, divergent, synthesizer: inherit-parent
+arena runners: claude:opus@xhigh, claude:sonnet@high
+arena cross-judge pool: claude:opus@xhigh, claude:sonnet@high
+swarm workers: claude:sonnet@high
+architect runners: claude:opus@xhigh, claude:sonnet@high
+interrogate reviewers: claude:opus@xhigh, claude:sonnet@high
+```
+
+Single-provider panels still use independent model lanes and an independent judge. Choose a different model from the configured pool when possible. Choose a different provider only when explicitly configured; never expand the active set to obtain provider diversity.
 
 ## Read-time normalization
 
-Normalize configured descriptors before matching them to the matrix or choosing a route. If a provider-qualified Claude model starts with `claude-fable-` or `claude-opus-` and its remaining revision contains only digits and hyphens, replace that model component in memory with `fable` or `opus`. Preserve provider, effort, role, and lane order. Use only the normalized descriptor for native dispatch or runner argv. Never pass the versioned predecessor to Claude.
+Normalize configured descriptors before matching them to the matrix or choosing a route. If a provider-qualified Claude model starts with `claude-fable-`, `claude-opus-`, or `claude-sonnet-` and its remaining revision contains only digits and hyphens, replace that model component in memory with `fable`, `opus`, or `sonnet`. Preserve provider, effort, role, and lane order. Use only the normalized descriptor for native dispatch or runner argv. Never pass the versioned predecessor to Claude.
 
-This read-time rule makes an older installed sheet use the latest family revision immediately without writing user files. Once per parent run, report that the persisted sheet is stale and that `/setup-pstack` will rewrite it after its normal probes and confirmation. Unknown versioned Claude models remain invalid. The external runner rejects a missed Fable or Opus version pin instead of silently executing it.
+This read-time rule makes an installed sheet with a versioned rolling-family entry use the latest family revision immediately without writing user files. Once per parent run, report that the persisted sheet is stale and that `/setup-pstack` will rewrite it after its normal probes and confirmation. Unknown versioned Claude models remain invalid. The external runner rejects a missed Fable, Opus, or Sonnet version pin instead of silently executing it.
 
 `fast` is part of Cursor's Grok selector, not a Grok Build CLI model or effort flag. The portable Grok route pins the current CLI model `grok-4.6`. The first-run Grok effort is `xhigh`.
 
@@ -42,7 +102,7 @@ The top-level harness resolves the route once. A child receives an assigned prov
 
 Native dispatch avoids a second CLI startup and its base context.
 
-- Claude Code: match the descriptor's `(provider, model)` to one model-matrix row, then dispatch it through `pstack-<stem>-<effort>` using that row's Claude-native agent stem and the descriptor's effort. Those definitions select the rolling model alias, requested effort, and `background: true`. `pstack-fable-max` and `pstack-opus-xhigh` remain in that set. Pass the complete task, grounding paths, access mode, and unique output location in the `Agent` prompt. Retain the task handle and drain it only after fan-out.
+- Claude Code: match the descriptor's `(provider, model)` to one model-matrix row, then dispatch it through `pstack-<stem>-<effort>` using that row's Claude-native agent stem and the descriptor's effort. Those definitions select the rolling model alias, requested effort, and `background: true`. `pstack-fable-max` and `pstack-opus-xhigh` remain in that set, and Sonnet has the same five effort-specific definitions. Pass the complete task, grounding paths, access mode, and unique output location in the `Agent` prompt. Retain the task handle and drain it only after fan-out.
 - Codex: call `spawn_agent` with the descriptor's model and `reasoning_effort`, the complete task, grounding paths, access mode, and unique output location. Use an isolated worktree for a writer. Codex subagents already run concurrently.
 
 Do not send a same-provider descriptor to the external runner. It rejects that call because the native route is cheaper and already available.
@@ -90,7 +150,7 @@ Success requires all of these:
 
 1. Exit status `0`.
 2. Receipt status `complete`.
-3. Either `modelVerified: true` with `modelEvidence: "provider-report"`, or a Codex receipt with `reportedModel: null`, `modelVerified: false`, and `modelEvidence: "pinned-argv"`. For Claude's `fable` and `opus` aliases, the concrete provider report must belong to the requested family. Codex 0.149.0 accepts the exact `--model` argument but does not report the served model in its JSONL stream.
+3. Either `modelVerified: true` with `modelEvidence: "provider-report"`, or a Codex receipt with `reportedModel: null`, `modelVerified: false`, and `modelEvidence: "pinned-argv"`. For Claude's `fable`, `opus`, and `sonnet` aliases, the concrete provider report must belong to the requested family. Codex 0.149.0 accepts the exact `--model` argument but does not report the served model in its JSONL stream.
 4. A non-empty output file.
 
 The receipt also carries elapsed time, token usage when the CLI exposes it, and cost when available. Keep it with the arena or review artifacts so parent-harness comparisons are evidence-based.

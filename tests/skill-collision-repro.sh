@@ -64,71 +64,57 @@ standalone_code_pins="$(
     2>/dev/null || true
 )"
 if [ -n "$legacy_model_pins" ] || [ -n "$standalone_code_pins" ]; then
-  note "FAIL: active Fable or Opus configuration still pins a model revision:"
+  note "FAIL: active Fable, Opus, or Sonnet configuration still pins a model revision:"
   [ -z "$legacy_model_pins" ] || note "$legacy_model_pins"
   [ -z "$standalone_code_pins" ] || note "$standalone_code_pins"
   fail=1
 else
-  note "ok: active Fable and Opus configuration uses rolling aliases"
+  note "ok: active Fable, Opus, and Sonnet configuration uses rolling aliases"
 fi
 
-# Static invariant (CHANGES maintenance note): provider-dispatch owns the default
-# provider/model quad and the three panel skills plus setup-pstack copy it verbatim.
+# Canonical maps own defaults; consumers refer to them instead of copying panels.
 setup="$repo/plugins/pstack/skills/setup-pstack/SKILL.md"
 dispatch="$repo/plugins/pstack/skills/poteto-mode/references/provider-dispatch.md"
-quad_of() { { grep -oE '(claude|codex|grok):[a-z0-9.-]+@(low|medium|high|xhigh|max)' || true; } | tr '\n' ' ' | sed 's/ $//'; }
-canon_quad="$(awk '
-  $0 == "## Model matrix" { in_matrix = 1; next }
-  in_matrix && /^## / { exit }
-  in_matrix && /^\|/ {
-    line = $0
-    sub(/^\|/, "", line)
-    sub(/\|$/, "", line)
-    n = split(line, cells, "|")
-    for (i = 1; i <= n; i++) {
-      gsub(/^ +| +$/, "", cells[i])
-      gsub(/`/, "", cells[i])
+canonical_map() {
+  awk -v heading="$1" '$0 == heading { active = 1; next } active && /^###? / { exit } active { print }' "$dispatch"
+}
+panel_mismatches=""
+for parent in codex claude; do
+  case "$parent" in
+    codex) heading="### Codex defaults" ;;
+    claude) heading="### Claude Code defaults" ;;
+  esac
+  expected="$(awk -F '|' -v parent="$parent" '
+    $0 == "## Model matrix" { active = 1; next }
+    active && /^## / { exit }
+    active && /^\|/ {
+      for (i = 2; i <= 9; i++) gsub(/^[[:space:]`]+|[[:space:]`]+$/, "", $i)
+      if ($9 != parent) next
+      descriptor = $4 ":" $5 "@" $6
+      out = out (out == "" ? "" : ", ") descriptor
     }
-    family = cells[1]
-    if (family == "Family" || family ~ /^:?-+:?$/) next
-    provider = cells[3]
-    model = cells[4]
-    effort = cells[5]
-    if (out != "") out = out " "
-    out = out provider ":" model "@" effort
-  }
-  END { print out }
-' "$dispatch")"
-quad_bad=""
-[ -n "$canon_quad" ] || quad_bad="could not read the canonical quad from $dispatch"$'\n'
-# Anchor on the quad's last slug rather than a hard-coded one, so a model swap in
-# setup-pstack cannot leave this check hunting for a slug nobody ships any more.
-anchor="${canon_quad##* }"
-# arena and architect each state the quad on one line; interrogate lists it
-# as one slug per row of its Reviewer A/B/C/D table (upstream #167).
-for name in arena architect; do
-  skill="$repo/plugins/pstack/skills/$name/SKILL.md"
-  n="$(grep -Fc "$anchor" "$skill" || true)"
-  if [ "$n" != "1" ]; then
-    quad_bad="$quad_bad$skill: expected exactly 1 default-quad line, found $n"$'\n'
-    continue
-  fi
-  got="$(grep -F "$anchor" "$skill" | quad_of)"
-  [ "$got" = "$canon_quad" ] || quad_bad="$quad_bad$skill: [$got] != [$canon_quad]"$'\n'
+    END { print out }
+  ' "$dispatch")"
+  [ -n "$expected" ] || panel_mismatches="${panel_mismatches}${parent}: missing matrix defaults"$'\n'
+  map="$(canonical_map "$heading")"
+  for role in 'arena runners' 'arena cross-judge pool' 'architect runners' 'interrogate reviewers'; do
+    got="$(printf '%s\n' "$map" | sed -n "s/^${role}: //p")"
+    [ "$got" = "$expected" ] || panel_mismatches="${panel_mismatches}${parent} ${role}: [${got}] != [${expected}]"$'\n'
+  done
+  foreign="$(printf '%s\n' "$map" | grep -oE '(claude|codex|grok):[a-z0-9.-]+@(low|medium|high|xhigh|max)' | grep -v "^${parent}:" || true)"
+  [ -z "$foreign" ] || panel_mismatches="${panel_mismatches}${parent}: foreign default ${foreign}"$'\n'
 done
-interrogate="$repo/plugins/pstack/skills/interrogate/SKILL.md"
-got="$(grep -E '^\| Reviewer [A-Z] \|' "$interrogate" | quad_of)"
-[ "$got" = "$canon_quad" ] || quad_bad="$quad_bad$interrogate reviewer table: [$got] != [$canon_quad]"$'\n'
-while IFS= read -r line; do
-  got="$(printf '%s\n' "$line" | quad_of)"
-  [ "$got" = "$canon_quad" ] || quad_bad="$quad_bad$setup role row: [$got] != [$canon_quad]"$'\n'
-done < <(grep -E '^(arena runners|arena cross-judge pool|architect runners|interrogate reviewers):' "$setup")
-if [ -n "$quad_bad" ]; then
-  note "FAIL: the default model quad is not identical across provider dispatch, the panel skills, and setup-pstack:"
-  note "$quad_bad"
+for name in arena architect interrogate; do
+  skill="$repo/plugins/pstack/skills/$name/SKILL.md"
+  grep -Fq "current parent's canonical" "$skill" || panel_mismatches="${panel_mismatches}${name}: canonical parent map binding missing"$'\n'
+done
+grep -Fq "select only the established parent's map" "$setup" || panel_mismatches="${panel_mismatches}setup: canonical parent map binding missing"$'\n'
+if [ -n "$panel_mismatches" ]; then
+  note "FAIL: host-native defaults or canonical consumer bindings disagree:"
+  note "$panel_mismatches"
   fail=1
 else
-  note "ok: default model quad identical across provider dispatch + 3 panel skills + setup-pstack ($canon_quad)"
+  note "ok: both host-native canonical panels match the matrix and consumer bindings"
 fi
 
 plugin="$repo/plugins/pstack"
@@ -349,33 +335,21 @@ else
   note "ok: routed skills stay model-invocable"
 fi
 
-sol_descriptor="$(awk -F '|' '
-  $2 ~ /^[[:space:]]*sol[[:space:]]*$/ {
-    for (i = 4; i <= 6; i++) gsub(/^[[:space:]]+|[[:space:]]+$/, "", $i)
-    print $4 ":" $5 "@" $6
-  }
-' "$dispatch")"
 solo_code_bad=""
-if [ -z "$sol_descriptor" ]; then
-  solo_code_bad="could not read the sol row from $dispatch"$'\n'
-fi
 for role in bug-fix perf-issue hillclimb; do
-  setup_descriptor="$(sed -n "s/^${role}: //p" "$setup")"
-  if [ "$setup_descriptor" != "$sol_descriptor" ]; then
-    solo_code_bad="${solo_code_bad}${setup} ${role}: [${setup_descriptor}] != [${sol_descriptor}]"$'\n'
-  fi
   role_playbook="$plugin/skills/poteto-mode/playbooks/$role.md"
-  playbook_descriptor="$(sed -n 's/.*default `\([^`]*\)`.*/\1/p' "$role_playbook")"
-  if [ "$playbook_descriptor" != "$sol_descriptor" ]; then
-    solo_code_bad="${solo_code_bad}${role_playbook}: [${playbook_descriptor}] != [${sol_descriptor}]"$'\n'
-  fi
+  grep -Fq "current parent's corresponding canonical role in provider-dispatch.md" "$role_playbook" || solo_code_bad="${solo_code_bad}${role}: canonical binding missing"$'\n'
+  for heading in '### Codex defaults' '### Claude Code defaults'; do
+    descriptor="$(canonical_map "$heading" | sed -n "s/^${role}: //p")"
+    [ -n "$descriptor" ] || solo_code_bad="${solo_code_bad}${heading} ${role}: missing default"$'\n'
+  done
 done
 if [ -n "$solo_code_bad" ]; then
-  note "FAIL: solo code roles must use the sol row:"
+  note "FAIL: solo code roles lost their canonical host-native defaults:"
   note "$solo_code_bad"
   fail=1
 else
-  note "ok: solo code roles stay on the sol row ($sol_descriptor)"
+  note "ok: solo code roles use their canonical host-native defaults"
 fi
 
 codex_manifest="$plugin/.codex-plugin/plugin.json"
