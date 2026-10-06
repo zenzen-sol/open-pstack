@@ -25,4 +25,4 @@ Cursor's `cursor/plugins/pstack` tree is the content source. Community Open Psta
 
 ## Current candidate
 
-`1.5.0-maana.2` imports Cursor pstack 0.15.15 at `df581122cde17e6e27686b5a448bde23e4ad4318`. It retains optional model families and defaults unconfigured roles to the current host provider. Scheduled Autopilot wake-ups are disabled in this core candidate. It is a review candidate, not an installed or published release. The prepared daily update-check schedule remains disabled; manual detection is read-only unless its caller explicitly enables the notice input.
+`1.5.0-maana.3` imports Cursor pstack 0.15.15 at `df581122cde17e6e27686b5a448bde23e4ad4318`. It retains optional model families and defaults unconfigured roles to the current host provider. Scheduled Autopilot wake-ups are disabled in this core candidate. It is installed as a shared local candidate for DealTeam and Codeslaw, not a published release. See docs/plans/native-default-adoption.md. The prepared daily update-check schedule remains disabled; manual detection is read-only unless its caller explicitly enables the notice input.

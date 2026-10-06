@@ -242,7 +242,7 @@ describe("model matrix", () => {
         row.firstRunActive,
       ])
     ).toEqual([
-      ["fable", "claude", "fable", "max", "fable", "claude"],
+      ["fable", "claude", "fable", "max", "fable", "no"],
       ["sol", "codex", "gpt-5.6-sol", "max", null, "codex"],
       ["grok", "grok", "grok-4.6", "xhigh", null, "no"],
       ["opus", "claude", "opus", "xhigh", "opus", "claude"],
@@ -254,7 +254,7 @@ describe("model matrix", () => {
       ["luna6", "codex", "gpt-6-luna", "high", null, "codex"],
     ]);
     expect(rows.filter((row) => row.firstRunActive === "codex").map((row) => row.family)).toEqual(["sol", "astra", "luna6"]);
-    expect(rows.filter((row) => row.firstRunActive === "claude").map((row) => row.family)).toEqual(["fable", "opus", "sonnet"]);
+    expect(rows.filter((row) => row.firstRunActive === "claude").map((row) => row.family)).toEqual(["opus", "sonnet"]);
     expect(
       rows.filter((row) => row.provider === "claude").map((row) => row.model)
     ).toEqual([...ROLLING_CLAUDE_ALIASES]);

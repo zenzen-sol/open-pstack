@@ -10,7 +10,7 @@ pstack model choices are provider-qualified descriptors:
 
 | Family | Upstream pstack choice | Provider | Model | Default effort | Selectable efforts | Claude-native agent stem | First-run active |
 |---|---|---|---|---|---|---|---|
-| fable | fable | claude | fable | max | low medium high xhigh max | fable | claude |
+| fable | fable | claude | fable | max | low medium high xhigh max | fable | no |
 | sol | gpt-5.6-sol-max | codex | gpt-5.6-sol | max | low medium high xhigh max | - | codex |
 | grok | grok-4.6-fast-xhigh | grok | grok-4.6 | xhigh | low medium high xhigh max | - | no |
 | opus | opus | claude | opus | xhigh | low medium high xhigh max | opus | claude |
@@ -60,21 +60,21 @@ interrogate reviewers: codex:gpt-5.6-sol@max, codex:gpt-6-astra@high, codex:gpt-
 
 Provider-qualified per-role choices. Every documented role remains present.
 
-feature, refactoring: claude:fable@max
-bug-fix: claude:fable@max
-perf-issue: claude:fable@max
-hillclimb: claude:fable@max
-judgment and prose: claude:fable@max
+feature, refactoring: claude:opus@xhigh
+bug-fix: claude:opus@xhigh
+perf-issue: claude:opus@xhigh
+hillclimb: claude:opus@xhigh
+judgment and prose: claude:opus@xhigh
 hardest tasks: claude:opus@xhigh
 how explorer: claude:sonnet@high
-how explainer: claude:fable@max
+how explainer: claude:opus@xhigh
 why investigators, synthesizer: inherit-parent
 reflect tooling, judgment, divergent, synthesizer: inherit-parent
-arena runners: claude:fable@max, claude:opus@xhigh, claude:sonnet@high
-arena cross-judge pool: claude:fable@max, claude:opus@xhigh, claude:sonnet@high
+arena runners: claude:opus@xhigh, claude:sonnet@high
+arena cross-judge pool: claude:opus@xhigh, claude:sonnet@high
 swarm workers: claude:sonnet@high
-architect runners: claude:fable@max, claude:opus@xhigh, claude:sonnet@high
-interrogate reviewers: claude:fable@max, claude:opus@xhigh, claude:sonnet@high
+architect runners: claude:opus@xhigh, claude:sonnet@high
+interrogate reviewers: claude:opus@xhigh, claude:sonnet@high
 ```
 
 Single-provider panels still use independent model lanes and an independent judge. Choose a different model from the configured pool when possible. Choose a different provider only when explicitly configured; never expand the active set to obtain provider diversity.

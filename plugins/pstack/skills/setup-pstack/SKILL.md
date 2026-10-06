@@ -43,7 +43,7 @@ Derive the current active family set from the normalized loaded rows: it is exac
 
 ### 4. Choose the target active set and role assignments
 
-Show the supported matrix families and mark the current active set. On a first run, use only the host-native set: Sol, Astra, and Luna 6 for Codex; Fable, Opus, and Sonnet for Claude Code. Keep it unchanged by default. Foreign providers require explicit opt-in. On a rerun, keep the derived current set by default. Ask whether to add or remove named supported families. Require at least one target active family. Refuse an alias-only role map because setup could not probe a model family or choose a behavioral-smoke descriptor from it.
+Show the supported matrix families and mark the current active set. On a first run, use only the host-native set: Sol, Astra, and Luna 6 for Codex; Opus and Sonnet for Claude Code. Keep it unchanged by default. Foreign providers require explicit opt-in. On a rerun, keep the derived current set by default. Ask whether to add or remove named supported families. Require at least one target active family. Refuse an alias-only role map because setup could not probe a model family or choose a behavioral-smoke descriptor from it.
 
 Build the final role map in memory before probing. Start from the normalized complete role map from step 2, preserving every loaded row's lane order and family or alias per lane. Present each pending row and its seeded assignments. If a seeded descriptor names a family outside the target set, require the operator to replace that lane with a target family, `inherit-parent`, or `auto`. Ask whether to keep the other assignments or change named roles. Keeping them is the default. Apply only role changes the operator names; never offer a reset of a customized sheet to the first-run assignments.
 
@@ -55,7 +55,7 @@ Offer a reasoning budget before the per-family choices: `unlimited` proposes `ma
 
 Visit the target active families in matrix order and collect one requested effort for each. For a family that currently uses one effort, show it as current. For a newly active family, show its Default effort as proposed. Empty input keeps the current value or accepts that proposal.
 
-If a target family has mixed current efforts, show every conflicting role row and ask for one normalized effort from its Selectable efforts cell. Do not ask for an effort from a removed or inactive family. On a first run with the unchanged target set, state the current parent's three matrix defaults before asking.
+If a target family has mixed current efforts, show every conflicting role row and ask for one normalized effort from its Selectable efforts cell. Do not ask for an effort from a removed or inactive family. On a first run with the unchanged target set, state the current parent's matrix defaults before asking.
 
 ### 6. Probe the target active set
 
