@@ -29,7 +29,7 @@ Standalone Codex CLI 0.145.0 rejected the configured parent model. The app-bundl
 - Install the exact candidate in controlled Codex and Claude user surfaces, then exercise the changed behavior from those surfaces. Inline Claude and fixture-local Codex reads do not satisfy the full installed-app gate.
 - Live-prove budget selection and existing GPT-only setup with parent-specific probes in temporary configuration, including unsupported models and failed probes leaving both the sheet and integration unchanged. Do not use the real user's files as a migration fixture.
 - Exercise fresh-agent follow-ups, code-ready/fix-round review, hourly change-only ticks, required live/performance lanes, and the retained disarm/lease/expected-head rules. Unit and static checks do not establish those workflows end to end.
-- Run GitHub CI on the draft PR. The manual update workflow has not run on GitHub, and cannot be treated as verified merely because local detection/tests pass.
+- GitHub CI passed on candidate commit `bd1c3513e9994fd0ea8806cadf95e65375df0849`: [verification run](https://github.com/zenzen-sol/open-pstack/actions/runs/37403140148). The manual update workflow has not run on GitHub, and cannot be treated as verified merely because local detection/tests pass.
 - Review and merge only after required live evidence exists. Tag the exact merged candidate and read back the release before refreshing either shared installation. Daily scheduling remains a separate approval and code change.
 
 ## Shared-machine rollout after approval
