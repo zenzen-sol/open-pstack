@@ -10,7 +10,7 @@ The native-default candidate uses a host-specific first-run map. Explicit role c
 
 ## Installing the current branch
 
-Use the branch-specific [README installation instructions](README.md#install). The downstream changes live on `codex/gpt-only-routing`, while `main` remains at community version `1.4.1`. PR #2 remains a draft; sharing the branch does not mean the parent-specific role-sheet confirmation or mixed-panel smoke gates have passed. Each recipient must run setup in their own harness and confirm their own model choices.
+Use the immutable fork tag `v1.5.0-maana.3` with the [README installation instructions](README.md#install). Preserve existing model sheets and project overrides. Codex defaults to OpenAI; Claude Code defaults to Anthropic. Cross-provider use remains explicit.
 
 ## Updating directly from Cursor
 
@@ -25,4 +25,4 @@ Cursor's `cursor/plugins/pstack` tree is the content source. Community Open Psta
 
 ## Current candidate
 
-`1.5.0-maana.3` imports Cursor pstack 0.15.15 at `df581122cde17e6e27686b5a448bde23e4ad4318`. It retains optional model families and defaults unconfigured roles to the current host provider. Scheduled Autopilot wake-ups are disabled in this core candidate. It is installed as a shared local candidate for DealTeam and Codeslaw, not a published release. See docs/plans/native-default-adoption.md. The prepared daily update-check schedule remains disabled; manual detection is read-only unless its caller explicitly enables the notice input.
+`1.5.0-maana.3` imports Cursor pstack 0.15.15 at `df581122cde17e6e27686b5a448bde23e4ad4318`. It retains optional model families and defaults unconfigured roles to the current host provider. Scheduled Autopilot wake-ups are disabled in this core candidate. It is installed as a shared local candidate for DealTeam and Codeslaw, not a published release. See docs/plans/native-default-adoption.md. The operator-approved daily update-check schedule runs at 08:17 UTC and reports changes without auto-upgrading; manual detection is read-only unless its caller explicitly enables the notice input.

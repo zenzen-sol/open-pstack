@@ -33,11 +33,11 @@ pstack does not ask you to trust an agent on day one. It helps the agent leave e
 
 ## Cursor 0.15.15 candidate
 
-The native-default candidate is `1.5.0-maana.3`, based on the pinned direct Cursor 0.15.15 import. Its core workflows default to the host provider and preserve explicit role choices. Independent scheduled Autopilot wake-ups are disabled. See [the native-default adoption record](docs/plans/native-default-adoption.md) for installation and verification evidence. It is a candidate installation, not a published release.
+The native-default candidate is `1.5.0-maana.3`, based on the pinned direct Cursor 0.15.15 import. Its core workflows default to the host provider and preserve explicit role choices. Independent scheduled Autopilot wake-ups are disabled. See [the native-default adoption record](docs/plans/native-default-adoption.md) for installation and verification evidence. The scoped release disables scheduled Autopilot and supports explicit manual audit ticks. Fresh private-project AI sessions were not run; project adoption is verified through local plugin-manager and cache readback.
 
 ## Install
 
-The downstream version `1.4.2-maana.2` is available on [`codex/gpt-only-routing`](https://github.com/zenzen-sol/open-pstack/tree/codex/gpt-only-routing). `main` still contains community version `1.4.1`; installing from `main` omits the downstream changes. [PR #2](https://github.com/zenzen-sol/open-pstack/pull/2) remains a draft while parent-specific role-sheet confirmation and mixed-panel smoke checks are incomplete. This is a branch distribution, with no downstream release tag.
+Use the immutable fork release `v1.5.0-maana.3` for the native-default distribution. Cross-provider use is explicit opt-in. Scheduled Autopilot is disabled/manual-only. The separate daily Cursor detector reports source changes and never installs them.
 
 Both distributions use marketplace name `open-pstack`. If that name is already registered from another source, remove that marketplace using your harness's marketplace remove command before adding this fork; otherwise it can keep resolving the old source.
 
@@ -48,7 +48,7 @@ You need a current Claude Code or Codex installation. Default review panels use 
 First clone the downstream branch in your shell:
 
 ```shell
-git clone --branch codex/gpt-only-routing --single-branch https://github.com/zenzen-sol/open-pstack.git
+git clone --branch v1.5.0-maana.3 --single-branch https://github.com/zenzen-sol/open-pstack.git
 cd open-pstack
 pwd
 ```
@@ -66,7 +66,7 @@ Use the absolute path printed by `pwd` in these commands inside Claude Code:
 Run these commands in your shell:
 
 ```shell
-codex plugin marketplace add zenzen-sol/open-pstack --ref codex/gpt-only-routing
+codex plugin marketplace add zenzen-sol/open-pstack --ref v1.5.0-maana.3
 codex plugin add pstack@open-pstack
 ```
 

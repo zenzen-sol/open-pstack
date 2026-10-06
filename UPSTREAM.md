@@ -40,7 +40,7 @@ git log --oneline df581122cde17e6e27686b5a448bde23e4ad4318..cursor/main -- pstac
 git diff --stat df581122cde17e6e27686b5a448bde23e4ad4318..cursor/main -- pstack
 ```
 
-No output means the tracked pstack tree has not changed. `scripts/check-cursor-update.py` produces the full pinned audit without fetching or writing the checkout. The manual `.github/workflows/cursor-update-check.yml` fetches Cursor and uploads that audit. Its optional notice job deduplicates a bot-authored fork issue. The daily 08:17 UTC schedule is prepared as a comment and remains disabled until explicitly approved. Unrelated Cursor repository commits do not trigger a notice.
+No output means the tracked pstack tree has not changed. `scripts/check-cursor-update.py` produces the full pinned audit without fetching or writing the checkout. The manual `.github/workflows/cursor-update-check.yml` fetches Cursor and uploads that audit. Its optional notice job deduplicates a bot-authored fork issue. The operator-approved daily 08:17 UTC schedule reports source changes only and never installs an update. Unrelated Cursor repository commits do not trigger a notice.
 
 ## Incorporate a change
 

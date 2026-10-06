@@ -7,9 +7,9 @@ on:
         description: Create or update the single pending Cursor update issue
         type: boolean
         default: false
-  # Enable only after release review and explicit scheduling approval.
-  # schedule:
-  #   - cron: '17 8 * * *'
+  # Operator-approved daily detection and deduplicated notice only; never upgrade.
+  schedule:
+    - cron: '17 8 * * *'
 
 permissions:
   contents: read
