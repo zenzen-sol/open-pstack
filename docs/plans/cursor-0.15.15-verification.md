@@ -26,6 +26,8 @@ Standalone Codex CLI 0.145.0 rejected the configured parent model. The app-bundl
 
 ## Remaining release gates
 
+The subsequently authorized installed checks are recorded in [the installed verification record](cursor-0.15.15-installed-verification.md). Most controlled setup and local Autopilot checks passed. Normal Claude-to-Codex executable compatibility and scheduled-wake approval remain blocked; both shared plugins were restored to `1.4.2-maana.2`. The items below describe the original gate list, not a claim that no installed testing occurred.
+
 - Install the exact candidate in controlled Codex and Claude user surfaces, then exercise the changed behavior from those surfaces. Inline Claude and fixture-local Codex reads do not satisfy the full installed-app gate.
 - Live-prove budget selection and existing GPT-only setup with parent-specific probes in temporary configuration, including unsupported models and failed probes leaving both the sheet and integration unchanged. Do not use the real user's files as a migration fixture.
 - Exercise fresh-agent follow-ups, code-ready/fix-round review, hourly change-only ticks, required live/performance lanes, and the retained disarm/lease/expected-head rules. Unit and static checks do not establish those workflows end to end.

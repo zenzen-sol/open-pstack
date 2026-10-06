@@ -1,0 +1,1873 @@
+{
+  "candidateCommit": "e221ad3dc564ddef48a41e6c239b15ffec2037c5",
+  "candidateVersion": "1.5.0-maana.1",
+  "cursorVersion": "0.15.15",
+  "cursorCommit": "df581122cde17e6e27686b5a448bde23e4ad4318",
+  "pluginTree": "308fdae33b7fe7dd7b9f5cf64e4b4977df9560d6",
+  "installedPayloadFiles": 177,
+  "installedPayloadExactInBothHarnesses": true,
+  "rollbackVersion": "1.4.2-maana.2",
+  "nativeCodexSessions": [
+    {
+      "sessionId": "01a10f13-3f7c-7ad1-bf45-b2a0ac40ea7a",
+      "cwd": "/tmp/pstack-01515-rollout/codex-autopilot",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a10f0b-8e67-7bb3-bd5c-53e49a9d5082",
+            "depth": 1,
+            "agent_path": "/root/trail_review",
+            "agent_nickname": "Boyle",
+            "agent_role": null
+          }
+        }
+      },
+      "requestedModels": [
+        "gpt-6-astra@high"
+      ],
+      "lastEvent": "event_msg"
+    },
+    {
+      "sessionId": "01a10f14-d207-72b2-8e1e-ba897416f14c",
+      "cwd": "/tmp/pstack-01515-rollout/codex-autopilot",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a10f0b-8e67-7bb3-bd5c-53e49a9d5082",
+            "depth": 1,
+            "agent_path": "/root/audit_fix_verify",
+            "agent_nickname": "Newton",
+            "agent_role": null
+          }
+        }
+      },
+      "requestedModels": [
+        "gpt-6-astra@high"
+      ],
+      "lastEvent": "event_msg"
+    },
+    {
+      "sessionId": "01a10f0e-3419-7c03-9154-9e16aca43656",
+      "cwd": "/tmp/pstack-01515-rollout/codex-setup",
+      "source": "exec",
+      "requestedModels": [
+        "gpt-6.1-sol@medium"
+      ],
+      "lastEvent": "event_msg"
+    },
+    {
+      "sessionId": "01a10f0b-8e67-7bb3-bd5c-53e49a9d5082",
+      "cwd": "/tmp/pstack-01515-rollout/codex-autopilot",
+      "source": "exec",
+      "requestedModels": [
+        "gpt-6.1-sol@medium"
+      ],
+      "lastEvent": "event_msg"
+    },
+    {
+      "sessionId": "01a10f0e-8f7c-7092-9d2c-9638fa31ef31",
+      "cwd": "/tmp/pstack-01515-rollout/codex-autopilot",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a10f0b-8e67-7bb3-bd5c-53e49a9d5082",
+            "depth": 1,
+            "agent_path": "/root/sum_r2_live",
+            "agent_nickname": "Averroes",
+            "agent_role": null
+          }
+        }
+      },
+      "requestedModels": [
+        "gpt-6.1-sol@medium"
+      ],
+      "lastEvent": "event_msg"
+    },
+    {
+      "sessionId": "01a10f0e-b3a8-7631-a3ff-529fd5ae4786",
+      "cwd": "/tmp/pstack-01515-rollout/codex-setup",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a10f0e-3419-7c03-9154-9e16aca43656",
+            "depth": 1,
+            "agent_path": "/root/probe_luna6_exact",
+            "agent_nickname": "Newton",
+            "agent_role": null
+          }
+        }
+      },
+      "requestedModels": [
+        "gpt-6-luna@medium"
+      ],
+      "lastEvent": "event_msg"
+    },
+    {
+      "sessionId": "01a10f0b-8ece-7700-8693-3c5d67a4dd84",
+      "cwd": "/tmp/pstack-01515-rollout/codex-autopilot",
+      "source": {
+        "subagent": {
+          "other": "guardian"
+        }
+      },
+      "requestedModels": [
+        "codex-auto-review@low"
+      ],
+      "lastEvent": "event_msg"
+    },
+    {
+      "sessionId": "01a10f0f-7f1b-72e1-9031-95bb661ce54b",
+      "cwd": "/tmp/pstack-01515-rollout/codex-setup",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a10f0e-3419-7c03-9154-9e16aca43656",
+            "depth": 1,
+            "agent_path": "/root/cross_judge_exact",
+            "agent_nickname": "Dalton",
+            "agent_role": null
+          }
+        }
+      },
+      "requestedModels": [
+        "gpt-6-sol@medium"
+      ],
+      "lastEvent": "event_msg"
+    },
+    {
+      "sessionId": "01a10f0e-92bb-75e1-b6a9-978517c38864",
+      "cwd": "/tmp/pstack-01515-rollout/codex-setup",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a10f0e-3419-7c03-9154-9e16aca43656",
+            "depth": 1,
+            "agent_path": "/root/probe_luna_exact",
+            "agent_nickname": "Rawls",
+            "agent_role": null
+          }
+        }
+      },
+      "requestedModels": [
+        "gpt-5.6-luna@medium"
+      ],
+      "lastEvent": "event_msg"
+    },
+    {
+      "sessionId": "01a10f0f-2281-7ee3-b6be-303cb103aeb1",
+      "cwd": "/tmp/pstack-01515-rollout/codex-setup",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a10f0e-3419-7c03-9154-9e16aca43656",
+            "depth": 1,
+            "agent_path": "/root/panel_luna6_exact",
+            "agent_nickname": "Cicero",
+            "agent_role": null
+          }
+        }
+      },
+      "requestedModels": [
+        "gpt-6-luna@medium"
+      ],
+      "lastEvent": "event_msg"
+    },
+    {
+      "sessionId": "01a10f10-5c52-7e51-b877-6bdc9fb29604",
+      "cwd": "/tmp/pstack-01515-rollout/codex-autopilot",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a10f0b-8e67-7bb3-bd5c-53e49a9d5082",
+            "depth": 1,
+            "agent_path": "/root/owner_multiply",
+            "agent_nickname": "Singer",
+            "agent_role": null
+          }
+        }
+      },
+      "requestedModels": [
+        "gpt-6.1-sol@medium"
+      ],
+      "lastEvent": "event_msg"
+    },
+    {
+      "sessionId": "01a10f11-7360-7603-8626-868f79be54a1",
+      "cwd": "/tmp/pstack-01515-rollout/codex-autopilot",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a10f0b-8e67-7bb3-bd5c-53e49a9d5082",
+            "depth": 1,
+            "agent_path": "/root/multiply_r1_diff",
+            "agent_nickname": "Lagrange",
+            "agent_role": null
+          }
+        }
+      },
+      "requestedModels": [
+        "gpt-6.1-sol@medium"
+      ],
+      "lastEvent": "event_msg"
+    },
+    {
+      "sessionId": "01a10f0d-10d1-7a40-a8ee-6c3675c4d459",
+      "cwd": "/tmp/pstack-01515-rollout/codex-autopilot",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a10f0b-8e67-7bb3-bd5c-53e49a9d5082",
+            "depth": 1,
+            "agent_path": "/root/sum_r1_live",
+            "agent_nickname": "Pauli",
+            "agent_role": null
+          }
+        }
+      },
+      "requestedModels": [
+        "gpt-6.1-sol@medium"
+      ],
+      "lastEvent": "event_msg"
+    },
+    {
+      "sessionId": "01a10f0c-4b4f-79a3-8152-73ae6ae22d09",
+      "cwd": "/tmp/pstack-01515-rollout/codex-autopilot",
+      "source": {
+        "subagent": {
+          "other": "guardian"
+        }
+      },
+      "requestedModels": [
+        "codex-auto-review@low"
+      ],
+      "lastEvent": "event_msg"
+    },
+    {
+      "sessionId": "01a10f10-5c8f-74d0-977d-4bf04014a426",
+      "cwd": "/tmp/pstack-01515-rollout/codex-autopilot",
+      "source": {
+        "subagent": {
+          "other": "guardian"
+        }
+      },
+      "requestedModels": [
+        "codex-auto-review@low"
+      ],
+      "lastEvent": "event_msg"
+    },
+    {
+      "sessionId": "01a10f0e-a81f-7461-aa74-2e75c8013260",
+      "cwd": "/tmp/pstack-01515-rollout/codex-autopilot",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a10f0b-8e67-7bb3-bd5c-53e49a9d5082",
+            "depth": 1,
+            "agent_path": "/root/sum_r2_diff",
+            "agent_nickname": "Chandrasekhar",
+            "agent_role": null
+          }
+        }
+      },
+      "requestedModels": [
+        "gpt-6.1-sol@medium"
+      ],
+      "lastEvent": "event_msg"
+    },
+    {
+      "sessionId": "01a10f0e-a32f-73a1-931e-cf3924c71fbe",
+      "cwd": "/tmp/pstack-01515-rollout/codex-setup",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a10f0e-3419-7c03-9154-9e16aca43656",
+            "depth": 1,
+            "agent_path": "/root/probe_sol6_exact",
+            "agent_nickname": "Boole",
+            "agent_role": null
+          }
+        }
+      },
+      "requestedModels": [
+        "gpt-6-sol@medium"
+      ],
+      "lastEvent": "event_msg"
+    },
+    {
+      "sessionId": "01a10f0d-2913-7c80-bb55-cfed75db765d",
+      "cwd": "/tmp/pstack-01515-rollout/codex-autopilot",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a10f0b-8e67-7bb3-bd5c-53e49a9d5082",
+            "depth": 1,
+            "agent_path": "/root/sum_r1_diff",
+            "agent_nickname": "Locke",
+            "agent_role": null
+          }
+        }
+      },
+      "requestedModels": [
+        "gpt-6.1-sol@medium"
+      ],
+      "lastEvent": "event_msg"
+    },
+    {
+      "sessionId": "01a10f11-56d0-7043-aa8e-8820c5628345",
+      "cwd": "/tmp/pstack-01515-rollout/codex-autopilot",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a10f0b-8e67-7bb3-bd5c-53e49a9d5082",
+            "depth": 1,
+            "agent_path": "/root/multiply_r1_live",
+            "agent_nickname": "Curie",
+            "agent_role": null
+          }
+        }
+      },
+      "requestedModels": [
+        "gpt-6.1-sol@medium"
+      ],
+      "lastEvent": "event_msg"
+    },
+    {
+      "sessionId": "01a10f0a-1bd7-7e53-b305-0d924bcbe59e",
+      "cwd": "/tmp/pstack-01515-rollout/codex-autopilot",
+      "source": "exec",
+      "requestedModels": [
+        "gpt-6.1-sol@medium"
+      ],
+      "lastEvent": "event_msg"
+    },
+    {
+      "sessionId": "01a10f0c-4afc-79b2-88da-9fe96e66fbfd",
+      "cwd": "/tmp/pstack-01515-rollout/codex-autopilot",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a10f0b-8e67-7bb3-bd5c-53e49a9d5082",
+            "depth": 1,
+            "agent_path": "/root/owner_sum",
+            "agent_nickname": "Hegel",
+            "agent_role": null
+          }
+        }
+      },
+      "requestedModels": [
+        "gpt-6.1-sol@medium"
+      ],
+      "lastEvent": "event_msg"
+    },
+    {
+      "sessionId": "01a10f0e-fee7-7a70-b100-19e90ded3bc7",
+      "cwd": "/tmp/pstack-01515-rollout/codex-setup",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a10f0e-3419-7c03-9154-9e16aca43656",
+            "depth": 1,
+            "agent_path": "/root/panel_luna_exact",
+            "agent_nickname": "Kant",
+            "agent_role": null
+          }
+        }
+      },
+      "requestedModels": [
+        "gpt-5.6-luna@medium"
+      ],
+      "lastEvent": "event_msg"
+    },
+    {
+      "sessionId": "01a10f0f-107c-74e1-9e07-9a55ab721ac6",
+      "cwd": "/tmp/pstack-01515-rollout/codex-setup",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a10f0e-3419-7c03-9154-9e16aca43656",
+            "depth": 1,
+            "agent_path": "/root/panel_sol6_exact",
+            "agent_nickname": "Bacon",
+            "agent_role": null
+          }
+        }
+      },
+      "requestedModels": [
+        "gpt-6-sol@medium"
+      ],
+      "lastEvent": "event_msg"
+    }
+  ],
+  "claudeRuns": {
+    "claude-native": {
+      "sessionId": "d4cd32f0-942f-4c93-be54-12fa8a8ef598",
+      "parentModel": "claude-sonnet-5",
+      "mcpServers": [],
+      "pstack": {
+        "name": "pstack",
+        "path": "/Users/zenzen-sol/Documents/Codex/2026-10-06/task/open-pstack-port/plugins/pstack",
+        "source": "pstack@open-pstack",
+        "version": "1.5.0-maana.1"
+      },
+      "resultSubtype": "success",
+      "isError": false,
+      "nativeCalls": [
+        {
+          "id": "toolu_01RjSt3V6Awnq7TeG5nRFEvS",
+          "tool": "Agent",
+          "input": {
+            "description": "pstack sonnet native probe",
+            "subagent_type": "pstack:pstack-sonnet-medium",
+            "run_in_background": false
+          }
+        },
+        {
+          "id": "toolu_01RezUsbyfCYHrx8PRh8EWC1",
+          "tool": "Agent",
+          "input": {
+            "description": "pstack sonnet smoke panel entry",
+            "subagent_type": "pstack:pstack-sonnet-medium",
+            "run_in_background": false
+          }
+        },
+        {
+          "id": "toolu_01CKAoU5DC641WfciEkD7npE",
+          "tool": "Agent",
+          "input": {
+            "description": "pstack sonnet smoke cross-judge",
+            "subagent_type": "pstack:pstack-sonnet-medium",
+            "run_in_background": false
+          }
+        }
+      ]
+    },
+    "claude-setup-v2": {
+      "sessionId": "316e4269-2089-4747-b675-ed51a6865bb0",
+      "parentModel": "claude-sonnet-5",
+      "mcpServers": [],
+      "pstack": {
+        "name": "pstack",
+        "path": "/Users/zenzen-sol/Documents/Codex/2026-10-06/task/open-pstack-port/plugins/pstack",
+        "source": "pstack@open-pstack",
+        "version": "1.5.0-maana.1"
+      },
+      "resultSubtype": "success",
+      "isError": false,
+      "nativeCalls": []
+    },
+    "claude-panel": {
+      "sessionId": "c632f2ef-5ec3-4a09-9c9e-0c1b6f48a72b",
+      "parentModel": "claude-sonnet-5",
+      "mcpServers": [],
+      "pstack": {
+        "name": "pstack",
+        "path": "/Users/zenzen-sol/Documents/Codex/2026-10-06/task/open-pstack-port/plugins/pstack",
+        "source": "pstack@open-pstack",
+        "version": "1.5.0-maana.1"
+      },
+      "resultSubtype": "success",
+      "isError": false,
+      "nativeCalls": []
+    },
+    "failed-probe": {
+      "sessionId": "ffd48c36-0bb3-4394-95ab-f0176886f879",
+      "parentModel": "claude-sonnet-5",
+      "mcpServers": [],
+      "pstack": {
+        "name": "pstack",
+        "path": "/Users/zenzen-sol/Documents/Codex/2026-10-06/task/open-pstack-port/plugins/pstack",
+        "source": "pstack@open-pstack",
+        "version": "1.5.0-maana.1"
+      },
+      "resultSubtype": "success",
+      "isError": false,
+      "nativeCalls": []
+    },
+    "normal-path-v2": {
+      "sessionId": "cd9d1818-d8e2-4f89-8c8e-d8f220f1a623",
+      "parentModel": "claude-sonnet-5",
+      "mcpServers": [],
+      "pstack": {
+        "name": "pstack",
+        "path": "/Users/zenzen-sol/Documents/Codex/2026-10-06/task/open-pstack-port/plugins/pstack",
+        "source": "pstack@open-pstack",
+        "version": "1.5.0-maana.1"
+      },
+      "resultSubtype": "success",
+      "isError": false,
+      "nativeCalls": []
+    },
+    "claude-autopilot": {
+      "sessionId": "fca6f622-bcdd-46be-a940-cabb6cd39d6e",
+      "parentModel": "claude-sonnet-5",
+      "mcpServers": [],
+      "pstack": {
+        "name": "pstack",
+        "path": "/Users/zenzen-sol/Documents/Codex/2026-10-06/task/open-pstack-port/plugins/pstack",
+        "source": "pstack@open-pstack",
+        "version": "1.5.0-maana.1"
+      },
+      "resultSubtype": "success",
+      "isError": false,
+      "nativeCalls": [
+        {
+          "id": "toolu_01Qv1xBPghW4ZidJSQFoHv3H",
+          "tool": "Agent",
+          "input": {
+            "description": "Owner-1: fix sum.mjs addition bug",
+            "subagent_type": "pstack:poteto-agent",
+            "run_in_background": false
+          }
+        },
+        {
+          "id": "toolu_01PEYRq59HDYDizQM8ykVmfx",
+          "tool": "Agent",
+          "input": {
+            "description": "Verifier-A: gates and diff audit for pr1-fix-sum",
+            "subagent_type": "pstack:poteto-agent",
+            "run_in_background": true
+          }
+        },
+        {
+          "id": "toolu_0177YhqEaMboLgHFAAbGzjbJ",
+          "tool": "Agent",
+          "input": {
+            "description": "Verifier-B: live export behavior lane",
+            "subagent_type": "pstack:poteto-agent",
+            "run_in_background": true
+          }
+        },
+        {
+          "id": "toolu_01AQAT7a1rmkGkuyd2HwEN3k",
+          "tool": "Agent",
+          "input": {
+            "description": "Verifier-C: regression lane against trunk",
+            "subagent_type": "pstack:poteto-agent",
+            "run_in_background": true
+          }
+        },
+        {
+          "id": "toolu_01Wy2XTJwxERFxtwDMCofdbv",
+          "tool": "Agent",
+          "input": {
+            "description": "Owner-1 fix-forward: reject non-number input",
+            "subagent_type": "pstack:poteto-agent",
+            "run_in_background": false
+          }
+        },
+        {
+          "id": "toolu_01EDFL7Qtgf17Eou893po936",
+          "tool": "Agent",
+          "input": {
+            "description": "Verifier-D round2: diff+live lane in worktree",
+            "subagent_type": "pstack:poteto-agent",
+            "run_in_background": true
+          }
+        },
+        {
+          "id": "toolu_01MeujkwYdhFpsJQWwoDtoMM",
+          "tool": "Agent",
+          "input": {
+            "description": "Verifier-E round2: regression lane in worktree",
+            "subagent_type": "pstack:poteto-agent",
+            "run_in_background": true
+          }
+        },
+        {
+          "id": "toolu_0112nvuQn4Y1482mRC3X6t8G",
+          "tool": "Agent",
+          "input": {
+            "description": "Owner-2: add multiply export",
+            "subagent_type": "pstack:poteto-agent",
+            "run_in_background": false
+          }
+        },
+        {
+          "id": "toolu_01DvekyhG8gxhMkyJvmYJjuQ",
+          "tool": "Agent",
+          "input": {
+            "description": "Verifier-F: multiply diff+live lane",
+            "subagent_type": "pstack:poteto-agent",
+            "run_in_background": true
+          }
+        },
+        {
+          "id": "toolu_01DunJZvkYwpubLNF1CzUUf4",
+          "tool": "Agent",
+          "input": {
+            "description": "Verifier-G: regression lane for item 2",
+            "subagent_type": "pstack:poteto-agent",
+            "run_in_background": true
+          }
+        }
+      ]
+    },
+    "claude-handle": {
+      "sessionId": "2d4156ac-5006-4827-aab8-933d22c33128",
+      "parentModel": "claude-sonnet-5",
+      "mcpServers": [],
+      "pstack": {
+        "name": "pstack",
+        "path": "/Users/zenzen-sol/Documents/Codex/2026-10-06/task/open-pstack-port/plugins/pstack",
+        "source": "pstack@open-pstack",
+        "version": "1.5.0-maana.1"
+      },
+      "resultSubtype": "success",
+      "isError": false,
+      "nativeCalls": [
+        {
+          "id": "toolu_01Pk7xv4UKmAGDqT2LWn6LPi",
+          "tool": "Agent",
+          "input": {
+            "description": "pstack handle owner round one",
+            "subagent_type": "pstack:poteto-agent",
+            "run_in_background": false
+          }
+        },
+        {
+          "id": "toolu_01C7Eck1A7yDbmaT13gZ1Yf3",
+          "tool": "SendMessage",
+          "input": {
+            "to": "a808311b317a64f5f"
+          }
+        },
+        {
+          "id": "toolu_017JH7Rv4azZHNtHf6pTgf2h",
+          "tool": "Agent",
+          "input": {
+            "description": "pstack fresh next-owner isolation check",
+            "subagent_type": "pstack:poteto-agent",
+            "run_in_background": false
+          }
+        }
+      ]
+    }
+  },
+  "externalReceipts": [
+    {
+      "parent": "claude",
+      "provider": "codex",
+      "model": "gpt-5.6-luna",
+      "effort": "medium",
+      "mode": "read-only",
+      "status": "complete",
+      "exitCode": 0,
+      "elapsedMs": 7230,
+      "executable": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+      "modelEvidence": "pinned-argv",
+      "reportedModel": null,
+      "modelVerified": false,
+      "usage": {
+        "inputTokens": 33112,
+        "cachedInputTokens": 32256,
+        "cacheCreationInputTokens": 0,
+        "outputTokens": 173,
+        "reasoningTokens": 34
+      },
+      "costUsd": null,
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "exec",
+        "--model",
+        "gpt-5.6-luna",
+        "--config",
+        "model_reasoning_effort=\"medium\"",
+        "--sandbox",
+        "read-only",
+        "--cd",
+        "/private/tmp/pstack-01515-rollout/claude-setup",
+        "--skip-git-repo-check",
+        "--ephemeral",
+        "--disable",
+        "plugins",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "hooks",
+        "--disable",
+        "memories",
+        "--json",
+        "-"
+      ],
+      "receipt": "claude-setup/.pstack-setup/run-1791254181/luna/receipt.json",
+      "sha256": "8b9aa129da6a35d3ef7b2bd1ff974f79ee1e562d5c7f6ee883ca523ecdcbca5f",
+      "releaseEvidence": "candidate complete three-family panel or independent judge"
+    },
+    {
+      "parent": "claude",
+      "provider": "codex",
+      "model": "gpt-6-luna",
+      "effort": "medium",
+      "mode": "read-only",
+      "status": "complete",
+      "exitCode": 0,
+      "elapsedMs": 8234,
+      "executable": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+      "modelEvidence": "pinned-argv",
+      "reportedModel": null,
+      "modelVerified": false,
+      "usage": {
+        "inputTokens": 37079,
+        "cachedInputTokens": 29184,
+        "cacheCreationInputTokens": 0,
+        "outputTokens": 198,
+        "reasoningTokens": 0
+      },
+      "costUsd": null,
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "exec",
+        "--model",
+        "gpt-6-luna",
+        "--config",
+        "model_reasoning_effort=\"medium\"",
+        "--sandbox",
+        "read-only",
+        "--cd",
+        "/private/tmp/pstack-01515-rollout/claude-setup",
+        "--skip-git-repo-check",
+        "--ephemeral",
+        "--disable",
+        "plugins",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "hooks",
+        "--disable",
+        "memories",
+        "--json",
+        "-"
+      ],
+      "receipt": "claude-setup/.pstack-setup/run-1791254181/luna6/receipt.json",
+      "sha256": "78c1c3a5cab4431d2c17af84ab244b9cc362130412f4c6fdd2ff85b6c7252348",
+      "releaseEvidence": "candidate complete three-family panel or independent judge"
+    },
+    {
+      "parent": "claude",
+      "provider": "codex",
+      "model": "gpt-6-sol",
+      "effort": "medium",
+      "mode": "read-only",
+      "status": "complete",
+      "exitCode": 0,
+      "elapsedMs": 6297,
+      "executable": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+      "modelEvidence": "pinned-argv",
+      "reportedModel": null,
+      "modelVerified": false,
+      "usage": {
+        "inputTokens": 37418,
+        "cachedInputTokens": 36864,
+        "cacheCreationInputTokens": 0,
+        "outputTokens": 156,
+        "reasoningTokens": 30
+      },
+      "costUsd": null,
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "exec",
+        "--model",
+        "gpt-6-sol",
+        "--config",
+        "model_reasoning_effort=\"medium\"",
+        "--sandbox",
+        "read-only",
+        "--cd",
+        "/private/tmp/pstack-01515-rollout/claude-setup",
+        "--skip-git-repo-check",
+        "--ephemeral",
+        "--disable",
+        "plugins",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "hooks",
+        "--disable",
+        "memories",
+        "--json",
+        "-"
+      ],
+      "receipt": "claude-setup/.pstack-setup/run-1791254181/sol6/receipt.json",
+      "sha256": "5a0650ce9989983b45a1301dd2934e94b6bfee59d6f53817f5cca7d372064d12",
+      "releaseEvidence": "candidate complete three-family panel or independent judge"
+    },
+    {
+      "parent": "claude",
+      "provider": "codex",
+      "model": "gpt-6-sol",
+      "effort": "medium",
+      "mode": "read-only",
+      "status": "complete",
+      "exitCode": 0,
+      "elapsedMs": 6450,
+      "executable": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+      "modelEvidence": "pinned-argv",
+      "reportedModel": null,
+      "modelVerified": false,
+      "usage": {
+        "inputTokens": 37880,
+        "cachedInputTokens": 37120,
+        "cacheCreationInputTokens": 0,
+        "outputTokens": 153,
+        "reasoningTokens": 46
+      },
+      "costUsd": null,
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "exec",
+        "--model",
+        "gpt-6-sol",
+        "--config",
+        "model_reasoning_effort=\"medium\"",
+        "--sandbox",
+        "read-only",
+        "--cd",
+        "/private/tmp/pstack-01515-rollout/claude-setup",
+        "--skip-git-repo-check",
+        "--ephemeral",
+        "--disable",
+        "plugins",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "hooks",
+        "--disable",
+        "memories",
+        "--json",
+        "-"
+      ],
+      "receipt": "claude-setup/.pstack-setup/run-1791254181/judge/receipt.json",
+      "sha256": "37c50b0c71c9838ce6cba9c14b138783cffdfc6dba7a31bfb32e10504c6909d7",
+      "releaseEvidence": "candidate complete three-family panel or independent judge"
+    },
+    {
+      "parent": "claude",
+      "provider": "codex",
+      "model": "gpt-5.6-luna",
+      "effort": "medium",
+      "mode": "read-only",
+      "status": "complete",
+      "exitCode": 0,
+      "elapsedMs": 5542,
+      "executable": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+      "modelEvidence": "pinned-argv",
+      "reportedModel": null,
+      "modelVerified": false,
+      "usage": {
+        "inputTokens": 33032,
+        "cachedInputTokens": 32256,
+        "cacheCreationInputTokens": 0,
+        "outputTokens": 117,
+        "reasoningTokens": 34
+      },
+      "costUsd": null,
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "exec",
+        "--model",
+        "gpt-5.6-luna",
+        "--config",
+        "model_reasoning_effort=\"medium\"",
+        "--sandbox",
+        "read-only",
+        "--cd",
+        "/private/tmp/pstack-01515-rollout/claude-setup",
+        "--skip-git-repo-check",
+        "--ephemeral",
+        "--disable",
+        "plugins",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "hooks",
+        "--disable",
+        "memories",
+        "--json",
+        "-"
+      ],
+      "receipt": "claude-setup/.pstack-setup/smoke-1791253856/luna/receipt.json",
+      "sha256": "76259d9fa09d0b39ab5a99467767e8f6b64f51a70a4056fb7c43cc32c8535628",
+      "releaseEvidence": "incomplete two-candidate smoke, superseded"
+    },
+    {
+      "parent": "claude",
+      "provider": "codex",
+      "model": "gpt-6-luna",
+      "effort": "medium",
+      "mode": "read-only",
+      "status": "complete",
+      "exitCode": 0,
+      "elapsedMs": 4572,
+      "executable": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+      "modelEvidence": "pinned-argv",
+      "reportedModel": null,
+      "modelVerified": false,
+      "usage": {
+        "inputTokens": 18515,
+        "cachedInputTokens": 11008,
+        "cacheCreationInputTokens": 0,
+        "outputTokens": 13,
+        "reasoningTokens": 0
+      },
+      "costUsd": null,
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "exec",
+        "--model",
+        "gpt-6-luna",
+        "--config",
+        "model_reasoning_effort=\"medium\"",
+        "--sandbox",
+        "read-only",
+        "--cd",
+        "/private/tmp/pstack-01515-rollout/claude-setup",
+        "--skip-git-repo-check",
+        "--ephemeral",
+        "--disable",
+        "plugins",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "hooks",
+        "--disable",
+        "memories",
+        "--json",
+        "-"
+      ],
+      "receipt": "claude-setup/.pstack-setup/smoke-1791253856/luna6/receipt.json",
+      "sha256": "08a4178c392d2451653e16a7227ccd66e526e67b20cc15a98448b7d7fd5608a7",
+      "releaseEvidence": "incomplete two-candidate smoke, superseded"
+    },
+    {
+      "parent": "claude",
+      "provider": "codex",
+      "model": "gpt-6-sol",
+      "effort": "medium",
+      "mode": "read-only",
+      "status": "complete",
+      "exitCode": 0,
+      "elapsedMs": 7846,
+      "executable": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+      "modelEvidence": "pinned-argv",
+      "reportedModel": null,
+      "modelVerified": false,
+      "usage": {
+        "inputTokens": 37360,
+        "cachedInputTokens": 36864,
+        "cacheCreationInputTokens": 0,
+        "outputTokens": 99,
+        "reasoningTokens": 8
+      },
+      "costUsd": null,
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "exec",
+        "--model",
+        "gpt-6-sol",
+        "--config",
+        "model_reasoning_effort=\"medium\"",
+        "--sandbox",
+        "read-only",
+        "--cd",
+        "/private/tmp/pstack-01515-rollout/claude-setup",
+        "--skip-git-repo-check",
+        "--ephemeral",
+        "--disable",
+        "plugins",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "hooks",
+        "--disable",
+        "memories",
+        "--json",
+        "-"
+      ],
+      "receipt": "claude-setup/.pstack-setup/smoke-1791253856/sol6/receipt.json",
+      "sha256": "5326b724d839a579bd3091423ec95e8eca220d66ffc53d51fe7533da367e2858",
+      "releaseEvidence": "incomplete two-candidate smoke, superseded"
+    },
+    {
+      "parent": "claude",
+      "provider": "codex",
+      "model": "gpt-5.6-luna",
+      "effort": "medium",
+      "mode": "read-only",
+      "status": "complete",
+      "exitCode": 0,
+      "elapsedMs": 3478,
+      "executable": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+      "modelEvidence": "pinned-argv",
+      "reportedModel": null,
+      "modelVerified": false,
+      "usage": {
+        "inputTokens": 16430,
+        "cachedInputTokens": 9984,
+        "cacheCreationInputTokens": 0,
+        "outputTokens": 15,
+        "reasoningTokens": 0
+      },
+      "costUsd": null,
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "exec",
+        "--model",
+        "gpt-5.6-luna",
+        "--config",
+        "model_reasoning_effort=\"medium\"",
+        "--sandbox",
+        "read-only",
+        "--cd",
+        "/private/tmp/pstack-01515-rollout/claude-setup",
+        "--skip-git-repo-check",
+        "--ephemeral",
+        "--disable",
+        "plugins",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "hooks",
+        "--disable",
+        "memories",
+        "--json",
+        "-"
+      ],
+      "receipt": "claude-setup/.pstack-setup/probes/luna/receipt.json",
+      "sha256": "1fb2daa3be42162f00a22a970837c2fe9edb97fa27d7503ab6747a6491cb0752",
+      "releaseEvidence": "excluded initial attempt"
+    },
+    {
+      "parent": "claude",
+      "provider": "codex",
+      "model": "gpt-6-luna",
+      "effort": "medium",
+      "mode": "read-only",
+      "status": "complete",
+      "exitCode": 0,
+      "elapsedMs": 4886,
+      "executable": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+      "modelEvidence": "pinned-argv",
+      "reportedModel": null,
+      "modelVerified": false,
+      "usage": {
+        "inputTokens": 18405,
+        "cachedInputTokens": 11008,
+        "cacheCreationInputTokens": 0,
+        "outputTokens": 16,
+        "reasoningTokens": 0
+      },
+      "costUsd": null,
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "exec",
+        "--model",
+        "gpt-6-luna",
+        "--config",
+        "model_reasoning_effort=\"medium\"",
+        "--sandbox",
+        "read-only",
+        "--cd",
+        "/private/tmp/pstack-01515-rollout/claude-setup",
+        "--skip-git-repo-check",
+        "--ephemeral",
+        "--disable",
+        "plugins",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "hooks",
+        "--disable",
+        "memories",
+        "--json",
+        "-"
+      ],
+      "receipt": "claude-setup/.pstack-setup/probes/luna6/receipt.json",
+      "sha256": "4b53ac57dd4180699378cc3cef20b80d1010fe94793f6c2ed402249a9e91f198",
+      "releaseEvidence": "excluded initial attempt"
+    },
+    {
+      "parent": "claude",
+      "provider": "codex",
+      "model": "gpt-6-sol",
+      "effort": "medium",
+      "mode": "read-only",
+      "status": "complete",
+      "exitCode": 0,
+      "elapsedMs": 4394,
+      "executable": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+      "modelEvidence": "pinned-argv",
+      "reportedModel": null,
+      "modelVerified": false,
+      "usage": {
+        "inputTokens": 18586,
+        "cachedInputTokens": 11648,
+        "cacheCreationInputTokens": 0,
+        "outputTokens": 18,
+        "reasoningTokens": 0
+      },
+      "costUsd": null,
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "exec",
+        "--model",
+        "gpt-6-sol",
+        "--config",
+        "model_reasoning_effort=\"medium\"",
+        "--sandbox",
+        "read-only",
+        "--cd",
+        "/private/tmp/pstack-01515-rollout/claude-setup",
+        "--skip-git-repo-check",
+        "--ephemeral",
+        "--disable",
+        "plugins",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "hooks",
+        "--disable",
+        "memories",
+        "--json",
+        "-"
+      ],
+      "receipt": "claude-setup/.pstack-setup/probes/sol6/receipt.json",
+      "sha256": "a0959d4431ca72e0ebeca25f407a51757a57ad97b7305e621bbe8040439ab943",
+      "releaseEvidence": "excluded initial attempt"
+    },
+    {
+      "parent": "claude",
+      "provider": "codex",
+      "model": "gpt-5.6-luna",
+      "effort": "medium",
+      "mode": "read-only",
+      "status": "complete",
+      "exitCode": 0,
+      "elapsedMs": 4478,
+      "executable": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+      "modelEvidence": "pinned-argv",
+      "reportedModel": null,
+      "modelVerified": false,
+      "usage": {
+        "inputTokens": 16430,
+        "cachedInputTokens": 16128,
+        "cacheCreationInputTokens": 0,
+        "outputTokens": 15,
+        "reasoningTokens": 0
+      },
+      "costUsd": null,
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "exec",
+        "--model",
+        "gpt-5.6-luna",
+        "--config",
+        "model_reasoning_effort=\"medium\"",
+        "--sandbox",
+        "read-only",
+        "--cd",
+        "/private/tmp/pstack-01515-rollout/claude-setup",
+        "--skip-git-repo-check",
+        "--ephemeral",
+        "--disable",
+        "plugins",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "hooks",
+        "--disable",
+        "memories",
+        "--json",
+        "-"
+      ],
+      "receipt": "claude-setup/.pstack-setup/probes/run-1791253778/luna/receipt.json",
+      "sha256": "682a4627f526f06dfb598350e21c2003d4d30f86b64ff9a8b714bd83e04b56d6",
+      "releaseEvidence": "candidate fresh availability probe"
+    },
+    {
+      "parent": "claude",
+      "provider": "codex",
+      "model": "gpt-6-luna",
+      "effort": "medium",
+      "mode": "read-only",
+      "status": "complete",
+      "exitCode": 0,
+      "elapsedMs": 5925,
+      "executable": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+      "modelEvidence": "pinned-argv",
+      "reportedModel": null,
+      "modelVerified": false,
+      "usage": {
+        "inputTokens": 18408,
+        "cachedInputTokens": 18176,
+        "cacheCreationInputTokens": 0,
+        "outputTokens": 19,
+        "reasoningTokens": 0
+      },
+      "costUsd": null,
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "exec",
+        "--model",
+        "gpt-6-luna",
+        "--config",
+        "model_reasoning_effort=\"medium\"",
+        "--sandbox",
+        "read-only",
+        "--cd",
+        "/private/tmp/pstack-01515-rollout/claude-setup",
+        "--skip-git-repo-check",
+        "--ephemeral",
+        "--disable",
+        "plugins",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "hooks",
+        "--disable",
+        "memories",
+        "--json",
+        "-"
+      ],
+      "receipt": "claude-setup/.pstack-setup/probes/run-1791253778/luna6/receipt.json",
+      "sha256": "c6a77648e4e098baac185020f0bbe4cee4359f88c8667097c447340ad4f3792a",
+      "releaseEvidence": "candidate fresh availability probe"
+    },
+    {
+      "parent": "claude",
+      "provider": "codex",
+      "model": "gpt-6-sol",
+      "effort": "medium",
+      "mode": "read-only",
+      "status": "complete",
+      "exitCode": 0,
+      "elapsedMs": 4919,
+      "executable": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+      "modelEvidence": "pinned-argv",
+      "reportedModel": null,
+      "modelVerified": false,
+      "usage": {
+        "inputTokens": 18584,
+        "cachedInputTokens": 11648,
+        "cacheCreationInputTokens": 0,
+        "outputTokens": 16,
+        "reasoningTokens": 0
+      },
+      "costUsd": null,
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "exec",
+        "--model",
+        "gpt-6-sol",
+        "--config",
+        "model_reasoning_effort=\"medium\"",
+        "--sandbox",
+        "read-only",
+        "--cd",
+        "/private/tmp/pstack-01515-rollout/claude-setup",
+        "--skip-git-repo-check",
+        "--ephemeral",
+        "--disable",
+        "plugins",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "hooks",
+        "--disable",
+        "memories",
+        "--json",
+        "-"
+      ],
+      "receipt": "claude-setup/.pstack-setup/probes/run-1791253778/sol6/receipt.json",
+      "sha256": "86ca7cbb0fda4a1b21aab51c42cc038eb65627904361ecee26c36cef255551df",
+      "releaseEvidence": "candidate fresh availability probe"
+    },
+    {
+      "parent": "claude",
+      "provider": "codex",
+      "model": "gpt-6-sol",
+      "effort": "medium",
+      "mode": "read-only",
+      "status": "unauthenticated",
+      "exitCode": 1,
+      "elapsedMs": 354,
+      "executable": "/private/tmp/pstack-01515-rollout/failed-probe/bin/codex",
+      "modelEvidence": null,
+      "reportedModel": null,
+      "modelVerified": false,
+      "usage": null,
+      "costUsd": null,
+      "argv": [
+        "/private/tmp/pstack-01515-rollout/failed-probe/bin/codex",
+        "exec",
+        "--model",
+        "gpt-6-sol",
+        "--config",
+        "model_reasoning_effort=\"medium\"",
+        "--sandbox",
+        "read-only",
+        "--cd",
+        "/private/tmp/pstack-01515-rollout/failed-probe",
+        "--skip-git-repo-check",
+        "--ephemeral",
+        "--disable",
+        "plugins",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "hooks",
+        "--disable",
+        "memories",
+        "--json",
+        "-"
+      ],
+      "receipt": "failed-probe/probe/receipt.json",
+      "sha256": "3e7a13a50f102918205a10fb401d3cb54bddfa3dc74a7ef220281a424d37d2f1",
+      "errorMessage": "authentication or model preflight failed",
+      "errorEvidenceExcerpt": "Injected test authentication unavailable",
+      "releaseEvidence": "intentional authentication-failure safety test"
+    },
+    {
+      "parent": "claude",
+      "provider": "codex",
+      "model": "gpt-6-sol",
+      "effort": "medium",
+      "mode": "read-only",
+      "status": "unavailable-model",
+      "exitCode": 1,
+      "elapsedMs": 2946,
+      "executable": "/Users/zenzen-sol/.local/bin/codex",
+      "modelEvidence": null,
+      "reportedModel": null,
+      "modelVerified": false,
+      "usage": null,
+      "costUsd": null,
+      "argv": [
+        "/Users/zenzen-sol/.local/bin/codex",
+        "exec",
+        "--model",
+        "gpt-6-sol",
+        "--config",
+        "model_reasoning_effort=\"medium\"",
+        "--sandbox",
+        "read-only",
+        "--cd",
+        "/tmp/pstack-01515-rollout/normal-path-probe",
+        "--skip-git-repo-check",
+        "--ephemeral",
+        "--disable",
+        "plugins",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "hooks",
+        "--disable",
+        "memories",
+        "--json",
+        "-"
+      ],
+      "receipt": "normal-path-probe/receipt-v2.json",
+      "sha256": "b9f8e508a4de10f2cb961ae40c16d4adbcb181bc7b2da8242fde734e2ccaecd1",
+      "errorMessage": "child exited with status 1",
+      "errorEvidenceExcerpt": "2026-10-06T02:40:21.705025Z  INFO codex_http_client::custom_ca: using system root certificates because no CA override environment variable was selected codex_ca_certificate_configured=false ssl_cert_file_configured=false",
+      "releaseEvidence": "actual default-executable release blocker"
+    },
+    {
+      "parent": "claude",
+      "provider": "codex",
+      "model": "gpt-6-sol",
+      "effort": "medium",
+      "mode": "read-only",
+      "status": "unavailable-model",
+      "exitCode": 1,
+      "elapsedMs": 2987,
+      "executable": "/Users/zenzen-sol/.local/bin/codex",
+      "modelEvidence": null,
+      "reportedModel": null,
+      "modelVerified": false,
+      "usage": null,
+      "costUsd": null,
+      "argv": [
+        "/Users/zenzen-sol/.local/bin/codex",
+        "exec",
+        "--model",
+        "gpt-6-sol",
+        "--config",
+        "model_reasoning_effort=\"medium\"",
+        "--sandbox",
+        "read-only",
+        "--cd",
+        "/private/tmp/pstack-01515-rollout/normal-path-probe",
+        "--skip-git-repo-check",
+        "--ephemeral",
+        "--disable",
+        "plugins",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "hooks",
+        "--disable",
+        "memories",
+        "--json",
+        "-"
+      ],
+      "receipt": "normal-path-probe/receipt-NORMAL_PATH_PSTACK_01515.json",
+      "sha256": "eac36a6295882b5a2091227e1efb907f04865c44ee8a27f82abe4f0f6e1abb42",
+      "errorMessage": "child exited with status 1",
+      "errorEvidenceExcerpt": "2026-10-06T02:38:23.775178Z  INFO codex_http_client::custom_ca: using system root certificates because no CA override environment variable was selected codex_ca_certificate_configured=false ssl_cert_file_configured=false",
+      "releaseEvidence": "excluded initial attempt"
+    }
+  ],
+  "release": "held",
+  "dailySchedule": "disabled",
+  "projectPreservation": {
+    "count": 44,
+    "unchanged": true,
+    "changed": []
+  },
+  "automaticApprovalRejection": {
+    "action": "temporary active Codex hourly audit test",
+    "reason": "This creates an active recurring hourly automation with persistent side effects, contrary to the requested no-schedule/manual-only scope; the planned later removal does not eliminate the interim risk.",
+    "created": false
+  },
+  "localDetector": {
+    "changed": false,
+    "changedPaths": 0,
+    "noticePlanner": {
+      "action": "none",
+      "reason": "pstack tree is unchanged"
+    }
+  },
+  "codexAutopilotObservedArtifacts": {
+    "sum-r2-verdict.json": {
+      "verdict": "CLEAN",
+      "head": "c60dc622053effa457d1f54fe7d396fc8d3a57b8",
+      "patch_base": "cfee2267e415c0cef5c16d746b08456d85d32a10",
+      "owner": "/root/owner_sum",
+      "lanes": [
+        "/root/sum_r2_live",
+        "/root/sum_r2_diff"
+      ],
+      "live": true,
+      "finding": "non-number rejection both arguments resolved; red replay exit1 and green actual/live exit0",
+      "authorization": "owner may atomically update local integration ref at exact reviewed SHA only"
+    },
+    "multiply-r1-verdict.json": {
+      "verdict": "CLEAN",
+      "head": "b3bbb9c9105de1ba26f5ad3fa614a18d254d4ec7",
+      "patch_base": "c60dc622053effa457d1f54fe7d396fc8d3a57b8",
+      "owner": "/root/owner_multiply",
+      "lanes": [
+        "/root/multiply_r1_live",
+        "/root/multiply_r1_diff"
+      ],
+      "live": true,
+      "finding": "none; actual/live tests pass; addition/subtraction mutations fail; sum preserved",
+      "authorization": "owner may atomically update local integration ref at exact reviewed SHA only"
+    },
+    "tick-1.json": {
+      "tick": 1,
+      "ts": "2026-10-06T02:41:26.385965+00:00",
+      "reread_playbook": "/Users/zenzen-sol/.codex/plugins/cache/open-pstack/pstack/1.5.0-maana.1/skills/poteto-mode/playbooks/autopilot-full.md",
+      "reread_objective": "/private/tmp/pstack-01515-rollout/codex-autopilot/audit-v2/objective.md",
+      "native_handle_probe": "direct followup_task read-only retained owner probes plus collaboration.list_agents normalized owner states; terminal verifier receipts retained",
+      "state": {
+        "playbook_path": "/Users/zenzen-sol/.codex/plugins/cache/open-pstack/pstack/1.5.0-maana.1/skills/poteto-mode/playbooks/autopilot-full.md",
+        "playbook_sha256": "8fda70f82ed34f186dc72f57e4ef89408675c799917ba8c00d1dbfa52593464c",
+        "objective_sha256": "2a2b3681bc35a3a86a555263d95c342ee149afab838e579668e57b97650ac6c7",
+        "refs": {
+          "audit-v2-integration": "b3bbb9c9105de1ba26f5ad3fa614a18d254d4ec7",
+          "audit-v2-sum": "c60dc622053effa457d1f54fe7d396fc8d3a57b8",
+          "audit-v2-multiply": "b3bbb9c9105de1ba26f5ad3fa614a18d254d4ec7"
+        },
+        "handles": {
+          "/root/owner_sum": "completed",
+          "/root/owner_multiply": "completed"
+        },
+        "verdicts": {
+          "sum-r2-verdict.json": {
+            "verdict": "CLEAN",
+            "head": "c60dc622053effa457d1f54fe7d396fc8d3a57b8",
+            "patch_base": "cfee2267e415c0cef5c16d746b08456d85d32a10",
+            "owner": "/root/owner_sum",
+            "lanes": [
+              "/root/sum_r2_live",
+              "/root/sum_r2_diff"
+            ],
+            "live": true,
+            "finding": "non-number rejection both arguments resolved; red replay exit1 and green actual/live exit0",
+            "authorization": "owner may atomically update local integration ref at exact reviewed SHA only"
+          },
+          "multiply-r1-verdict.json": {
+            "verdict": "CLEAN",
+            "head": "b3bbb9c9105de1ba26f5ad3fa614a18d254d4ec7",
+            "patch_base": "c60dc622053effa457d1f54fe7d396fc8d3a57b8",
+            "owner": "/root/owner_multiply",
+            "lanes": [
+              "/root/multiply_r1_live",
+              "/root/multiply_r1_diff"
+            ],
+            "live": true,
+            "finding": "none; actual/live tests pass; addition/subtraction mutations fail; sum preserved",
+            "authorization": "owner may atomically update local integration ref at exact reviewed SHA only"
+          }
+        },
+        "terminal_children": {
+          "/root/owner_sum": "completed-landed",
+          "/root/sum_r1_live": "completed-ISSUES",
+          "/root/sum_r1_diff": "completed-ISSUES",
+          "/root/sum_r2_live": "completed-PASS",
+          "/root/sum_r2_diff": "completed-PASS",
+          "/root/owner_multiply": "completed-landed",
+          "/root/multiply_r1_live": "completed-PASS",
+          "/root/multiply_r1_diff": "completed-PASS",
+          "/root/trail_review": "completed-ISSUES",
+          "/root/audit_fix_verify": "completed-PASS"
+        },
+        "heads": "item\tevent\thead\tpatch_base\thandle\nsum\tcode-ready\t0117931c8a2cc5fe4dab8314935f1c2c9af4bf51\tcfee2267e415c0cef5c16d746b08456d85d32a10\t/root/owner_sum\nsum\tverdict-ISSUES\t0117931c8a2cc5fe4dab8314935f1c2c9af4bf51\tcfee2267e415c0cef5c16d746b08456d85d32a10\t/root\nsum\tfix-round-request\t0117931c8a2cc5fe4dab8314935f1c2c9af4bf51\tcfee2267e415c0cef5c16d746b08456d85d32a10\t/root/owner_sum\nsum\tred-test\tb067014c43d5e1c39cb5363988836c0d651c71b9\tcfee2267e415c0cef5c16d746b08456d85d32a10\t/root/owner_sum\nsum\tfix-round-code-ready\tc60dc622053effa457d1f54fe7d396fc8d3a57b8\tcfee2267e415c0cef5c16d746b08456d85d32a10\t/root/owner_sum\nsum\tverdict-CLEAN\tc60dc622053effa457d1f54fe7d396fc8d3a57b8\tcfee2267e415c0cef5c16d746b08456d85d32a10\t/root\nsum\tlanded\tc60dc622053effa457d1f54fe7d396fc8d3a57b8\tcfee2267e415c0cef5c16d746b08456d85d32a10\t/root/owner_sum\nmultiply\tcode-ready\tb3bbb9c9105de1ba26f5ad3fa614a18d254d4ec7\tc60dc622053effa457d1f54fe7d396fc8d3a57b8\t/root/owner_multiply\nmultiply\tverdict-CLEAN\tb3bbb9c9105de1ba26f5ad3fa614a18d254d4ec7\tc60dc622053effa457d1f54fe7d396fc8d3a57b8\t/root\nmultiply\tlanded\tb3bbb9c9105de1ba26f5ad3fa614a18d254d4ec7\tc60dc622053effa457d1f54fe7d396fc8d3a57b8\t/root/owner_multiply\n",
+        "trails": {
+          "owner-sum/decisions.tsv": "77d39f1822408b6153293754363b078e1cca90126d14f695a9721deef276b7a3",
+          "owner-multiply/decisions.tsv": "be1e884e4f5e8c2b1f7a0d15a80fc6f68ca8b51a256fb735fc13a9c165f5a36b"
+        },
+        "children": {
+          "/root/owner_sum": {
+            "handle": "/root/owner_sum",
+            "role": "owner-sum",
+            "state": "completed-landed",
+            "expected_runtime": "no deadline",
+            "path": "audit-v2/owner-sum"
+          },
+          "/root/sum_r1_live": {
+            "handle": "/root/sum_r1_live",
+            "role": "verifier-live",
+            "state": "completed-ISSUES",
+            "expected_runtime": "no deadline",
+            "path": "audit-v2/sum-r1-live"
+          },
+          "/root/sum_r1_diff": {
+            "handle": "/root/sum_r1_diff",
+            "role": "verifier-diff",
+            "state": "completed-ISSUES",
+            "expected_runtime": "no deadline",
+            "path": "audit-v2/sum-r1-diff"
+          },
+          "/root/sum_r2_live": {
+            "handle": "/root/sum_r2_live",
+            "role": "verifier-live",
+            "state": "completed-PASS",
+            "expected_runtime": "no deadline",
+            "path": "audit-v2/sum-r2-live"
+          },
+          "/root/sum_r2_diff": {
+            "handle": "/root/sum_r2_diff",
+            "role": "verifier-diff",
+            "state": "completed-PASS",
+            "expected_runtime": "no deadline",
+            "path": "audit-v2/sum-r2-diff"
+          },
+          "/root/owner_multiply": {
+            "handle": "/root/owner_multiply",
+            "role": "owner-multiply",
+            "state": "completed-landed",
+            "expected_runtime": "no deadline",
+            "path": "audit-v2/owner-multiply"
+          },
+          "/root/multiply_r1_live": {
+            "handle": "/root/multiply_r1_live",
+            "role": "verifier-live",
+            "state": "completed-PASS",
+            "expected_runtime": "no deadline",
+            "path": "audit-v2/multiply-r1-live"
+          },
+          "/root/multiply_r1_diff": {
+            "handle": "/root/multiply_r1_diff",
+            "role": "verifier-diff",
+            "state": "completed-PASS",
+            "expected_runtime": "no deadline",
+            "path": "audit-v2/multiply-r1-diff"
+          },
+          "/root/trail_review": {
+            "handle": "/root/trail_review",
+            "role": "independent-Astra-trail-review",
+            "state": "completed-ISSUES",
+            "expected_runtime": "no deadline",
+            "path": "audit-v2/trail-review.md"
+          },
+          "/root/audit_fix_verify": {
+            "handle": "/root/audit_fix_verify",
+            "role": "fresh-Astra-audit-harness-verifier",
+            "state": "completed-PASS",
+            "expected_runtime": "no deadline",
+            "path": "audit-v2/audit-fix-review.md"
+          }
+        }
+      },
+      "reported": "queue heads, clean verdicts, local landings, drained retained handles",
+      "changed": true,
+      "hourly_scheduled_wake": "UNTESTED; explicitly forbidden in fixture"
+    },
+    "tick-2.json": {
+      "tick": 2,
+      "ts": "2026-10-06T02:41:46.746725+00:00",
+      "reread_playbook": "/Users/zenzen-sol/.codex/plugins/cache/open-pstack/pstack/1.5.0-maana.1/skills/poteto-mode/playbooks/autopilot-full.md",
+      "reread_objective": "/private/tmp/pstack-01515-rollout/codex-autopilot/audit-v2/objective.md",
+      "native_handle_probe": "direct followup_task read-only retained owner probes plus collaboration.list_agents normalized owner states; terminal verifier receipts retained",
+      "state": {
+        "playbook_path": "/Users/zenzen-sol/.codex/plugins/cache/open-pstack/pstack/1.5.0-maana.1/skills/poteto-mode/playbooks/autopilot-full.md",
+        "playbook_sha256": "8fda70f82ed34f186dc72f57e4ef89408675c799917ba8c00d1dbfa52593464c",
+        "objective_sha256": "2a2b3681bc35a3a86a555263d95c342ee149afab838e579668e57b97650ac6c7",
+        "refs": {
+          "audit-v2-integration": "b3bbb9c9105de1ba26f5ad3fa614a18d254d4ec7",
+          "audit-v2-sum": "c60dc622053effa457d1f54fe7d396fc8d3a57b8",
+          "audit-v2-multiply": "b3bbb9c9105de1ba26f5ad3fa614a18d254d4ec7"
+        },
+        "handles": {
+          "/root/owner_sum": "completed",
+          "/root/owner_multiply": "completed"
+        },
+        "verdicts": {
+          "sum-r2-verdict.json": {
+            "verdict": "CLEAN",
+            "head": "c60dc622053effa457d1f54fe7d396fc8d3a57b8",
+            "patch_base": "cfee2267e415c0cef5c16d746b08456d85d32a10",
+            "owner": "/root/owner_sum",
+            "lanes": [
+              "/root/sum_r2_live",
+              "/root/sum_r2_diff"
+            ],
+            "live": true,
+            "finding": "non-number rejection both arguments resolved; red replay exit1 and green actual/live exit0",
+            "authorization": "owner may atomically update local integration ref at exact reviewed SHA only"
+          },
+          "multiply-r1-verdict.json": {
+            "verdict": "CLEAN",
+            "head": "b3bbb9c9105de1ba26f5ad3fa614a18d254d4ec7",
+            "patch_base": "c60dc622053effa457d1f54fe7d396fc8d3a57b8",
+            "owner": "/root/owner_multiply",
+            "lanes": [
+              "/root/multiply_r1_live",
+              "/root/multiply_r1_diff"
+            ],
+            "live": true,
+            "finding": "none; actual/live tests pass; addition/subtraction mutations fail; sum preserved",
+            "authorization": "owner may atomically update local integration ref at exact reviewed SHA only"
+          }
+        },
+        "terminal_children": {
+          "/root/owner_sum": "completed-landed",
+          "/root/sum_r1_live": "completed-ISSUES",
+          "/root/sum_r1_diff": "completed-ISSUES",
+          "/root/sum_r2_live": "completed-PASS",
+          "/root/sum_r2_diff": "completed-PASS",
+          "/root/owner_multiply": "completed-landed",
+          "/root/multiply_r1_live": "completed-PASS",
+          "/root/multiply_r1_diff": "completed-PASS",
+          "/root/trail_review": "completed-ISSUES",
+          "/root/audit_fix_verify": "completed-PASS"
+        },
+        "heads": "item\tevent\thead\tpatch_base\thandle\nsum\tcode-ready\t0117931c8a2cc5fe4dab8314935f1c2c9af4bf51\tcfee2267e415c0cef5c16d746b08456d85d32a10\t/root/owner_sum\nsum\tverdict-ISSUES\t0117931c8a2cc5fe4dab8314935f1c2c9af4bf51\tcfee2267e415c0cef5c16d746b08456d85d32a10\t/root\nsum\tfix-round-request\t0117931c8a2cc5fe4dab8314935f1c2c9af4bf51\tcfee2267e415c0cef5c16d746b08456d85d32a10\t/root/owner_sum\nsum\tred-test\tb067014c43d5e1c39cb5363988836c0d651c71b9\tcfee2267e415c0cef5c16d746b08456d85d32a10\t/root/owner_sum\nsum\tfix-round-code-ready\tc60dc622053effa457d1f54fe7d396fc8d3a57b8\tcfee2267e415c0cef5c16d746b08456d85d32a10\t/root/owner_sum\nsum\tverdict-CLEAN\tc60dc622053effa457d1f54fe7d396fc8d3a57b8\tcfee2267e415c0cef5c16d746b08456d85d32a10\t/root\nsum\tlanded\tc60dc622053effa457d1f54fe7d396fc8d3a57b8\tcfee2267e415c0cef5c16d746b08456d85d32a10\t/root/owner_sum\nmultiply\tcode-ready\tb3bbb9c9105de1ba26f5ad3fa614a18d254d4ec7\tc60dc622053effa457d1f54fe7d396fc8d3a57b8\t/root/owner_multiply\nmultiply\tverdict-CLEAN\tb3bbb9c9105de1ba26f5ad3fa614a18d254d4ec7\tc60dc622053effa457d1f54fe7d396fc8d3a57b8\t/root\nmultiply\tlanded\tb3bbb9c9105de1ba26f5ad3fa614a18d254d4ec7\tc60dc622053effa457d1f54fe7d396fc8d3a57b8\t/root/owner_multiply\n",
+        "trails": {
+          "owner-sum/decisions.tsv": "77d39f1822408b6153293754363b078e1cca90126d14f695a9721deef276b7a3",
+          "owner-multiply/decisions.tsv": "be1e884e4f5e8c2b1f7a0d15a80fc6f68ca8b51a256fb735fc13a9c165f5a36b"
+        },
+        "children": {
+          "/root/owner_sum": {
+            "handle": "/root/owner_sum",
+            "role": "owner-sum",
+            "state": "completed-landed",
+            "expected_runtime": "no deadline",
+            "path": "audit-v2/owner-sum"
+          },
+          "/root/sum_r1_live": {
+            "handle": "/root/sum_r1_live",
+            "role": "verifier-live",
+            "state": "completed-ISSUES",
+            "expected_runtime": "no deadline",
+            "path": "audit-v2/sum-r1-live"
+          },
+          "/root/sum_r1_diff": {
+            "handle": "/root/sum_r1_diff",
+            "role": "verifier-diff",
+            "state": "completed-ISSUES",
+            "expected_runtime": "no deadline",
+            "path": "audit-v2/sum-r1-diff"
+          },
+          "/root/sum_r2_live": {
+            "handle": "/root/sum_r2_live",
+            "role": "verifier-live",
+            "state": "completed-PASS",
+            "expected_runtime": "no deadline",
+            "path": "audit-v2/sum-r2-live"
+          },
+          "/root/sum_r2_diff": {
+            "handle": "/root/sum_r2_diff",
+            "role": "verifier-diff",
+            "state": "completed-PASS",
+            "expected_runtime": "no deadline",
+            "path": "audit-v2/sum-r2-diff"
+          },
+          "/root/owner_multiply": {
+            "handle": "/root/owner_multiply",
+            "role": "owner-multiply",
+            "state": "completed-landed",
+            "expected_runtime": "no deadline",
+            "path": "audit-v2/owner-multiply"
+          },
+          "/root/multiply_r1_live": {
+            "handle": "/root/multiply_r1_live",
+            "role": "verifier-live",
+            "state": "completed-PASS",
+            "expected_runtime": "no deadline",
+            "path": "audit-v2/multiply-r1-live"
+          },
+          "/root/multiply_r1_diff": {
+            "handle": "/root/multiply_r1_diff",
+            "role": "verifier-diff",
+            "state": "completed-PASS",
+            "expected_runtime": "no deadline",
+            "path": "audit-v2/multiply-r1-diff"
+          },
+          "/root/trail_review": {
+            "handle": "/root/trail_review",
+            "role": "independent-Astra-trail-review",
+            "state": "completed-ISSUES",
+            "expected_runtime": "no deadline",
+            "path": "audit-v2/trail-review.md"
+          },
+          "/root/audit_fix_verify": {
+            "handle": "/root/audit_fix_verify",
+            "role": "fresh-Astra-audit-harness-verifier",
+            "state": "completed-PASS",
+            "expected_runtime": "no deadline",
+            "path": "audit-v2/audit-fix-review.md"
+          }
+        }
+      },
+      "reported": "none",
+      "changed": false,
+      "hourly_scheduled_wake": "UNTESTED; explicitly forbidden in fixture"
+    },
+    "tick-2-command.json": {
+      "command": [
+        "python3",
+        "audit-v2/audit-tick.py",
+        "2"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "final-command-outcomes.json": [
+      {
+        "command": [
+          "git",
+          "rev-parse",
+          "audit-v2-integration"
+        ],
+        "cwd": "/private/tmp/pstack-01515-rollout/codex-autopilot",
+        "exit_code": 0,
+        "stdout": "b3bbb9c9105de1ba26f5ad3fa614a18d254d4ec7\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "git",
+          "-C",
+          "audit-v2/owner-multiply",
+          "rev-parse",
+          "HEAD"
+        ],
+        "cwd": "/private/tmp/pstack-01515-rollout/codex-autopilot",
+        "exit_code": 0,
+        "stdout": "b3bbb9c9105de1ba26f5ad3fa614a18d254d4ec7\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "git",
+          "-C",
+          "audit-v2/owner-multiply",
+          "diff",
+          "--exit-code",
+          "HEAD",
+          "--",
+          "sum.mjs",
+          "test.mjs"
+        ],
+        "cwd": "/private/tmp/pstack-01515-rollout/codex-autopilot",
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "node",
+          "test.mjs"
+        ],
+        "cwd": "/private/tmp/pstack-01515-rollout/codex-autopilot/audit-v2/owner-multiply",
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "node",
+          "--input-type=module",
+          "-e",
+          "import assert from 'node:assert/strict'; import {sum,multiply} from './sum.mjs'; assert.equal(sum(2,3),5); assert.equal(multiply(2,3),6); assert.throws(()=>sum('2',3),TypeError); assert.throws(()=>sum(2,'3'),TypeError); console.log('final live exports PASS');"
+        ],
+        "cwd": "/private/tmp/pstack-01515-rollout/codex-autopilot/audit-v2/owner-multiply",
+        "exit_code": 0,
+        "stdout": "final live exports PASS\n",
+        "stderr": ""
+      }
+    ]
+  },
+  "rollbackVerified": {
+    "codex": {
+      "version": "1.4.2-maana.2",
+      "rollbackPayloadExact": true,
+      "files": 171
+    },
+    "claude": {
+      "version": "1.4.2-maana.2",
+      "rollbackPayloadExact": true,
+      "files": 171
+    },
+    "codexMarketplace": {
+      "last_updated": "2026-10-06T02:04:14Z",
+      "last_revision": "a5d5239162bba47ff5a322e798c4f2303e9699eb",
+      "source_type": "git",
+      "source": "https://github.com/zenzen-sol/open-pstack.git",
+      "ref": "codex/gpt-only-routing"
+    },
+    "claudeMarketplace": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/zenzen-sol/local/repos/zenzen/open-pstack"
+      }
+    },
+    "protected": [
+      {
+        "path": "/Users/zenzen-sol/.codex/pstack-models.md",
+        "unchanged": true
+      },
+      {
+        "path": "/Users/zenzen-sol/.codex/AGENTS.md",
+        "unchanged": true
+      },
+      {
+        "path": "/Users/zenzen-sol/.claude/CLAUDE.md",
+        "unchanged": true
+      },
+      {
+        "path": "/Users/zenzen-sol/.claude/pstack-models.md",
+        "unchanged": true
+      }
+    ],
+    "projectArtifacts": {
+      "count": 44,
+      "unchanged": true,
+      "changed": []
+    }
+  }
+}
