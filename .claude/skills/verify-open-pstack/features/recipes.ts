@@ -30,6 +30,8 @@ export interface Case {
 
 export const CLAUDE_TOOLS = 'Skill,Read,Glob,Grep,Write,Edit,Bash,Agent,Task,TodoWrite';
 export const DEFAULT_ROLES: Record<CoreHarness, string> = { claude: 'bug-fix', codex: 'judgment and prose' };
+export const FOREIGN_PARENT: Record<CoreHarness, CoreHarness> = { claude: 'codex', codex: 'claude' };
+const CATALOG_PARENTS: Record<Harness, string | null> = { claude: 'Claude Code', codex: 'Codex', grok: 'Grok', t3: null };
 export const ROUTE = /^([a-z][a-z0-9-]*):([A-Za-z0-9._/-]+)@([a-z]+)$/;
 const SETUP_DESCRIPTOR = 'claude:opus@high';
 const DESCRIPTOR = /\b[a-z][a-z0-9-]*:[A-Za-z0-9._/-]+@[a-z]+/g;
@@ -44,11 +46,13 @@ export interface Catalog {
   route(harness: Harness, descriptor: string): 'native' | 'external';
 }
 
-export async function readCatalog(location: string): Promise<Catalog> {
+export async function readCatalog(location: string, parent: Harness): Promise<Catalog> {
   const text = await readFile(join(location, 'skills/poteto-mode/references/model-catalog.md'), 'utf8');
   const section = (heading: string) => text.split(`\n## ${heading}\n`)[1]?.split('\n## ')[0] ?? '';
   const rows = (body: string) => body.split('\n').filter(line => line.startsWith('| ') && !line.startsWith('| ---')).map(line => line.slice(2, -2).split(' | '));
-  const sheet = /```markdown\n([\s\S]*?)```/.exec(section('Role defaults'))?.[1] ?? '';
+  const heading = CATALOG_PARENTS[parent];
+  const parentSheet = heading === null ? '' : section('Role defaults').split(`\n### ${heading} parent\n`)[1]?.split('\n### ')[0] ?? '';
+  const sheet = /```markdown\n([\s\S]*?)```/.exec(parentSheet)?.[1] ?? '';
   const defaults = new Map(sheet.split('\n').filter(line => /^[a-z][^:]*: \S/.test(line))
     .map((line): [string, string[]] => [line.slice(0, line.indexOf(': ')), line.slice(line.indexOf(': ') + 2).split(', ')]));
   const kept = new Map(rows(section('Kept predecessors and normalization').split('\nRolling aliases:')[0]!).slice(1)
@@ -334,7 +338,7 @@ function codexWriter(optIn: boolean): Case {
   return {
     id: `${name}-writer`,
     async prepare(f) {
-      const installed = await readCatalog(f.location);
+      const installed = await readCatalog(f.location, f.harness);
       if (installed.route('claude', descriptor) !== 'external') throw new Error(`runner-route-not-external:${descriptor}`);
       fileNonce = crypto.randomUUID(); pageNonce = crypto.randomUUID();
       await mkdir(lane(f));
@@ -407,7 +411,7 @@ function executedWriter(name: string, prompt: (f: Fixture, at: (file: string) =>
 function providerWriter(descriptor: string, optIn: boolean): Case {
   const [, provider = '', model = '', effort = ''] = ROUTE.exec(descriptor)!;
   return executedWriter(provider, (f, at, lane) => `${invoke(f.harness, 'poteto-mode', `Do no engineering work. For this task the pstack model sheet is ${at('sheet.md')}; use it in place of any configured sheet. Dispatch exactly one lane and nothing else: the first descriptor of its "${WRITER_ROLE}" role as an isolated-write writer, on the route and with the launcher arguments provider dispatch gives this parent. Use the prompt file ${at('prompt.md')}, the dedicated worktree ${lane} as its cwd, the output ${at('output.md')} and the receipt ${at('receipt.json')}, and wait for the lane to exit.`)} ${rules(f.dir)}`, async f => {
-    const installed = await readCatalog(f.location);
+    const installed = await readCatalog(f.location, f.harness);
     if (installed.route(f.harness, descriptor) !== 'external') throw new Error(`runner-route-not-external:${descriptor}`);
     const sheet = sheetText([...installed.defaults].map(([role, lanes]) => [role, role === WRITER_ROLE ? [descriptor] : lanes])) + (optIn ? `${provider} writer sandbox: full-access\n` : '');
     return { provider, model, effort, optIn, sheet };
@@ -449,8 +453,8 @@ function runner(harness: CoreHarness, routes: string[]): Case[] {
       id: `route-${index + 1}`,
       codexSandbox: 'danger-full-access',
       async prepare(f) {
-        const installed = await readCatalog(f.location);
-        route ||= installed.defaults.get(DEFAULT_ROLES[harness])?.[0] ?? '';
+        const installed = await readCatalog(f.location, f.harness);
+        route ||= (await readCatalog(f.location, FOREIGN_PARENT[harness])).defaults.get(DEFAULT_ROLES[harness])?.[0] ?? '';
         const parts = ROUTE.exec(route);
         if (!parts || installed.route(harness, route) !== 'external') throw new Error(`runner-route-not-external:${route || DEFAULT_ROLES[harness]}`);
         [, provider = '', model = '', effort = ''] = parts;
@@ -506,7 +510,7 @@ const setup: Case[] = [{
   async assert(record, f) {
     const sheet = join(f.configHome, 'pstack-models.md'), assertions = [loaded(record, 'pstack:setup-pstack'), await written(record, sheet)];
     const text = await readFile(sheet, 'utf8');
-    if (!Bun.deepEquals(roleLines(text), [...(await readCatalog(f.location)).defaults].map(([role, lanes]) => `${role}: ${lanes.join(', ')}`))) throw new Error('first-run-not-role-defaults');
+    if (!Bun.deepEquals(roleLines(text), [...(await readCatalog(f.location, f.harness)).defaults].map(([role, lanes]) => `${role}: ${lanes.join(', ')}`))) throw new Error('first-run-not-role-defaults');
     bounded(text);
     return { assertions: [...assertions, ...await mirrored(f, sheet), 'sheet:role-defaults', `setting:${BOUNDED_SETTING}`], files: [sheet] };
   },
@@ -537,7 +541,7 @@ function keptPredecessor(): Case {
     codexSandbox: 'danger-full-access',
     claudePermission: 'bypassPermissions',
     async prepare(f) {
-      const installed = await readCatalog(f.location), current = installed.kept.get(KEPT);
+      const installed = await readCatalog(f.location, f.harness), current = installed.kept.get(KEPT);
       if (!current) throw new Error(`catalog-kept-missing:${KEPT}`);
       proposed = `${current}@${KEPT_EFFORT}`;
       const roles = [...installed.defaults].map(([role, lanes]): [string, string[]] => [role, lanes.map(lane => lane.includes(':') ? `${KEPT}@${KEPT_EFFORT}` : lane)]);
@@ -571,7 +575,7 @@ function newFamilies(): Case {
     codexSandbox: 'danger-full-access',
     claudePermission: 'bypassPermissions',
     async prepare(f) {
-      const roles = [...(await readCatalog(f.location)).defaults];
+      const roles = [...(await readCatalog(f.location, f.harness)).defaults];
       const lane = (role: string, index: 0 | 1, lanes: string[]) => role in NEW_FAMILY_LANES ? [NEW_FAMILY_LANES[role]![index]] : lanes;
       for (const role of Object.keys(NEW_FAMILY_LANES)) if (!roles.some(([name]) => name === role)) throw new Error(`catalog-role-missing:${role}`);
       expected = roles.map(([role, lanes]) => `${role}: ${lane(role, 1, lanes).join(', ')}`).sort();
@@ -600,7 +604,7 @@ function readOnlyProvider(): Case {
     codexSandbox: 'danger-full-access',
     claudePermission: 'bypassPermissions',
     async prepare(f) {
-      const installed = await readCatalog(f.location), roles = [...installed.defaults];
+      const installed = await readCatalog(f.location, f.harness), roles = [...installed.defaults];
       if (!roles.some(([role]) => role === READ_ONLY_ROLE)) throw new Error(`catalog-role-missing:${READ_ONLY_ROLE}`);
       if (installed.route(f.harness, READ_ONLY_LANE) !== 'external') throw new Error(`catalog-route-not-external:${READ_ONLY_LANE}`);
       const lines = roles.map(([role, lanes]): [string, string[]] => [role, role === READ_ONLY_ROLE ? [READ_ONLY_LANE] : lanes]);
@@ -628,7 +632,7 @@ function writerRefusal(): Case {
     codexSandbox: 'danger-full-access',
     claudePermission: 'bypassPermissions',
     async prepare(f) {
-      const roles = [...(await readCatalog(f.location)).defaults];
+      const roles = [...(await readCatalog(f.location, f.harness)).defaults];
       if (!roles.some(([role]) => role === REFUSED_ROLE)) throw new Error(`catalog-role-missing:${REFUSED_ROLE}`);
       prepared = sheetText(roles.map(([role, lanes]) => [role, role === REFUSED_ROLE ? [REFUSED_LANE] : lanes]));
       await writeFile(join(f.configHome, 'pstack-models.md'), prepared);
@@ -654,7 +658,7 @@ function keepSetting(): Case {
     codexSandbox: 'danger-full-access',
     claudePermission: 'bypassPermissions',
     async prepare(f) {
-      const roles = [...(await readCatalog(f.location)).defaults];
+      const roles = [...(await readCatalog(f.location, f.harness)).defaults];
       const omitted = roles.find(([, lanes]) => lanes.every(lane => !lane.includes(':')))?.[0];
       expected = roles.map(([role, lanes]) => `${role}: ${lanes.join(', ')}`).sort();
       await writeFile(join(f.configHome, 'pstack-models.md'), sheetText(roles.filter(([role]) => role !== omitted)) + `${FULL_ACCESS_SETTING}\n`);
@@ -709,7 +713,7 @@ function consumeSheet(harness: Harness, optIn: boolean): Case {
   return {
     id: optIn ? 'consume-sheet' : 'consume-sheet-bounded',
     async prepare(f) {
-      const installed = await readCatalog(f.location), defaults = installed.defaults.get(CONFIGURED_ROLE);
+      const installed = await readCatalog(f.location, f.harness), defaults = installed.defaults.get(CONFIGURED_ROLE);
       const configured = [...installed.defaults.values()].flat().find(lane => lane.includes(':') && !defaults?.includes(lane));
       if (!defaults || !configured) throw new Error(`catalog-role-missing:${CONFIGURED_ROLE}`);
       const missing = MISSING_ROLES.map(role => ({ role, descriptors: installed.defaults.get(role) ?? [] }));

@@ -44,6 +44,11 @@ export interface RoleDefault<F extends string = string> {
   readonly lanes: readonly LaneDefault<F>[];
 }
 
+export interface ParentDefaults<F extends string = string> {
+  readonly efforts: { readonly [K in F]?: Effort };
+  readonly roles: readonly RoleDefault<F>[];
+}
+
 export interface ReleasedPair<F extends string = string> {
   readonly pair: `${ProviderId}:${string}`;
   readonly family: F;

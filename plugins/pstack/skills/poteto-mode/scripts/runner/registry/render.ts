@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync
 import { dirname, join } from "node:path";
 import { type AccessKind, PARENTS, type Parent } from "../types.ts";
 import { access, type EnvPolicy, type ProviderAdapter } from "./contract.ts";
-import { defaultDescriptor, effortsOf, modelIds, REGISTRY, type Registry } from "./index.ts";
+import { effortsOf, modelIds, REGISTRY, type Registry, roleDescriptor } from "./index.ts";
 
 export interface GeneratedFile {
   readonly path: string;
@@ -66,8 +66,8 @@ function environment(adapter: ProviderAdapter, long: boolean): string {
 const list = (items: readonly string[]): string => items.length === 0 ? "none" : items.join("; ");
 
 export function renderCatalog(registry: Registry): GeneratedFile {
-  const named = new Set<string>(registry.roleDefaults.flatMap((entry) => entry.lanes));
   const parents = Object.keys(PARENTS) as Parent[];
+  const named = new Set<string>(parents.flatMap((parent) => registry.roleDefaults[parent].roles.flatMap((entry) => entry.lanes)));
   const lines = [
     `<!-- Generated from registry/models.ts and registry/providers.ts; do not edit. ${WRITE_HINT} -->`,
     "",
@@ -92,7 +92,7 @@ export function renderCatalog(registry: Registry): GeneratedFile {
       ])
     ),
     "",
-    "A family is `default` when a role default names it and `optional` otherwise. A Claude-native agent exists for each selectable effort of a Claude family.",
+    "A family is `default` when a parent's role defaults name it and `optional` otherwise. A Claude-native agent exists for each selectable effort of a Claude family.",
     "",
     "Effort in the model ID: for these families the effort selects the CLI model, and argv carries no effort flag.",
     "",
@@ -159,16 +159,28 @@ export function renderCatalog(registry: Registry): GeneratedFile {
     "",
     "## Role defaults",
     "",
-    "The complete first-run sheet. A sheet that lacks a role uses that role's line here.",
-    "",
-    "```markdown",
-    ...SHEET_HEADER,
-    "",
-    ...registry.roleDefaults.map(({ role, lanes }) => `${role}: ${lanes.map((name) => {
-      const family = registry.families.find((entry) => entry.name === name);
-      return family === undefined ? name : defaultDescriptor(family);
-    }).join(", ")}`),
-    "```",
+    "One complete first-run sheet per parent. Each names only its parent's own provider. A sheet that lacks a role uses that role's line from the current parent's sheet here. A T3 Code session uses the sheet of its model runtime, Claude Code or Codex.",
+    ...parents.flatMap((parent) => {
+      const defaults = registry.roleDefaults[parent];
+      return [
+        "",
+        `### ${PARENTS[parent].harness} parent`,
+        "",
+        "```markdown",
+        ...SHEET_HEADER,
+        "",
+        ...defaults.roles.map(({ role, lanes }) => `${role}: ${lanes.map((name) => {
+          const family = registry.families.find((entry) => entry.name === name);
+          return family === undefined ? name : roleDescriptor(defaults, family);
+        }).join(", ")}`),
+        "```",
+      ];
+    }),
+    ...parents.filter((parent) => registry.roleDefaults[parent].roles.some(({ lanes }) => new Set(lanes).size < lanes.length))
+      .flatMap((parent) => [
+        "",
+        `The ${PARENTS[parent].harness} sheet's panels repeat one family, as Arena allows for generation-bound work, so they add independent runs but no model diversity.`,
+      ]),
     "",
   ];
   return { path: CATALOG_PATH, content: lines.join("\n") };

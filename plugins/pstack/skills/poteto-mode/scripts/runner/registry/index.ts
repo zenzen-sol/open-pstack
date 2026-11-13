@@ -1,6 +1,6 @@
 import { ACCESS_MODES, EFFORTS, PARENTS, type Parent, UsageError, WRITER_SANDBOXES } from "../types.ts";
 import { access, accessKind, isRevision, type Lane, type ProviderAdapter } from "./contract.ts";
-import { effortsOf, type FamilyEntry, type KeptPredecessor, modelIds, type ReleasedPair, type RoleDefault } from "./family.ts";
+import { effortsOf, type FamilyEntry, type KeptPredecessor, modelIds, type ParentDefaults, type ReleasedPair } from "./family.ts";
 import { FAMILIES, type FamilyName, RELEASED_PAIRS, ROLE_DEFAULTS } from "./models.ts";
 import { ADAPTERS } from "./providers.ts";
 
@@ -10,7 +10,7 @@ export { effortsOf, modelIds } from "./family.ts";
 export interface Registry {
   readonly families: readonly FamilyEntry[];
   readonly adapters: readonly ProviderAdapter[];
-  readonly roleDefaults: readonly RoleDefault<FamilyName>[];
+  readonly roleDefaults: { readonly [P in Parent]: ParentDefaults<FamilyName> };
   readonly releasedPairs: readonly ReleasedPair<FamilyName>[];
 }
 export const REGISTRY: Registry = {
@@ -120,6 +120,8 @@ export function resolveLane(request: LaneRequest): Lane {
   } as Lane;
 }
 
-export function defaultDescriptor(family: FamilyEntry): string {
-  return `${family.provider}:${family.model}@${family.defaultEffort}`;
+export function roleDescriptor(defaults: ParentDefaults, family: FamilyEntry): string {
+  const effort = defaults.efforts[family.name];
+  if (effort === undefined) throw new Error(`role defaults name ${family.name} without an effort`);
+  return `${family.provider}:${family.model}@${effort}`;
 }

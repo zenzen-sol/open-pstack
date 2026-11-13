@@ -1,4 +1,5 @@
-import { family, type ReleasedPair, type RoleDefault } from "./family.ts";
+import type { Parent } from "../types.ts";
+import { family, type ParentDefaults, type ReleasedPair } from "./family.ts";
 
 const UP_TO_MAX = ["low", "medium", "high", "xhigh", "max"] as const;
 const UP_TO_ULTRA = [...UP_TO_MAX, "ultra"] as const;
@@ -177,24 +178,71 @@ export const FAMILIES = [
 ] as const;
 export type FamilyName = (typeof FAMILIES)[number]["name"];
 
-const PANEL = ["opus", "sol", "grok"] as const;
-export const ROLE_DEFAULTS = [
-  { role: "feature, refactoring", lanes: ["grok"] },
-  { role: "bug-fix", lanes: ["sol"] },
-  { role: "perf-issue", lanes: ["sol"] },
-  { role: "hillclimb", lanes: ["sol"] },
-  { role: "judgment and prose", lanes: ["opus"] },
-  { role: "hardest tasks", lanes: ["opus"] },
-  { role: "how explorer", lanes: ["grok"] },
-  { role: "how explainer", lanes: ["opus"] },
-  { role: "why investigators, synthesizer", lanes: ["inherit-parent"] },
-  { role: "reflect tooling, judgment, divergent, synthesizer", lanes: ["inherit-parent"] },
-  { role: "arena runners", lanes: PANEL },
-  { role: "arena cross-judge pool", lanes: PANEL },
-  { role: "swarm workers", lanes: ["grok"] },
-  { role: "architect runners", lanes: PANEL },
-  { role: "interrogate reviewers", lanes: PANEL },
-] as const satisfies readonly RoleDefault<FamilyName>[];
+const CODEX_PANEL = ["sol", "astra", "luna"] as const;
+const CLAUDE_PANEL = ["opus", "sonnet"] as const;
+const GROK_PANEL = ["grok", "grok", "grok"] as const;
+export const ROLE_DEFAULTS = {
+  claude: {
+    efforts: { opus: "xhigh", sonnet: "high" },
+    roles: [
+      { role: "feature, refactoring", lanes: ["opus"] },
+      { role: "bug-fix", lanes: ["opus"] },
+      { role: "perf-issue", lanes: ["opus"] },
+      { role: "hillclimb", lanes: ["opus"] },
+      { role: "judgment and prose", lanes: ["opus"] },
+      { role: "hardest tasks", lanes: ["opus"] },
+      { role: "how explorer", lanes: ["sonnet"] },
+      { role: "how explainer", lanes: ["opus"] },
+      { role: "why investigators, synthesizer", lanes: ["inherit-parent"] },
+      { role: "reflect tooling, judgment, divergent, synthesizer", lanes: ["inherit-parent"] },
+      { role: "arena runners", lanes: CLAUDE_PANEL },
+      { role: "arena cross-judge pool", lanes: CLAUDE_PANEL },
+      { role: "swarm workers", lanes: ["sonnet"] },
+      { role: "architect runners", lanes: CLAUDE_PANEL },
+      { role: "interrogate reviewers", lanes: CLAUDE_PANEL },
+    ],
+  },
+  codex: {
+    efforts: { sol: "max", astra: "high", luna: "high" },
+    roles: [
+      { role: "feature, refactoring", lanes: ["sol"] },
+      { role: "bug-fix", lanes: ["sol"] },
+      { role: "perf-issue", lanes: ["sol"] },
+      { role: "hillclimb", lanes: ["sol"] },
+      { role: "judgment and prose", lanes: ["sol"] },
+      { role: "hardest tasks", lanes: ["astra"] },
+      { role: "how explorer", lanes: ["luna"] },
+      { role: "how explainer", lanes: ["sol"] },
+      { role: "why investigators, synthesizer", lanes: ["inherit-parent"] },
+      { role: "reflect tooling, judgment, divergent, synthesizer", lanes: ["inherit-parent"] },
+      { role: "arena runners", lanes: CODEX_PANEL },
+      { role: "arena cross-judge pool", lanes: CODEX_PANEL },
+      { role: "swarm workers", lanes: ["luna"] },
+      { role: "architect runners", lanes: CODEX_PANEL },
+      { role: "interrogate reviewers", lanes: CODEX_PANEL },
+    ],
+  },
+  grok: {
+    efforts: { grok: "xhigh" },
+    roles: [
+      { role: "feature, refactoring", lanes: ["grok"] },
+      { role: "bug-fix", lanes: ["grok"] },
+      { role: "perf-issue", lanes: ["grok"] },
+      { role: "hillclimb", lanes: ["grok"] },
+      { role: "judgment and prose", lanes: ["grok"] },
+      { role: "hardest tasks", lanes: ["grok"] },
+      { role: "how explorer", lanes: ["grok"] },
+      { role: "how explainer", lanes: ["grok"] },
+      { role: "why investigators, synthesizer", lanes: ["inherit-parent"] },
+      { role: "reflect tooling, judgment, divergent, synthesizer", lanes: ["inherit-parent"] },
+      { role: "arena runners", lanes: GROK_PANEL },
+      { role: "arena cross-judge pool", lanes: ["grok"] },
+      { role: "swarm workers", lanes: ["grok"] },
+      { role: "architect runners", lanes: GROK_PANEL },
+      { role: "interrogate reviewers", lanes: GROK_PANEL },
+    ],
+  },
+} as const satisfies Record<Parent, ParentDefaults<FamilyName>>;
 
 export const RELEASED_PAIRS = [
   { pair: "claude:claude-fable-5", family: "fable" },

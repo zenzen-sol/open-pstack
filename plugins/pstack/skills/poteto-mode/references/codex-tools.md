@@ -112,7 +112,7 @@ poteto-mode's Subagents section sets the Claude-specific default `subagent_type:
 
 ## Models and providers
 
-Do not replace every configured entry with a Codex model. `/setup-pstack` writes portable descriptors, such as the [role defaults](model-catalog.md#role-defaults). In a Codex parent, only `codex:*` is native. Route Claude and Grok descriptors through the external launcher exactly as `provider-dispatch.md` specifies. In a Grok parent, only `inherit-parent` and `auto` use `spawn_subagent`. Every explicit descriptor, including every `grok:*` descriptor, uses the runner with `--parent grok`. The runner still rejects a Claude provider from a Claude parent and a Codex provider from a Codex parent. The default panel runs one model from each of three providers and contains no older GPT or Claude substitute.
+Do not replace every configured entry with a Codex model. `/setup-pstack` writes portable descriptors, such as the [role defaults](model-catalog.md#role-defaults). In a Codex parent, only `codex:*` is native. Route Claude and Grok descriptors through the external launcher exactly as `provider-dispatch.md` specifies. In a Grok parent, only `inherit-parent` and `auto` use `spawn_subagent`. Every explicit descriptor, including every `grok:*` descriptor, uses the runner with `--parent grok`. The runner still rejects a Claude provider from a Claude parent and a Codex provider from a Codex parent. Each parent's role defaults name only its own provider and contain no older GPT or Claude substitute. A cross-provider panel comes only from configured role lines.
 
 ## Claude built-in skills pstack references
 

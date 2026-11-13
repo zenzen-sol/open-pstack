@@ -4,12 +4,12 @@ import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSyn
 import { tmpdir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import {
-  defaultDescriptor,
   effortsOf,
   type LaneRequest,
   REGISTRY,
   resolveLane,
   resolveModel,
+  roleDescriptor,
 } from "./registry/index.ts";
 import {
   CATALOG_PATH,
@@ -64,25 +64,57 @@ describe("registry data", () => {
     }
   });
 
+  const parents = Object.keys(PARENTS) as Parent[];
+  const familyNamed = (name: string) => REGISTRY.families.find((entry) => entry.name === name);
+
   it("lists every role-default pair as a released pair", () => {
     const released = new Set(REGISTRY.releasedPairs.map((entry) => entry.pair));
-    for (const { lanes } of REGISTRY.roleDefaults) {
-      for (const name of lanes) {
-        if (name === "inherit-parent" || name === "auto") continue;
-        const family = REGISTRY.families.find((entry) => entry.name === name)!;
-        expect(released).toContain(`${family.provider}:${family.model}`);
+    for (const parent of parents) {
+      for (const { lanes } of REGISTRY.roleDefaults[parent].roles) {
+        for (const name of lanes) {
+          if (name === "inherit-parent" || name === "auto") continue;
+          const family = familyNamed(name)!;
+          expect([parent, released.has(`${family.provider}:${family.model}`)]).toEqual([parent, true]);
+        }
       }
     }
   });
 
-  it("keeps the solo code roles on Sol and every panel on Opus, Sol and Grok", () => {
-    const lanes = (role: string) => REGISTRY.roleDefaults.find((entry) => entry.role === role)?.lanes;
-    for (const role of ["bug-fix", "perf-issue", "hillclimb"]) expect([role, lanes(role)]).toEqual([role, ["sol"]]);
-    for (const role of ["arena runners", "arena cross-judge pool", "architect runners", "interrogate reviewers"]) {
-      expect([role, lanes(role)]).toEqual([role, ["opus", "sol", "grok"]]);
+  it("keeps each parent's role defaults on its own provider, without Fable, at selectable efforts", () => {
+    const roles = (parent: Parent) => REGISTRY.roleDefaults[parent].roles.map((entry) => entry.role);
+    for (const parent of parents) {
+      const defaults = REGISTRY.roleDefaults[parent];
+      expect([parent, roles(parent)]).toEqual([parent, roles("claude")]);
+      const named = new Set(defaults.roles.flatMap((entry) => entry.lanes).filter((name) => name !== "inherit-parent" && name !== "auto"));
+      expect([parent, [...named].filter((name) => familyNamed(name)?.provider !== parent)]).toEqual([parent, []]);
+      expect([parent, named.has("fable")]).toEqual([parent, false]);
+      expect([parent, Object.keys(defaults.efforts).sort()]).toEqual([parent, [...named].sort()]);
+      for (const [name, effort] of Object.entries(defaults.efforts)) {
+        expect([parent, name, effortsOf(familyNamed(name)!).includes(effort!)]).toEqual([parent, name, true]);
+      }
     }
-    for (const role of ["why investigators, synthesizer", "reflect tooling, judgment, divergent, synthesizer"]) {
-      expect([role, lanes(role)]).toEqual([role, ["inherit-parent"]]);
+  });
+
+  it("keeps the solo code roles, the distinct-model panels, and the MCP roles on inherit-parent per parent", () => {
+    const lanes = (parent: Parent, role: string): readonly string[] | undefined =>
+      REGISTRY.roleDefaults[parent].roles.find((entry) => entry.role === role)?.lanes;
+    const panels = ["arena runners", "architect runners", "interrogate reviewers"];
+    const expected: Record<Parent, { solo: string; panel: readonly string[]; pool: readonly string[]; efforts: Record<string, string> }> = {
+      claude: { solo: "opus", panel: ["opus", "sonnet"], pool: ["opus", "sonnet"], efforts: { opus: "xhigh", sonnet: "high" } },
+      codex: { solo: "sol", panel: ["sol", "astra", "luna"], pool: ["sol", "astra", "luna"], efforts: { sol: "max", astra: "high", luna: "high" } },
+      grok: { solo: "grok", panel: ["grok", "grok", "grok"], pool: ["grok"], efforts: { grok: "xhigh" } },
+    };
+    for (const parent of parents) {
+      const { solo, panel, pool, efforts } = expected[parent];
+      for (const role of ["feature, refactoring", "bug-fix", "perf-issue", "hillclimb", "judgment and prose"]) {
+        expect([parent, role, lanes(parent, role)]).toEqual([parent, role, [solo]]);
+      }
+      for (const role of panels) expect([parent, role, lanes(parent, role)]).toEqual([parent, role, panel]);
+      expect([parent, lanes(parent, "arena cross-judge pool")]).toEqual([parent, pool]);
+      for (const role of ["why investigators, synthesizer", "reflect tooling, judgment, divergent, synthesizer"]) {
+        expect([parent, role, lanes(parent, role)]).toEqual([parent, role, ["inherit-parent"]]);
+      }
+      expect([parent, REGISTRY.roleDefaults[parent].efforts]).toEqual([parent, efforts]);
     }
   });
 
@@ -133,14 +165,19 @@ describe("registry data", () => {
     }
   });
 
-  it("renders each role default as its families' default descriptors, keeping aliases", () => {
+  it("renders one role-default sheet per parent at that parent's efforts, keeping aliases", () => {
     const catalog = renderCatalog(REGISTRY).content;
-    for (const { role, lanes } of REGISTRY.roleDefaults) {
-      const descriptors = lanes.map((name) => {
-        const family = REGISTRY.families.find((entry) => entry.name === name);
-        return family === undefined ? name : defaultDescriptor(family);
-      });
-      expect(catalog).toContain(`\n${role}: ${descriptors.join(", ")}\n`);
+    const roleDefaults = catalog.split("\n## Role defaults\n")[1]!;
+    for (const parent of parents) {
+      const defaults = REGISTRY.roleDefaults[parent];
+      const sheet = roleDefaults.split(`\n### ${PARENTS[parent].harness} parent\n`)[1]!.split("```\n")[0]!;
+      for (const { role, lanes } of defaults.roles) {
+        const descriptors = lanes.map((name) => {
+          const family = familyNamed(name);
+          return family === undefined ? name : roleDescriptor(defaults, family);
+        });
+        expect(sheet).toContain(`\n${role}: ${descriptors.join(", ")}\n`);
+      }
     }
     expect(catalog).toContain("Every documented role remains present.");
   });
@@ -258,6 +295,17 @@ describe("hand-written dispatch and setup rules", () => {
     expect(normalization).toContain("runner rejects a missed rolling-alias version pin");
     expect(normalization).toContain("A kept predecessor in the catalog matches its family. Dispatch it with the sheet's model");
     expect(normalization).toContain("Do not rewrite its model in memory.");
+  });
+
+  it("resolves a missing role and seeds a first run from the current parent's sheet, never a foreign provider", () => {
+    expect(dispatch).toContain("A role that the sheet lacks, or every role when no sheet exists, resolves from the current parent's sheet there: on T3, the sheet of its model runtime.");
+    expect(dispatch).toContain("so a missing role never launches or probes another provider's CLI. A role line the operator configured, including a cross-provider one, always wins.");
+    expect(dispatch).toContain("First-run requested efforts are the efforts in the current parent's role-default sheet.");
+    const load = section(setup, "### 2. Load current state", "### 3. Parse per-family efforts");
+    expect(load).toContain("Overlay those rows on the complete first-run role map: the current parent's sheet in the catalog's");
+    expect(load).toContain("do not check, log in to, or probe another provider's CLI for a role the operator did not configure.");
+    expect(load).toContain("If the sheet is missing, seed from the current parent's role defaults, whose descriptors carry that sheet's efforts.");
+    expect(setup).toContain("- First run: start from the current parent's role defaults, with the step 2 role changes applied.");
   });
 
   it("keeps setup's fail-closed reconfiguration order", () => {
@@ -386,7 +434,7 @@ const escape = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, "
 
 describe("role pointers and text scans", () => {
   it("point each Cursor-derived site at role defaults that exist", () => {
-    const roles = new Set(REGISTRY.roleDefaults.map((entry) => entry.role));
+    const roles = new Set(Object.values(REGISTRY.roleDefaults).flatMap((defaults) => defaults.roles.map((entry) => entry.role)));
     for (const [file, named] of Object.entries(ROLE_POINTERS)) {
       const text = readFileSync(join(PLUGIN_ROOT, file), "utf8");
       expect([file, text.includes(ROLE_DEFAULTS)]).toEqual([file, true]);

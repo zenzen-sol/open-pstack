@@ -3,7 +3,7 @@ import { chmod, mkdir, mkdtemp, readFile, realpath, rm, writeFile } from 'node:f
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { readCatalog, recipe, type Case, type Catalog, type Fixture } from '../features/recipes.ts';
+import { DEFAULT_ROLES, FOREIGN_PARENT, readCatalog, recipe, type Case, type Catalog, type Fixture } from '../features/recipes.ts';
 import { command } from './io.ts';
 import type { Harness, SessionRecord } from './types.ts';
 
@@ -38,9 +38,14 @@ const reportRoles = (roles: string[], lines: Map<string, string[]>, installed: C
   return { role, descriptors, routes: descriptors.map(d => installed.route(harness, d)) };
 });
 
-test('reads role defaults, kept predecessors and routes from the generated catalog', async () => {
-  const installed = await readCatalog(location);
-  expect([...installed.defaults.keys()]).toContain('arena runners');
+test('reads each parent\'s role defaults, kept predecessors and routes from the generated catalog', async () => {
+  const installed = await readCatalog(location, 'claude');
+  for (const parent of ['claude', 'codex', 'grok'] as const) {
+    const lanes = [...(await readCatalog(location, parent)).defaults.values()].flat();
+    expect(lanes).toContain('inherit-parent');
+    expect(lanes.filter(lane => lane.includes(':') && !lane.startsWith(`${parent}:`))).toEqual([]);
+  }
+  await expect(readCatalog(location, 't3')).rejects.toThrow('catalog-unreadable');
   expect(installed.kept.get('grok:grok-4.6')).toMatch(/^grok:/);
   for (const harness of ['claude', 'codex'] as const) {
     expect(installed.route(harness, `${harness}:any@max`)).toBe('native');
@@ -53,7 +58,7 @@ test('reads role defaults, kept predecessors and routes from the generated catal
 
 for (const harness of ['claude', 'codex'] as const) {
   test(`${harness}: the catalog case accepts the sheet's descriptors and catalog routes, and rejects a wrong route`, async () => {
-    const f = await fixture(harness), [c] = recipe('catalog', harness), installed = await readCatalog(location);
+    const f = await fixture(harness), [c] = recipe('catalog', harness), installed = await readCatalog(location, harness);
     await c!.prepare!(f);
     const lines = await sheet(join(f.dir, 'pstack-models.md'));
     const roles = promptRoles(c!, f);
@@ -98,7 +103,7 @@ for (const harness of ['claude', 'codex'] as const) {
   });
 
   test(`${harness}: the bounded consume-sheet case takes the same sheet with the bounded setting line and requires no writer sandbox`, async () => {
-    const opted = await fixture(harness), f = await fixture(harness), installed = await readCatalog(location);
+    const opted = await fixture(harness), f = await fixture(harness), installed = await readCatalog(location, harness);
     const [optIn, c] = recipe('catalog', harness);
     expect(c!.id).toBe('consume-sheet-bounded');
     await optIn!.prepare!(opted); await c!.prepare!(f);
@@ -116,7 +121,7 @@ for (const harness of ['claude', 'codex'] as const) {
 }
 
 test('the kept-predecessor case requires every loaded role, the materialized role and the proposed replacement', async () => {
-  const f = await fixture('claude'), c = setupCase('keep-predecessor'), installed = await readCatalog(location);
+  const f = await fixture('claude'), c = setupCase('keep-predecessor'), installed = await readCatalog(location, 'claude');
   await c.prepare!(f);
   const path = join(f.dir, 'pstack-models.md'), prepared = await readFile(path, 'utf8');
   const omitted = [...installed.defaults.keys()].find(role => !prepared.includes(`\n${role}: `))!;
@@ -136,7 +141,7 @@ test('the kept-predecessor case requires every loaded role, the materialized rol
 
 for (const harness of ['claude', 'codex'] as const) {
   test(`${harness}: the new-families case keeps Luna, Sonnet and the pin, and requires the old pin as opus`, async () => {
-    const f = await fixture(harness), c = recipe('setup', harness).find(c => c.id === 'new-families')!, installed = await readCatalog(location);
+    const f = await fixture(harness), c = recipe('setup', harness).find(c => c.id === 'new-families')!, installed = await readCatalog(location, harness);
     await writeFile(join(f.dir, 'AGENTS.md'), 'mirror\n');
     await c.prepare!(f);
     if (harness === 'codex') await expect(readFile(join(f.dir, 'AGENTS.md'))).rejects.toThrow();
@@ -178,10 +183,11 @@ for (const harness of ['claude', 'codex'] as const) {
     }
   });
 
-  test(`${harness}: the runner recipe's default route is the candidate's role default for this parent`, async () => {
-    const f = await fixture(harness), [c] = recipe('runner', harness), installed = await readCatalog(location);
+  test(`${harness}: the runner recipe's default route is the other parent's role default, external from this parent`, async () => {
+    const f = await fixture(harness), [c] = recipe('runner', harness), installed = await readCatalog(location, harness);
     await c!.prepare!(f);
-    const [route] = installed.defaults.get(harness === 'claude' ? 'bug-fix' : 'judgment and prose')!;
+    const [route] = (await readCatalog(location, FOREIGN_PARENT[harness])).defaults.get(DEFAULT_ROLES[harness])!;
+    expect(installed.route(harness, route!)).toBe('external');
     const [provider, rest] = route!.split(':'), [model, effort] = rest!.split('@');
     expect(provider).not.toBe(harness);
     expect(c!.prompt(f)).toContain(`--parent ${harness} --provider ${provider} --model ${model} --effort ${effort} --mode read-only`);
@@ -190,7 +196,7 @@ for (const harness of ['claude', 'codex'] as const) {
 
 for (const harness of ['claude', 'codex'] as const) {
   test(`${harness}: the read-only-provider case requires every role line, with how explorer on Devin`, async () => {
-    const f = await fixture(harness), c = recipe('setup', harness).find(c => c.id === 'read-only-provider')!, installed = await readCatalog(location);
+    const f = await fixture(harness), c = recipe('setup', harness).find(c => c.id === 'read-only-provider')!, installed = await readCatalog(location, harness);
     await writeFile(join(f.dir, 'AGENTS.md'), 'mirror\n');
     await c.prepare!(f);
     if (harness === 'codex') await expect(readFile(join(f.dir, 'AGENTS.md'))).rejects.toThrow();
@@ -276,7 +282,7 @@ test('the native-agents case needs each new agent dispatched, its child run, its
 });
 
 test('the first-run case requires a sheet equal to the catalog role defaults', async () => {
-  const f = await fixture('codex'), c = setupCase('first-run'), installed = await readCatalog(location);
+  const f = await fixture('codex'), c = setupCase('first-run'), installed = await readCatalog(location, 'codex');
   const path = join(f.dir, 'pstack-models.md');
   await writeFile(path, 'stale\n'); await writeFile(join(f.dir, 'AGENTS.md'), 'mirror\n');
   await c.prepare!(f);
@@ -294,7 +300,7 @@ test('the first-run case requires a sheet equal to the catalog role defaults', a
 });
 
 test('the configure case answers yes to full access and requires that setting with only the Opus descriptor', async () => {
-  const f = await fixture('claude'), c = setupCase('configure'), installed = await readCatalog(location);
+  const f = await fixture('claude'), c = setupCase('configure'), installed = await readCatalog(location, 'claude');
   expect(c.prompt(f)).toContain('whether Codex writer lanes should run with full access, answer yes');
   const path = join(f.dir, 'pstack-models.md');
   const written = `# pstack model configuration\n\n${[...installed.defaults].map(([role, lanes]) =>
@@ -311,7 +317,7 @@ test('the configure case answers yes to full access and requires that setting wi
 });
 
 test('the configure case keeps another provider\'s writer setting line that setup preserves', async () => {
-  const f = await fixture('claude'), c = setupCase('configure'), installed = await readCatalog(location);
+  const f = await fixture('claude'), c = setupCase('configure'), installed = await readCatalog(location, 'claude');
   const written = `# pstack model configuration\n\n${[...installed.defaults].map(([role, lanes]) =>
     `${role}: ${lanes.map(lane => lane.includes(':') ? 'claude:opus@high' : lane).join(', ')}`).join('\n')}\nmuse writer sandbox: full-access\n${FULL_ACCESS}`;
   await writeFile(join(f.dir, 'pstack-models.md'), written);
@@ -350,7 +356,7 @@ test('the full-access writer case quotes each browser argument for sh and encode
 
 for (const harness of ['claude', 'codex'] as const) {
   test(`${harness}: the keep-setting case requires the setting line and every role line after a rerun`, async () => {
-    const f = await fixture(harness), c = recipe('setup', harness).find(c => c.id === 'keep-setting')!, installed = await readCatalog(location);
+    const f = await fixture(harness), c = recipe('setup', harness).find(c => c.id === 'keep-setting')!, installed = await readCatalog(location, harness);
     await writeFile(join(f.dir, 'AGENTS.md'), 'mirror\n');
     await c.prepare!(f);
     if (harness === 'codex') await expect(readFile(join(f.dir, 'AGENTS.md'))).rejects.toThrow();

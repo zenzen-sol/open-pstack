@@ -12,9 +12,9 @@ Model and provider facts for [`provider-dispatch.md`](provider-dispatch.md), whi
 | sol | GPT-6.1 Sol | codex | gpt-6.1-sol | max | low medium high xhigh max ultra | - | default | gpt-5.6-sol-max |
 | grok | Grok 4.7 | grok | grok-4.7 | xhigh | low medium high xhigh max | - | default | grok-4.7-xhigh-fast |
 | opus | Opus | claude | opus | max | low medium high xhigh max | `pstack-opus-<effort>` | default | opus |
-| luna | GPT-6 Luna | codex | gpt-6-luna | max | low medium high xhigh max | - | optional | - |
-| astra | GPT-6 Astra | codex | gpt-6-astra | max | low medium high xhigh max ultra | - | optional | - |
-| sonnet | Sonnet | claude | sonnet | max | low medium high xhigh max | `pstack-sonnet-<effort>` | optional | - |
+| luna | GPT-6 Luna | codex | gpt-6-luna | max | low medium high xhigh max | - | default | - |
+| astra | GPT-6 Astra | codex | gpt-6-astra | max | low medium high xhigh max ultra | - | default | - |
+| sonnet | Sonnet | claude | sonnet | max | low medium high xhigh max | `pstack-sonnet-<effort>` | default | - |
 | opus-5-5 | Opus 5.5 | claude | claude-opus-5-5 | max | low medium high xhigh max | `pstack-opus-5-5-<effort>` | optional | claude-opus-5-5-xhigh |
 | haiku-5-5 | Haiku 5.5 | claude | claude-haiku-5-5 | max | low medium high xhigh max | `pstack-haiku-5-5-<effort>` | optional | - |
 | swe-2 | SWE-2 | devin | swe-2 | max | medium high max | - | optional | - |
@@ -27,7 +27,7 @@ Model and provider facts for [`provider-dispatch.md`](provider-dispatch.md), whi
 | composer-2.5 | Composer 2.5 (Cursor) | cursor | composer-2.5 | default | default | - | optional | - |
 | gemini-3.7-flash | Gemini 3.7 Flash (Cursor) | cursor | gemini-3.7-flash | high | low medium high | - | optional | - |
 
-A family is `default` when a role default names it and `optional` otherwise. A Claude-native agent exists for each selectable effort of a Claude family.
+A family is `default` when a parent's role defaults name it and `optional` otherwise. A Claude-native agent exists for each selectable effort of a Claude family.
 
 Effort in the model ID: for these families the effort selects the CLI model, and argv carries no effort flag.
 
@@ -236,7 +236,57 @@ The runner refuses an access mode outside a provider's Access modes cell before 
 
 ## Role defaults
 
-The complete first-run sheet. A sheet that lacks a role uses that role's line here.
+One complete first-run sheet per parent. Each names only its parent's own provider. A sheet that lacks a role uses that role's line from the current parent's sheet here. A T3 Code session uses the sheet of its model runtime, Claude Code or Codex.
+
+### Claude Code parent
+
+```markdown
+# pstack model configuration
+
+Provider-qualified per-role choices. Read the installed pstack provider-dispatch reference before dispatching a configured role. Every documented role remains present. `inherit-parent` and `auto` use the parent model natively and still count as one panel lane.
+
+feature, refactoring: claude:opus@xhigh
+bug-fix: claude:opus@xhigh
+perf-issue: claude:opus@xhigh
+hillclimb: claude:opus@xhigh
+judgment and prose: claude:opus@xhigh
+hardest tasks: claude:opus@xhigh
+how explorer: claude:sonnet@high
+how explainer: claude:opus@xhigh
+why investigators, synthesizer: inherit-parent
+reflect tooling, judgment, divergent, synthesizer: inherit-parent
+arena runners: claude:opus@xhigh, claude:sonnet@high
+arena cross-judge pool: claude:opus@xhigh, claude:sonnet@high
+swarm workers: claude:sonnet@high
+architect runners: claude:opus@xhigh, claude:sonnet@high
+interrogate reviewers: claude:opus@xhigh, claude:sonnet@high
+```
+
+### Codex parent
+
+```markdown
+# pstack model configuration
+
+Provider-qualified per-role choices. Read the installed pstack provider-dispatch reference before dispatching a configured role. Every documented role remains present. `inherit-parent` and `auto` use the parent model natively and still count as one panel lane.
+
+feature, refactoring: codex:gpt-6.1-sol@max
+bug-fix: codex:gpt-6.1-sol@max
+perf-issue: codex:gpt-6.1-sol@max
+hillclimb: codex:gpt-6.1-sol@max
+judgment and prose: codex:gpt-6.1-sol@max
+hardest tasks: codex:gpt-6-astra@high
+how explorer: codex:gpt-6-luna@high
+how explainer: codex:gpt-6.1-sol@max
+why investigators, synthesizer: inherit-parent
+reflect tooling, judgment, divergent, synthesizer: inherit-parent
+arena runners: codex:gpt-6.1-sol@max, codex:gpt-6-astra@high, codex:gpt-6-luna@high
+arena cross-judge pool: codex:gpt-6.1-sol@max, codex:gpt-6-astra@high, codex:gpt-6-luna@high
+swarm workers: codex:gpt-6-luna@high
+architect runners: codex:gpt-6.1-sol@max, codex:gpt-6-astra@high, codex:gpt-6-luna@high
+interrogate reviewers: codex:gpt-6.1-sol@max, codex:gpt-6-astra@high, codex:gpt-6-luna@high
+```
+
+### Grok parent
 
 ```markdown
 # pstack model configuration
@@ -244,18 +294,20 @@ The complete first-run sheet. A sheet that lacks a role uses that role's line he
 Provider-qualified per-role choices. Read the installed pstack provider-dispatch reference before dispatching a configured role. Every documented role remains present. `inherit-parent` and `auto` use the parent model natively and still count as one panel lane.
 
 feature, refactoring: grok:grok-4.7@xhigh
-bug-fix: codex:gpt-6.1-sol@max
-perf-issue: codex:gpt-6.1-sol@max
-hillclimb: codex:gpt-6.1-sol@max
-judgment and prose: claude:opus@max
-hardest tasks: claude:opus@max
+bug-fix: grok:grok-4.7@xhigh
+perf-issue: grok:grok-4.7@xhigh
+hillclimb: grok:grok-4.7@xhigh
+judgment and prose: grok:grok-4.7@xhigh
+hardest tasks: grok:grok-4.7@xhigh
 how explorer: grok:grok-4.7@xhigh
-how explainer: claude:opus@max
+how explainer: grok:grok-4.7@xhigh
 why investigators, synthesizer: inherit-parent
 reflect tooling, judgment, divergent, synthesizer: inherit-parent
-arena runners: claude:opus@max, codex:gpt-6.1-sol@max, grok:grok-4.7@xhigh
-arena cross-judge pool: claude:opus@max, codex:gpt-6.1-sol@max, grok:grok-4.7@xhigh
+arena runners: grok:grok-4.7@xhigh, grok:grok-4.7@xhigh, grok:grok-4.7@xhigh
+arena cross-judge pool: grok:grok-4.7@xhigh
 swarm workers: grok:grok-4.7@xhigh
-architect runners: claude:opus@max, codex:gpt-6.1-sol@max, grok:grok-4.7@xhigh
-interrogate reviewers: claude:opus@max, codex:gpt-6.1-sol@max, grok:grok-4.7@xhigh
+architect runners: grok:grok-4.7@xhigh, grok:grok-4.7@xhigh, grok:grok-4.7@xhigh
+interrogate reviewers: grok:grok-4.7@xhigh, grok:grok-4.7@xhigh, grok:grok-4.7@xhigh
 ```
+
+The Grok sheet's panels repeat one family, as Arena allows for generation-bound work, so they add independent runs but no model diversity.
