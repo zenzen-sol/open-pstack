@@ -23,3 +23,5 @@ jobs:
         run: bun run typecheck
       - name: Validate manifests and static invariants
         run: bun run static
+      - name: Direct Cursor audit and notice tests
+        run: python3 -m unittest discover -s tests -p 'test_cursor_updates.py' -v

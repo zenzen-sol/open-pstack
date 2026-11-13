@@ -1,0 +1,58 @@
+name: Check direct Cursor pstack
+
+on:
+  workflow_dispatch:
+    inputs:
+      notify:
+        description: Create or update the single pending Cursor update issue
+        type: boolean
+        default: false
+  # Operator-approved daily detection and deduplicated notice only; never upgrade.
+  schedule:
+    - cron: '17 8 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: direct-cursor-update-check
+  cancel-in-progress: false
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.audit.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Fetch direct content source
+        run: git fetch --no-tags https://github.com/cursor/plugins.git main:refs/remotes/cursor/main
+      - name: Audit pinned source against Cursor
+        id: audit
+        run: python3 scripts/check-cursor-update.py --output cursor-audit.json --github-output "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cursor-audit
+          path: cursor-audit.json
+  notice:
+    needs: detect
+    if: needs.detect.outputs.changed == 'true' && (github.event_name == 'schedule' || inputs.notify)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: cursor-audit
+      - name: Deduplicate the update notice
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: python3 scripts/cursor-update-notice.py cursor-audit.json --repo "$GH_REPO" --write
