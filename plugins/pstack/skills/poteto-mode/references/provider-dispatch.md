@@ -6,106 +6,85 @@ pstack model choices are provider-qualified descriptors:
 <provider>:<model>@<effort>
 ```
 
-## Model matrix
+## Model catalog
 
-| Family | Upstream pstack choice | Provider | Model | Default effort | Selectable efforts | Claude-native agent stem | First-run active |
-|---|---|---|---|---|---|---|---|
-| fable | fable | claude | fable | max | low medium high xhigh max | fable | no |
-| sol | gpt-5.6-sol-max | codex | gpt-5.6-sol | max | low medium high xhigh max | - | codex |
-| grok | grok-4.6-fast-xhigh | grok | grok-4.6 | xhigh | low medium high xhigh max | - | no |
-| opus | opus | claude | opus | xhigh | low medium high xhigh max | opus | claude |
-| sonnet | - | claude | sonnet | high | low medium high xhigh max | sonnet | claude |
-| astra | - | codex | gpt-6-astra | high | low medium high xhigh max | - | codex |
-| luna | - | codex | gpt-5.6-luna | high | low medium high xhigh max | - | no |
-| terra | - | codex | gpt-5.6-terra | high | low medium high xhigh max | - | no |
-| sol6 | - | codex | gpt-6-sol | max | low medium high xhigh max | - | no |
-| luna6 | - | codex | gpt-6-luna | high | low medium high xhigh max | - | codex |
+The generated [model catalog](model-catalog.md) holds the model facts: the model matrix, kept predecessors and rolling aliases, the route table, provider notes, and role defaults. Match a descriptor's `(provider, model)` there.
 
-The allowed effort universe is exactly `low`, `medium`, `high`, `xhigh`, `max`. A `-` in Upstream pstack choice means the portable build added that family. First run activates only rows whose First-run active cell names the current parent (`codex` or `claude`), in matrix order, and uses each active row's Default effort. Grok and other foreign providers are explicit opt-in only. Later runs derive the active family set from the non-alias descriptors in the normalized final role map. No separate active-family setting exists. A Claude-native agent stem of `-` means the family has no Claude-native agent. Otherwise the shipped agent name is `pstack-<stem>-<effort>`.
+The catalog's [role defaults](model-catalog.md#role-defaults) hold one sheet per parent. A role that the sheet lacks, or every role when no sheet exists, resolves from the current parent's sheet there: on T3, the sheet of its model runtime. Each parent's sheet names only that parent's own provider, so a missing role never launches or probes another provider's CLI. A role line the operator configured, including a cross-provider one, always wins.
 
-`fable`, `opus`, and `sonnet` are Claude Code's rolling aliases. Claude resolves each alias to the latest available family revision. A runner receipt keeps the requested alias in `model` and the concrete provider-reported revision in `reportedModel`; verification accepts only a numeric `claude-fable-*`, `claude-opus-*`, or `claude-sonnet-*` revision from the matching family.
+The allowed effort universe is exactly `low`, `medium`, `high`, `xhigh`, `max`, `ultra`, and `default`, which passes no effort flag. A row offers `default` only when its Selectable efforts cell lists it. A row offers `ultra` only when its CLI's model entry lists that effort; for Codex, that is the model's entry in `codex`'s model list. First-run requested efforts are the efforts in the current parent's role-default sheet. Per spawn, the parent may move a role's effort to another effort that the row lists, under poteto-mode's Match the model to the job rule. A child never changes its assigned effort.
 
-## Host-native defaults
+A rolling alias, such as `opus`, names a family whose CLI resolves it to the latest available family revision. A runner receipt keeps the requested alias in `model` and the concrete provider-reported revision in `reportedModel`; verification accepts only a revision of the matching family, as the catalog's rolling-alias table gives it.
 
-This is the canonical first-run and missing-role map. Establish the parent from its live tool surface. Codex defaults to OpenAI through native spawn_agent; Claude Code defaults to Anthropic through native Agent. Never launch a foreign CLI or authentication probe for an unconfigured role. Preserve every existing explicit descriptor, alias, effort, and lane order, including deliberate cross-provider choices. Project role overrides take precedence over the harness sheet. Resolve each missing role independently from the current parent map; never reset other rows. No silent fallback is allowed.
-
-### Codex defaults
-
-```markdown
-# pstack model configuration
-
-Provider-qualified per-role choices. Every documented role remains present.
-
-feature, refactoring: codex:gpt-5.6-sol@max
-bug-fix: codex:gpt-5.6-sol@max
-perf-issue: codex:gpt-5.6-sol@max
-hillclimb: codex:gpt-5.6-sol@max
-judgment and prose: codex:gpt-5.6-sol@max
-hardest tasks: codex:gpt-6-astra@high
-how explorer: codex:gpt-6-luna@high
-how explainer: codex:gpt-5.6-sol@max
-why investigators, synthesizer: inherit-parent
-reflect tooling, judgment, divergent, synthesizer: inherit-parent
-arena runners: codex:gpt-5.6-sol@max, codex:gpt-6-astra@high, codex:gpt-6-luna@high
-arena cross-judge pool: codex:gpt-5.6-sol@max, codex:gpt-6-astra@high, codex:gpt-6-luna@high
-swarm workers: codex:gpt-6-luna@high
-architect runners: codex:gpt-5.6-sol@max, codex:gpt-6-astra@high, codex:gpt-6-luna@high
-interrogate reviewers: codex:gpt-5.6-sol@max, codex:gpt-6-astra@high, codex:gpt-6-luna@high
-```
-
-### Claude Code defaults
-
-```markdown
-# pstack model configuration
-
-Provider-qualified per-role choices. Every documented role remains present.
-
-feature, refactoring: claude:opus@xhigh
-bug-fix: claude:opus@xhigh
-perf-issue: claude:opus@xhigh
-hillclimb: claude:opus@xhigh
-judgment and prose: claude:opus@xhigh
-hardest tasks: claude:opus@xhigh
-how explorer: claude:sonnet@high
-how explainer: claude:opus@xhigh
-why investigators, synthesizer: inherit-parent
-reflect tooling, judgment, divergent, synthesizer: inherit-parent
-arena runners: claude:opus@xhigh, claude:sonnet@high
-arena cross-judge pool: claude:opus@xhigh, claude:sonnet@high
-swarm workers: claude:sonnet@high
-architect runners: claude:opus@xhigh, claude:sonnet@high
-interrogate reviewers: claude:opus@xhigh, claude:sonnet@high
-```
-
-Single-provider panels still use independent model lanes and an independent judge. Choose a different model from the configured pool when possible. Choose a different provider only when explicitly configured; never expand the active set to obtain provider diversity.
+A descriptor whose `(provider, model)` matches no matrix row, kept predecessor, or rolling-alias revision is an unregistered pair. It runs unchanged on an external route and on Codex's native route. A Claude-native route needs a generated agent, so an unregistered Claude model on a Claude Code parent is a dropout. An unregistered Grok model on a Grok parent uses the runner like every explicit Grok descriptor. Never guess a replacement.
 
 ## Read-time normalization
 
-Normalize configured descriptors before matching them to the matrix or choosing a route. If a provider-qualified Claude model starts with `claude-fable-`, `claude-opus-`, or `claude-sonnet-` and its remaining revision contains only digits and hyphens, replace that model component in memory with `fable`, `opus`, or `sonnet`. Preserve provider, effort, role, and lane order. Use only the normalized descriptor for native dispatch or runner argv. Never pass the versioned predecessor to Claude.
+Match each configured descriptor before choosing a route, in this order: an exact model-matrix row, then a kept predecessor, then a rolling-alias revision. A model that is its own matrix row, such as a registered exact pin, is never normalized. If a provider-qualified model matches no matrix row or kept predecessor and is a versioned predecessor of a rolling alias in the catalog, replace that model component in memory with the alias. Preserve provider, effort, role, and lane order. Use only the normalized descriptor for native dispatch or runner argv. Never pass the versioned predecessor to Claude.
 
-This read-time rule makes an installed sheet with a versioned rolling-family entry use the latest family revision immediately without writing user files. Once per parent run, report that the persisted sheet is stale and that `/setup-pstack` will rewrite it after its normal probes and confirmation. Unknown versioned Claude models remain invalid. The external runner rejects a missed Fable, Opus, or Sonnet version pin instead of silently executing it.
+This read-time rule makes an older installed sheet use the latest family revision immediately without writing user files. Once per parent run, report that the persisted sheet is stale and that `/setup-pstack` will rewrite it after its normal probes and confirmation. Unknown versioned Claude models remain invalid. The external runner rejects a missed rolling-alias version pin instead of silently executing it.
 
-`fast` is part of Cursor's Grok selector, not a Grok Build CLI model or effort flag. The portable Grok route pins the current CLI model `grok-4.6`. The first-run Grok effort is `xhigh`.
+A kept predecessor in the catalog matches its family. Dispatch it with the sheet's model until `/setup-pstack` replaces it, and with the sheet's effort or a per-spawn effort that its row lists. Do not rewrite its model in memory.
 
 ## The parent owns the route
 
 The top-level harness resolves the route once. A child receives an assigned provider, model, effort, access mode, prompt, working directory, and output path. A child never detects the harness, chooses a provider, or launches another model. Environment markers may corroborate the top-level harness before fan-out, but nested processes inherit parent markers and must not use them for routing.
 
-| Parent | `claude:*` | `codex:*` | `grok:*` |
-|---|---|---|---|
-| Claude Code | native `Agent` | external runner | external runner |
-| Codex | external runner | native `spawn_agent` | external runner |
+The catalog's [route table](model-catalog.md#routes) gives each provider's route from each parent. Outside [T3](#t3-host), a Claude or Codex provider on its own parent uses that parent's subagent primitive, and every other provider from those parents uses the external runner. A Grok parent uses `spawn_subagent` for `inherit-parent` and `auto` only. Every explicit descriptor from a Grok parent, including every `grok:*` descriptor, registered or not, uses the external runner with `--parent grok`.
 
-`inherit-parent` and `auto` remain aliases. They use the parent's current model and effort through its native subagent primitive. In a panel they still consume one lane, but they reduce provider diversity; say so in the synthesis record.
+A Grok parent reads its model sheet from `<config-home>/rules/pstack-models.md`, with `<config-home>` resolved by the [config-home rule](codex-tools.md#harness-config-homes). Grok loads that file as a home rule. It takes precedence over any model text Grok imports from Claude instructions. A malformed Grok sheet is a visible stop, never a reason to use the imported text or the role defaults.
+
+`inherit-parent` and `auto` remain aliases. Outside [T3](#t3-host), they use the parent's current model and effort through its native subagent primitive. In a panel they still consume one lane, but they reduce provider diversity; say so in the synthesis record.
+
+## T3 host
+
+A T3 Code parent records two facts once, before fan-out: the orchestration harness is T3, and the model runtime is the app running the session, Claude Code or Codex. The parent is on T3 when its own instructions name T3 Code and T3's orchestration tools respond. `T3CODE_THREAD_ID` only corroborates; a marker without working tools is a visible failure, not a T3 parent. T3 owns delegation, worktrees, and lifecycle. The runtime owns skill loading, the config home, and the model sheet. Pstack still chooses each role's provider, model, and effort, and T3's instructions govern waiting, cancellation, and re-review.
+
+Read `orchestrator_capabilities` once per parent run and keep the snapshot. Route each normalized descriptor in this order:
+
+1. T3 route: call `delegate_task` when T3 lists a provider for the descriptor's provider with `canRunChildTask`, no constraints, `canRunCrossProviderChildTask` when it is not the parent's provider, and the resolved model with the requested effort. Match the descriptor's provider to T3's `driverKind` with this table:
+
+   | Pstack provider | T3 `driverKind` |
+   | --- | --- |
+   | `claude` | `claudeAgent` |
+   | `codex` | `codex` |
+   | `cursor` | `cursor` |
+   | `grok` | `grok` |
+   | `opencode` | `opencode` |
+   | `agy` | `antigravity` |
+
+   A provider missing from the table has no T3 driver and takes the standalone route.
+2. Standalone route: any other lane takes the route a standalone parent of the same runtime gives it in the [route table](model-catalog.md#routes): the runtime's native subagent for its own provider, and otherwise the external runner with `--parent` set to the runtime.
+3. A lane neither route can run is a named dropout. Never lower the effort or pick another model.
+
+On the T3 route:
+
+- Set `target.providerInstanceId` to the provider's `providerInstanceId` and `target.model` to a concrete model ID. Put the effort in the model's effort option: `{"effort": "<effort>"}` on `claudeAgent`, `{"reasoningEffort": "<effort>"}` on `codex`. Effort `default` passes `options: {}`, which clears inherited settings. A family whose effort is in its CLI model passes that CLI model and no effort option. Use `mode: "wait"` when this turn needs the result, and `mode: "async"` otherwise.
+- `inherit-parent` and `auto` call `delegate_task` with no `target`, so the child inherits the parent's provider, model, and options. Record the parent selection from the snapshot's `inheritedProviderInstanceId`, `inheritedModel`, and `inheritedOptions`.
+- A rolling alias such as `opus` resolves only among that provider's models, from the `orchestrator_capabilities` search `claude-<alias>`; the unfiltered list omits models, so search before treating a model as missing. Keep only IDs that match the alias's versioned-predecessor form in the catalog's [rolling-alias table](model-catalog.md#kept-predecessors-and-normalization), and take the highest revision, compared number by number. A suffix that is not digits and hyphens, such as `-high`, is not a revision. A registered exact pin stays exact.
+- A writer that needs its own checkout uses `isolation: "worktree"`. T3 creates it from the parent's commit and leaves uncommitted edits out, so give the child a committed base or explicit fixture inputs in its task. Never commit unrelated changes for it, and never create a child checkout in the shell.
+- The [writer sandbox](#writer-sandbox) setting governs only lanes that take the standalone route. A writer on the T3 route runs with whatever runtime mode the T3 session has, and needs no setting line.
+- T3 does not enforce read-only access. A read-only lane on the T3 route is advisory read-only: add "Do not edit files." to its task and record it as advisory. When the calling skill requires enforced read-only access, the lane takes the standalone route.
+
+Keep one T3 result record per lane: the capability snapshot, the normalized descriptor, the request, and every raw response. Its model evidence is T3 launch configuration, never `provider-report` or `pinned-argv`. It shows what T3 launched, not which model served the request or the reasoning depth it applied.
+
+A T3 lane completes only when all of these hold:
+
+1. The response's task, provider, model, and effort match the request, compared on the normalized required settings only. `inherit-parent` matches the recorded parent selection, and `default` matches empty options.
+2. The response reports `status: "completed"`, `workState: "result_available"`, `hasPendingChildRuns: false`, `hasPendingQuestion: false`, and `pendingApproval: null`.
+3. The summary is nonempty, and every artifact the calling skill requires exists.
+
+A `wait` timeout means the child is still running: follow T3's `next`, and never poll or replace it. A failed, cancelled, interrupted, or mismatched task is a named dropout.
 
 ## Native lanes
 
 Native dispatch avoids a second CLI startup and its base context.
 
-- Claude Code: match the descriptor's `(provider, model)` to one model-matrix row, then dispatch it through `pstack-<stem>-<effort>` using that row's Claude-native agent stem and the descriptor's effort. Those definitions select the rolling model alias, requested effort, and `background: true`. `pstack-fable-max` and `pstack-opus-xhigh` remain in that set, and Sonnet has the same five effort-specific definitions. Pass the complete task, grounding paths, access mode, and unique output location in the `Agent` prompt. Retain the task handle and drain it only after fan-out.
+- Claude Code: match the descriptor's `(provider, model)` to one model-matrix row, then dispatch it through `pstack-<family>-<effort>` using that row's family and the descriptor's effort. Those definitions select the row's model and requested effort. `pstack-fable-max` and `pstack-opus-xhigh` remain in that set. Pass the complete task, grounding paths, access mode, and unique output location in the `Agent` prompt. Dispatch and wait as [Waits on Claude Code](codex-tools.md#waits-on-claude-code) says.
 - Codex: call `spawn_agent` with the descriptor's model and `reasoning_effort`, the complete task, grounding paths, access mode, and unique output location. Use an isolated worktree for a writer. Codex subagents already run concurrently.
+- Grok: for `inherit-parent` and `auto` only, call `spawn_subagent` with `subagent_type: pstack:poteto-agent` and the complete task, grounding paths, access mode, and unique output location in the prompt. Pass no `model`. A Grok `[subagents.models]`, role, or persona override for that agent type changes this lane's model; the parent records the override with the lane. Dispatch, isolate, and wait as [Grok tools](codex-tools.md#waits-on-grok) says. A native child inherits the parent session's permission mode. A headless Grok parent uses auto mode, because headless Grok cancels the turn on a permission prompt and auto mode reports the blocked call to the model instead.
 
-Do not send a same-provider descriptor to the external runner. It rejects that call because the native route is cheaper and already available.
+Do not send a Claude or Codex descriptor to the external runner from that same parent. The runner rejects that call because the native route is available. A Grok parent sends every explicit `grok:*` descriptor to the runner with `--parent grok --provider grok`, because a Grok agent file that names a model Grok cannot serve runs the parent's model without an error, and the runner's receipt proves the served model. That launch sets `--permission-mode auto`, the model, and the effort. A failed native lane is never retried through the runner.
 
 ## External lanes
 
@@ -113,11 +92,12 @@ The launcher lives at `skills/poteto-mode/scripts/runner/pstack-runner` under th
 
 ```text
 pstack-runner \
-  --parent <claude|codex> \
-  --provider <claude|codex|grok> \
+  --parent <claude|codex|grok> \
+  --provider <provider in the route table> \
   --model <real CLI model> \
-  --effort <low|medium|high|xhigh|max> \
+  --effort <low|medium|high|xhigh|max|ultra|default> \
   --mode <read-only|isolated-write> \
+  [--writer-sandbox full-access] \
   --prompt <unique prompt file> \
   --cwd <repository or dedicated worktree> \
   --output <unique final-response file> \
@@ -125,24 +105,37 @@ pstack-runner \
   [--timeout <seconds>]
 ```
 
-Pass arguments as an argv array or quote every path. Never interpolate prompt text into a shell command. The launcher preflights the assigned CLI and authentication, invokes the model exactly once, disables recursive agents and ambient skill dispatch where the CLI supports it, restricts the built-in tool surface, and records the exact provider/model/effort flags. External lanes do not receive the parent's MCP surface. Keep MCP-dependent Why and Reflect roles on `inherit-parent` or `auto`. The launcher never falls back.
+Pass arguments as an argv array or quote every path. Never interpolate prompt text into a shell command. The launcher preflights the assigned CLI and authentication, invokes the model exactly once, disables recursive agents and ambient skill dispatch where the CLI supports it, restricts the built-in tool surface, and records the exact provider/model/effort flags. Each lane's preflight and model call receive the child environment in its provider's [notes](model-catalog.md#provider-notes), without the parent harness's identity markers. External lanes do not receive the parent's MCP surface. Keep MCP-dependent Why and Reflect roles on `inherit-parent` or `auto`. The launcher never falls back.
 
-Grok authentication preflight has one bounded retry. If the first `grok models` result would be classified as unauthenticated, the runner waits five seconds and tries the same preflight once more. A second failure is terminal. The delay and second attempt share the runner's absolute deadline and cancellation latch, and the receipt keeps evidence from both attempts. Model execution is never retried.
+Provider-specific preflight details, state paths, and host prerequisites are in the provider notes.
 
-The parent tool sandbox still governs whether a subscribed child CLI can reach its credentials and network. Run setup's live probe from the actual parent profile. A blocked external CLI is a loud dropout, not a reason to elevate permissions or substitute a model silently.
+### Writer sandbox
+
+A model sheet may hold setting lines that are not roles, one per provider at most: `<provider> writer sandbox: full-access` or `<provider> writer sandbox: bounded`, such as `codex writer sandbox: full-access`. Read them once, from the same sheet as the roles. Append `--writer-sandbox full-access` only when the line for the lane's provider says `full-access` and the lane is an external `isolated-write` lane of that provider. Without the line, or with `bounded`, pass no `--writer-sandbox`. Never pass it for a read-only lane or a provider whose line does not say `full-access`.
+
+A provider whose Access modes cell in the [route table](model-catalog.md#routes) lists `isolated-write` has a writer that a sandbox confines to the lane's worktree, so it writes without a setting line. A provider whose cell lists only `isolated-write-full-access` has no confined writer: it writes only when its line says `full-access`, and the runner refuses its `isolated-write` lane before launch otherwise. A native lane is unchanged: a Codex writer on a Codex parent stays on `spawn_agent` with the parent's sandbox, and the setting never moves a native lane to the runner. Never add the flag, or retry with it, after a sandbox failure; only the sheet opts in. Full access means nothing stops the writer from writing outside its worktree, including the main repository's shared Git state. A dedicated worktree keeps the writer's files apart, but it confines nothing, and a linked worktree shares the main repository's Git state.
+
+### Host and parent prerequisites
+
+- The parent tool sandbox still governs whether a subscribed child CLI can reach its credentials and network. Run setup's live probe from the actual parent profile. A blocked external CLI is a loud dropout, not a reason to elevate permissions or substitute a model silently.
+- On Linux, Grok's bounded `read-only` and `workspace` sandbox profiles require Landlock support and bubblewrap (`bwrap`). Hosts missing these prerequisites, including affected Claude Code cloud sessions, cannot run these Grok lanes even if `grok models` succeeds. A sandbox-startup refusal remains `child-failed` (exit 70), with Grok's refusal text in the receipt's `error.evidence`; inspect that evidence rather than attributing every `child-failed` result to missing prerequisites. Open Pstack never substitutes `devbox` or `off` to bypass these protections.
+- Codex's default `workspace-write` parent with network disabled can block external Claude Fable/Opus and Grok lanes: network lookups can fail (for example, `ENOTFOUND`), and required outside-workspace state writes such as `~/.grok/managed_config.toml` can be denied. In operator checks with Codex CLI 0.160.0 on macOS, the restricted session exposed `CODEX_SANDBOX=seatbelt` and `CODEX_SANDBOX_NETWORK_DISABLED=1`; full access exposed neither. Missing markers do not prove full access. Read the parent's effective permission instructions for network and the actual required paths; `workspace-write` alone does not establish either permission, and writable roots can include `CODEX_HOME`.
+- `/setup-pstack` checks assigned external lanes' required access before any external CLI check or probe. If access is blocked or unresolved, the operator can restart with suitable permissions or explicitly choose native-only role assignments. For Grok under Codex on macOS, child sandbox profiles do not nest; deliberately starting the parent with `danger-full-access` is the documented operator choice, not an automatic change. Setup separately checks both actual configuration destinations before any write, leaving existing bytes unchanged on refusal. It does not alter Codex permissions, silently replace families, or lower effort.
+- A dispatched runner still launches the instructed lane. Only after a plain `child-failed` without a provider-reported reason, an explicit Codex parent with `CODEX_SANDBOX_NETWORK_DISABLED=1` gets a likely-parent-sandbox hint in the existing error message and the front of its bounded evidence. The status remains `child-failed`/70; raw child evidence is retained. Provider-reported reasons, other failure statuses, successful runs, and Claude parents are unchanged. This post-failure hint is not a permission check or proof that every DNS or write error came from a sandbox.
 
 The parent invocation must itself be resumable background work:
 
-- Claude Code: call the launcher through a Bash tool invocation with `run_in_background: true` and retain its task ID. A foreground Bash tool call has an automatic ten-minute ceiling even when the runner's own timeout is longer. Shelling out with `&` and losing the task handle is not equivalent.
+- Claude Code: call the launcher through a Bash tool invocation with `run_in_background: true` and retain its task ID. A foreground Bash tool call has an automatic ten-minute ceiling even when the runner's own timeout is longer. Shelling out with `&` and losing the task handle is not equivalent. A subagent that must wait on the launcher follows [Waits on Claude Code](codex-tools.md#waits-on-claude-code).
 - Codex: run the launcher in a persistent exec session that returns a session ID, then wait or poll that handle. Do not hold one foreground tool call open for the model's full runtime.
+- Grok: start the launcher as background work and wait on its task ID as [Waits on Grok](codex-tools.md#waits-on-grok) says. Do not hold one foreground tool call open for the model's full runtime.
 
 Start the background process, continue launching the other lanes, then drain their handles. Native and external lanes belong in the same fan-out phase.
 
 The runner and its preflight have no implicit timeout. Do not invent a duration from role, mode, or a convenient round number; real implementation lanes can run for 90 minutes or much longer. Pass `--timeout` only when the user, an external service deadline, or a measured task contract supplies a real bound. That value starts at wrapper entry, before module loading and argument parsing, and remains one absolute deadline across setup, preflight, model execution, and output capture. It is never a fresh allowance per child, and long waits are armed in runtime-safe chunks without shortening the supplied deadline. Otherwise supervise liveness through the retained background task/session handle and cancel manually only on evidence that the run is dead. Cancel through that retained handle so the runner receives SIGINT or SIGTERM, sends it to an active child when one remains, stops waiting on inherited output pipes, removes the empty output reservation, and writes a `cancelled` receipt. Preserve that receipt; a retry is a new attempt with new unique output and receipt paths. Unchanged running state is not a dropout, and Claude's ten-minute foreground ceiling is never a reason to terminate a healthy lane.
 
-Read-only mode maps to Claude plan mode with project-only settings and an explicit tool list, Codex's read-only sandbox, and Grok plan mode plus its `read-only` sandbox and read-oriented tool list. Grok's built-in read-only profile deliberately keeps its own state and system temporary directories writable, so point a read-only Grok lane at the actual checkout rather than a worktree under `/tmp`, `/var/tmp`, or the host's temporary directory. `isolated-write` maps to Claude `acceptEdits` with project-only settings, Codex `workspace-write`, and Grok `acceptEdits` plus its `workspace` sandbox and write-capable tool list. Give every writer only a dedicated worktree or output directory. Never route a writer into the primary checkout.
+Read-only mode maps to Claude plan mode with project-only settings and an explicit tool list, Codex's read-only sandbox, and Grok auto mode plus its `read-only` sandbox and read-oriented tool list. Headless Grok cancels the whole turn on a permission prompt, which its `plan` mode raises for any shell command outside its built-in read-only list; auto mode reports a blocked call to the model instead. Grok's built-in read-only profile deliberately keeps its own state and system temporary directories writable, so point a read-only Grok lane at the actual checkout rather than a worktree under `/tmp`, `/var/tmp`, or the host's temporary directory. `isolated-write` maps to Claude `acceptEdits` with project-only settings plus the Claude Code Bash sandbox, Codex `workspace-write` (or `danger-full-access` for a writer the sheet opts in, as [Writer sandbox](#writer-sandbox) says), and Grok auto mode plus its `workspace` sandbox and write-capable tool list. The Claude writer's Bash runs without prompts in that sandbox, and in a linked worktree the runner denies writes to the main repository's shared `.git`. The runner refuses the writer before launch when it cannot resolve that shared `.git` exactly or express its path literally. Grok uses auto mode in both access modes because `acceptEdits` raises the same turn-cancelling prompt for a shell command outside Grok's built-in list. Every other provider's mapping is in its [provider notes](model-catalog.md#provider-notes). The route table's Access modes cell lists each provider's modes. Give every writer only a dedicated worktree or output directory. Never route a writer into the primary checkout.
 
-Every concurrent external lane needs distinct prompt, output, and receipt paths. The launcher reserves output and receipt paths exclusively and refuses to overwrite them.
+Every concurrent external lane needs distinct prompt, output, and receipt paths. The launcher exclusively reserves the output, receipt, and `<receipt>.stdout` / `<receipt>.stderr` sidecars with private (`0600`) permissions and refuses to overwrite existing files. For a provider whose notes name one, it also creates the private `<receipt>.provider/` directory (`0700`) that holds the provider's run-owned config and the file the CLI exports. All these paths must be distinct from each other and the prompt; a failed reservation rolls back only files created by that attempt. Schema-version-1 receipts add nullable `stdoutPath` and `stderrPath` fields identifying reserved artifacts. Sidecars retain the model process's raw stdout/stderr bytes, including on dropouts; they do not include authentication-preflight output. Cancellation and timeout retain every byte captured before the drain stops. Keep these private local files with the receipt; quote only operator-selected excerpts in public evidence.
 
 ## Completion and dropouts
 
@@ -150,11 +143,11 @@ Success requires all of these:
 
 1. Exit status `0`.
 2. Receipt status `complete`.
-3. Either `modelVerified: true` with `modelEvidence: "provider-report"`, or a Codex receipt with `reportedModel: null`, `modelVerified: false`, and `modelEvidence: "pinned-argv"`. For Claude's `fable`, `opus`, and `sonnet` aliases, the concrete provider report must belong to the requested family. Codex 0.149.0 accepts the exact `--model` argument but does not report the served model in its JSONL stream.
+3. Either `modelVerified: true` with `modelEvidence: "provider-report"`, or, for a provider whose Model proof cell in the [route table](model-catalog.md#routes) reads `pinned argv`, such as Codex, a receipt with `reportedModel: null`, `modelVerified: false`, and `modelEvidence: "pinned-argv"`. For Claude's `fable` and `opus` aliases, the concrete provider report must belong to the requested family. Codex 0.149.0 accepts the exact `--model` argument but does not report the served model in its JSONL stream.
 4. A non-empty output file.
 
 The receipt also carries elapsed time, token usage when the CLI exposes it, and cost when available. Keep it with the arena or review artifacts so parent-harness comparisons are evidence-based.
 
-Any missing CLI, failed login, unavailable model, explicit timeout, cancellation, catchable post-reservation launcher failure, non-zero child exit, malformed result, or model mismatch is a receipt-bearing dropout. Record it and apply the calling skill's existing dropout policy. A `cancelled` receipt proves that the runner received the signal; its `signal` field is non-null only when the runner sent that signal to a still-active direct CLI child, and remains null when cancellation only stopped a post-exit pipe drain. The provider CLI owns any processes it starts beneath that direct child; the receipt does not claim a process-tree kill. Do not delete or overwrite the receipt. Never substitute the parent model, retry another provider, or reinterpret an external descriptor as a native model slug.
+Any missing CLI, failed login, unavailable model, explicit timeout, cancellation, catchable post-reservation launcher failure, non-zero child exit, malformed result, or model mismatch is a receipt-bearing dropout. Record it and apply the calling skill's existing dropout policy. A `cancelled` receipt can represent either a launcher signal or a provider-reported cancellation: a well-formed Grok terminal cancellation, or a Devin cancellation that its provider notes describe. Provider cancellations return wrapper exit 130; other valid Grok terminal failures return `child-failed`/70. After a zero exit, invalid or incomplete Grok terminal data is `malformed-output`/65. After a nonzero exit, it takes the ordinary failure classification: normally `child-failed`/70, or `unavailable-model`/69 when the model-error text matches. Only the authentication preflight classifies a lane as `unauthenticated`/77. A nonzero child exit after the model call starts, without a provider-reported reason, is never `unauthenticated`, even when its output mentions authentication. If a login expires between the preflight and the model call, the receipt is `child-failed`/70 and keeps the CLI's error text in `error.evidence`. These provider failures preserve the exact reason in `error.message`, put it first in bounded evidence, and retain reported model/session/usage/cost and the actual child exit code, even after an ordinary nonzero child exit. Missing provider metadata stays null. Launcher cancellation and timeout take precedence. The `signal` field is non-null only when the runner sent that signal to a still-active direct CLI child, and remains null for provider-only cancellation or when launcher cancellation only stopped a post-exit pipe drain. The provider CLI owns any processes it starts beneath that direct child; the receipt does not claim a process-tree kill. Do not delete or overwrite the receipt. Never substitute the parent model, retry another provider, or reinterpret an external descriptor as a native model slug.
 
 Start native and external lanes in the same fan-out phase, then wait for all of them before judging. A judge must not read candidate paths while their owners are still writing.

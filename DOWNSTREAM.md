@@ -1,28 +1,50 @@
 # Maana Data downstream
 
-This fork lets Maana Data ship model-family and workflow changes without waiting for the community Open Pstack release schedule. `origin` is this fork and `upstream` is `https://github.com/ericlitman/open-pstack.git`. Cursor pstack remains the content source described in `UPSTREAM.md`.
+This fork ships the newest Cursor pstack without waiting for the community Open Pstack release schedule. `origin` is this fork and `upstream` is `https://github.com/ericlitman/open-pstack.git`. Cursor's `cursor/plugins/pstack` tree is the content source described in `UPSTREAM.md`. Open Pstack is the source of the cross-harness port.
+
+## Current base
+
+Version `1.21.0-maana.1` is Open Pstack 1.21.0, which imports Cursor pstack 0.15.36 at `2776ddd2355d6d6c8747d3964600f28daf62f049`, plus the downstream changes below.
 
 ## Downstream changes
 
-Version `1.4.2-maana.2` incorporates the optional Sonnet, GPT-6 Astra, GPT-5.6 Luna, and GPT-5.6 Terra families from open-pstack PR #55. It also adds optional GPT-6 Sol and GPT-6 Luna families for the Maana Data GPT-only route. Setup derives the active family set from the final role map, so a Codex-only Astra, Sol 6, and Luna 6 configuration does not probe or require Claude or Grok.
+Each change is its own commit, so it can be dropped when Open Pstack absorbs it.
 
-The native-default candidate uses a host-specific first-run map. Explicit role choices remain in each harness's pstack model sheet and project overrides.
+- **Direct Cursor check.** `scripts/check-cursor-update.py` audits the `UPSTREAM.md` pin against `cursor/plugins` main. `.github/workflows/cursor-update-check.yml` runs it daily at 08:17 UTC and opens or updates one issue when pstack changed. It reports only and never upgrades.
+- **Host-native default roles.** Each parent harness seeds first runs and missing roles from its own map: Claude Code uses Anthropic models only, Codex uses OpenAI models only, and Grok uses Grok only. Setup never probes a foreign command-line tool for a role the user did not configure. The maps are in the Role defaults section of `plugins/pstack/skills/poteto-mode/references/model-catalog.md`, generated from `scripts/runner/registry/models.ts`. Fable is in no default map. Cross-provider panels stay available as explicit choices in a model sheet.
+- **Arena judge.** The judge may come from the parent's provider, but it is never the parent's own model. A Grok parent has no judge by default, because its only pool entry is its own model.
+- **No alias-only sheet.** Setup stops without writing when every role is `inherit-parent` or `auto`, because there would be nothing to probe or smoke-test.
 
-## Installing the current branch
+These changes supersede three records in `UPSTREAM.md` that describe Open Pstack's own defaults: the exclusion that keeps `bug-fix`, `perf-issue` and `hillclimb` on Sol, the `df58112` exclusion that keeps three-model panels, and the `ab1f702` sentence that the judge is never from the parent's provider. Keep those records as they are, so the next Open Pstack merge stays clean.
 
-Use the immutable fork tag `v1.5.0-maana.3` with the [README installation instructions](README.md#install). Preserve existing model sheets and project overrides. Codex defaults to OpenAI; Claude Code defaults to Anthropic. Cross-provider use remains explicit.
+## Installing
 
-## Updating directly from Cursor
+Both harnesses install from this fork's `main`. If a marketplace named `open-pstack` is already registered from another source, remove it first.
 
-Cursor's `cursor/plugins/pstack` tree is the content source. Community Open Pstack releases do not gate this fork's updates. Keep that remote available only for optional cross-harness fixes.
+Claude Code:
 
-1. Run the direct-Cursor checker and pin the selected full source SHA. See `UPSTREAM.md`.
-2. Branch from the current fork tip and keep source imports, harness changes, GPT routing, and release metadata separable.
-3. Apply the audit in an isolated checkout, review every adapted hunk, and record each source path as imported, adapted, or intentionally retained/excluded.
-4. Preserve provider-qualified GPT support, configured roles and panel order, native MCP roles, no fallback, and no implicit timeout. Do not copy Cursor's Opus/Grok defaults over the user's configuration.
-5. Run the static, test, typecheck, manifest, plugin-validation, and installed-harness gates from `AGENTS.md`. Keep the PR draft until live evidence exists.
-6. After review and exact-candidate live proof, tag the merged commit and refresh the shared machine installation. Open fresh Maana and DealTeam tasks and verify the installed candidate. Leave global instructions, model sheets, and project verification skills unchanged.
+```text
+/plugin marketplace add zenzen-sol/open-pstack
+/plugin install pstack@open-pstack
+/reload-plugins
+```
 
-## Current candidate
+Codex:
 
-`1.5.0-maana.3` imports Cursor pstack 0.15.15 at `df581122cde17e6e27686b5a448bde23e4ad4318`. It retains optional model families and defaults unconfigured roles to the current host provider. Scheduled Autopilot wake-ups are disabled in this core candidate. It is installed as a shared local candidate for DealTeam and Codeslaw, not a published release. See docs/plans/native-default-adoption.md. The operator-approved daily update-check schedule runs at 08:17 UTC and reports changes without auto-upgrading; manual detection is read-only unless its caller explicitly enables the notice input.
+```shell
+codex plugin marketplace add zenzen-sol/open-pstack --ref main
+codex plugin add pstack@open-pstack
+```
+
+Existing model sheets and project overrides keep working. Run `/setup-pstack` again only to adopt the new defaults for roles you never configured.
+
+## Taking a new pstack release
+
+Two paths keep this fork current. Use whichever arrives first.
+
+1. **Cursor moves first.** The daily check opens an issue here. Follow "Incorporate a change" in `UPSTREAM.md` in this repository: branch from this fork's `main`, run `scripts/upstream-audit.py` and `scripts/upstream-merge.py` against the `cursor` remote, keep every port adaptation in the ledger, and keep the downstream changes above. Update the pin in `UPSTREAM.md`.
+2. **Open Pstack releases first.** Merge `upstream/main` into a branch from this fork's `main`, resolve conflicts in favor of the downstream changes above, and drop any downstream commit that Open Pstack now covers.
+
+## Merging and releasing
+
+This fork does not run Mergify or Unfret. A pull request stays a draft until the exact candidate is installed and the changed behavior passes a live test in every affected harness, with the installed version, surface, action and observed result recorded in the pull request. The operator then merges it and tags the merged commit as `v<open-pstack version>-maana.<n>` by hand. `scripts/release.py` targets Open Pstack and is not used here.
