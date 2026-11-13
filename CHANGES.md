@@ -3,6 +3,10 @@
 Open Pstack lands on green: Mergify merges a ready PR to main once verify and exact-head live-gate pass and no review thread is unresolved, and a workflow resolves Unfret's own threads. A PR that touches `.github/` or the Mergify config also waits for Unfret, and workflow changes require operator queueing.
 This port applies the Cursor → Claude Code substitutions in skill bodies. Earlier drafts left them flagged; this revision resolves them. A later pass added a Codex build that shares the same skills; see [Codex port](#codex-port) below.
 
+## 1.21.0-maana.1 rebases the Maana Data fork on Open Pstack 1.21.0
+
+This downstream release takes Open Pstack 1.21.0 and its Cursor pstack 0.15.36 sync, and keeps the fork's own changes listed in `DOWNSTREAM.md`: the direct Cursor check, host-native default roles for each parent, an arena judge that may share the parent's provider, and the refusal of a sheet with no concrete model. The fork's earlier GPT-6 Sol, GPT-5.6 Luna and GPT-5.6 Terra families are dropped in favor of Open Pstack's registered families.
+
 ## 1.21.0 adds Grok as a parent harness
 
 Open Pstack 1.21.0 keeps the Cursor pstack 0.15.36 sync. Default roles and panels are unchanged.
