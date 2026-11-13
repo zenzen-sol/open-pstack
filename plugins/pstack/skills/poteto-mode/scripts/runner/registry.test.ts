@@ -336,6 +336,7 @@ describe("hand-written dispatch and setup rules", () => {
     for (const rule of [
       "Do not invent a precedence rule.",
       "Do not probe or write while any inconsistency is unresolved.",
+      "Stop without writing when the final role map has no concrete `<provider>:<model>@<effort>` value, because every role is `inherit-parent` or `auto` and there would be nothing to probe or smoke-test.",
       "A failed probe writes nothing:",
       "Run one probe per family",
       "normalized complete role map from step 2",
