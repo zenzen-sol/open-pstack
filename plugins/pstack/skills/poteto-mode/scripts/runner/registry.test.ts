@@ -308,14 +308,15 @@ describe("hand-written dispatch and setup rules", () => {
     expect(setup).toContain("- First run: start from the current parent's role defaults, with the step 2 role changes applied.");
   });
 
-  it("picks an arena judge whose model differs from every runner and the parent, from any provider", () => {
+  it("picks an arena judge from any provider that is not the parent's own model", () => {
     const arena = readFileSync(join(PLUGIN_ROOT, "skills/arena/SKILL.md"), "utf8");
     const judge = section(arena, "## Phase C: Cross-judge", "## Phase D: Pick a base");
-    expect(judge).toContain("The judge is a different model from every runner and from the parent, and it may come from the parent's provider.");
-    expect(judge).toContain("A model is a `(provider, model)` pair, so a runner's model at another effort is the same model.");
+    expect(judge).toContain("The judge may come from any provider, including the parent's, but it is never the parent's own model.");
+    expect(judge).not.toContain("every runner");
+    expect(judge).toContain("A model is a `(provider, model)` pair, so the parent's model at another effort is still the parent's model.");
     expect(judge).toContain("If no entry runs, skip the judge, pick the base alone in Phase D, and say so in the output.");
     expect(judge).not.toContain("never from the parent's provider");
-    expect(setup).toContain("It tries, in list order, only entries whose model differs from every runner's and the parent's, from any provider, so order it by preference.");
+    expect(setup).toContain("It tries, in list order, only entries that are not the parent's own model, from any provider, so order it by preference.");
     expect(setup).not.toContain("a provider other than the parent's");
   });
 
