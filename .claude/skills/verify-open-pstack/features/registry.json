@@ -85,6 +85,7 @@
     "plugins/pstack/skills/poteto-mode/scripts/bootstrap.test.ts",
     "plugins/pstack/skills/poteto-mode/scripts/check-plan.test.ts",
     "plugins/pstack/skills/poteto-mode/scripts/orch/**",
-    "plugins/pstack/skills/poteto-mode/scripts/resolve-codex-transcript.test.ts", "scripts/release.py", "scripts/release_test.py"
+    "plugins/pstack/skills/poteto-mode/scripts/resolve-codex-transcript.test.ts", "scripts/release.py", "scripts/release_test.py",
+    "DOWNSTREAM.md", ".github/pull_request_template.md", ".github/unfret.json", "tests/setup-config-home-repro.sh"
   ]
 }

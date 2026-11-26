@@ -288,7 +288,7 @@ describe('registry and ownership', () => {
     }
   });
   test('unregistered CI, tests, and scripts fail closed instead of bypassing runtime proof', () => {
-    for (const filename of ['.github/workflows/new-gate.yml', '.github/pull_request_template.md', 'tests/new-gate.sh', 'scripts/disable-proof.ts']) {
+    for (const filename of ['.github/workflows/new-gate.yml', '.github/ISSUE_TEMPLATE/new.md', 'tests/new-gate.sh', 'scripts/disable-proof.ts']) {
       expect(() => classify([{ filename }], registry)).toThrow();
       expect(() => classify([{ filename: 'README.md', previous_filename: filename }], registry)).toThrow();
     }
